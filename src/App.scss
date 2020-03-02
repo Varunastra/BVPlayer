@@ -1,0 +1,118 @@
+input[type="range"].slider {
+    -webkit-appearance: none;
+    width: 100px;
+    margin: 0.7px 0;
+
+    &:focus {
+        outline: none;
+    }
+
+    &::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 10px;
+        cursor: pointer;
+        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        background: #484d4d;
+        border-radius: 0px;
+        border: 0px solid #010101;
+    }
+
+    &::-webkit-slider-thumb {
+        box-shadow: 0px 0px 1px #670000, 0px 0px 0px #810000;
+        border: 0px solid #ff1e00;
+        height: 13px;
+        width: 18px;
+        border-radius: 0px;
+        background: rgba(214, 67, 95, 0.93);
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -0.7px;
+    }
+}
+
+.fa-volume-down {
+    color: rgba(214, 67, 95, 0.93);
+    padding: 2px 7px;
+}
+
+.fa-volume-up {
+    color: rgba(214, 67, 95, 0.93);
+    padding: 2px 7px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    -moz-apperance: none;
+    border-radius: 6px;
+    height: 6px;
+    width: 95%;
+
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(15%, #df7164),
+        color-stop(15%, #f5d0cc)
+    );
+
+    background-image: -moz-linear-gradient(
+        left center,
+        #df7164 0%,
+        #df7164 15%,
+        #f5d0cc 15%,
+        #f5d0cc 100%
+    );
+}
+
+input[type="range"]::-moz-range-track {
+    border: none;
+    background: none;
+    outline: none;
+}
+
+input[type="range"]:focus {
+    outline: none;
+    border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    background-color: #df7164;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+    -moz-appearance: none !important;
+    background-color: #df7164;
+    border: none;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+}
+
+.start-time {
+  position: absolute;
+  top: 75px;
+  left: 0;
+}
+
+.end-time {
+  position: absolute;
+  right: 0;
+  top: 75px;
+}
+
+.player-progress {
+  position: relative;
+  width: 200px;
+  height: 70px;
+}
+
+.player-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
