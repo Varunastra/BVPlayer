@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setIsPlaying, setPlayTime } from "../actions/status";
+import { setIsPlaying, setPlayTime, setSeeking } from "../actions/status";
 import { VolumeControl } from "./VolumeControl";
 import { getContext } from "../audioBuffer";
 
@@ -20,6 +20,7 @@ export function PlayerControls() {
   };
 
   const onStop = () => {
+    dispatch(setSeeking(true));
     dispatch(setIsPlaying(false));
     dispatch(setPlayTime(0));
   };

@@ -12,7 +12,7 @@ export function status(state = initialState, action) {
         case "SET_DURATION":
             return { ...state, duration: action.payload };
         case "SET_SEEKING":
-            return { ...state, isPlaying: false, isSeeking: action.payload };
+            return { ...state, isSeeking: action.payload }
         default:
             return state;
     }
