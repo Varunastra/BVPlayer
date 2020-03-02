@@ -10,6 +10,6 @@ export function setDuration(time) {
     return { type: "SET_DURATION", payload: time };
 }
 
-export function setIsSeeking(time) {
-    return { type: "SET_SEEKING", payload: time };
+export function setSeeking(status) {
+    return { type: "SET_SEEKING", payload: status };
 }

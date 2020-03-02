@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPlayTime, setIsPlaying, setIsSeeking } from "../actions/status";
+import { setPlayTime, setSeeking } from "../actions/status";
+import debounce from "lodash.debounce";
 
 export function ProgressBar() {
     const currentTime = useSelector(state => state.status.currentTime);
     const duration = useSelector(state => state.status.duration);
-    const isPlaying = useSelector(state => state.status.isPlaying);
     const dispatch = useDispatch();
 
     const fillPrecent = currentTime / duration;
@@ -29,12 +29,10 @@ export function ProgressBar() {
             green ${fillPrecent * 100}%, black ${fillPrecent * 100}%)`
     };
 
-    const onProgressMove = e => {
-        const percent = e.target.value;
-        dispatch(setIsPlaying(false));
+    const onProgressMove = debounce((percent) => {
         dispatch(setPlayTime(percent * duration));
-        dispatch(setIsPlaying(true));
-    };
+        dispatch(setSeeking(true));
+    }, 50);
 
     return (
         <div className="player-progress">
@@ -49,7 +47,7 @@ export function ProgressBar() {
                     style={inputFillStyle}
                     step="0.01"
                     type="range"
-                    onChange={onProgressMove}
+                    onChange={(e) => onProgressMove(e.target.value)}
                 />
             </span>
             <small className="start-time">
