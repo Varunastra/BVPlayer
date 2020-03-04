@@ -5,10 +5,7 @@ export function status(state = initialState, action) {
         case "SET_TIME":
             return { ...state, currentTime: action.payload };
         case "SET_PLAYING":
-            if (action.payload) {
-                return { ...state, isPlaying: action.payload }
-            }
-            return { ...state, isPlaying: !state.isPlaying };
+            return { ...state, isPlaying: action.payload }
         case "SET_DURATION":
             return { ...state, duration: action.payload };
         case "SET_SEEKING":
