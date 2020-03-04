@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPlayTime, setSeeking } from "../actions/status";
 import debounce from "lodash.debounce";
@@ -8,7 +8,16 @@ export function ProgressBar() {
     const duration = useSelector(state => state.status.duration);
     const dispatch = useDispatch();
 
+    const isMouseDown = useRef(false);
+    const [progress, setProgress] = useState(0);
+
     const fillPrecent = currentTime / duration;
+
+    useEffect(() => {
+        if (!isMouseDown.current) {
+            setProgress(fillPrecent);
+        }
+    }, [fillPrecent]);
 
     const calculateCurrentValue = currentTime => {
         const current_minute = parseInt(currentTime / 60) % 60,
@@ -24,15 +33,33 @@ export function ProgressBar() {
         return current_time;
     };
 
-    const inputFillStyle = {
+    const progressFillStyle = {
         background: `-webkit-linear-gradient(left, green 0%, 
-            green ${fillPrecent * 100}%, black ${fillPrecent * 100}%)`
+        green ${progress * 100}%, black ${progress * 100}%)`
     };
 
-    const onProgressMove = debounce((percent) => {
-        dispatch(setPlayTime(percent * duration));
+    const setBarProgress = e => {
+        const rect = e.target.getBoundingClientRect();
+        const x = e.nativeEvent.clientX - rect.left;
+        setProgress(x / rect.width);
+    };
+
+    const onMouseMove = e => {
+        if (isMouseDown.current) {
+            setBarProgress(e);
+        }
+    };
+
+    const onMouseDown = e => {
+        isMouseDown.current = true;
+    };
+
+    const onMouseUp = e => {
+        //setBarProgress(e);
         dispatch(setSeeking(true));
-    }, 50);
+        dispatch(setPlayTime(progress * duration));
+        isMouseDown.current = false;
+    };
 
     return (
         <div className="player-progress">
@@ -40,15 +67,17 @@ export function ProgressBar() {
                 Oslo <small>by</small> Holy Esque
             </p>
             <span>
-                <input
-                    value={duration ? fillPrecent : 0}
-                    max="1"
-                    min="0"
-                    style={inputFillStyle}
-                    step="0.01"
-                    type="range"
-                    onChange={(e) => onProgressMove(e.target.value)}
-                />
+                <div
+                    className="full-progress"
+                    style={progressFillStyle}
+                    onMouseMove={onMouseMove}
+                    onMouseUp={onMouseUp}
+                    onMouseDown={onMouseDown}
+                >
+                    {/* <div
+                        className="current-progress"
+                    /> */}
+                </div>
             </span>
             <small className="start-time">
                 {calculateCurrentValue(currentTime)}

@@ -16,6 +16,7 @@ export function PlayerControls() {
   };
 
   const onPause = () => {
+    dispatch(setSeeking(true));
     dispatch(setIsPlaying(false));
   };
 

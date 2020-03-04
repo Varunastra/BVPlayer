@@ -26,8 +26,7 @@ export function Player() {
         const updateListener = audioElem.addEventListener("timeupdate", e => {
             if (!waitForSeek.current) {
                 dispatch(setPlayTime(e.target.currentTime));
-            }
-            else {
+            } else {
                 waitForSeek.current = false;
             }
         });
