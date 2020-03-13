@@ -1,7 +1,75 @@
+$containerColor: rgb(48, 56, 65);
+$progressBarColor: #3a4750;
+$mainTextColor: #eeeeee;
+$secondTextColor: #808080;
+$progressBarProgressColor: #d72323;
+$progressBarThumbColor: #d72323;
+$mediaMaxWidth: 1024px;
+
+@mixin makeResponsive {
+    @media screen and (max-width: $mediaMaxWidth) {
+        width: 100%;
+    }
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: local("Montserrat"), url(./fonts/Montserrat-Light.ttf) format(ttf)
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    font-family: "Montserrat", sans-serif;
+}
+
+#root {
+    background: $containerColor;
+    color: $mainTextColor;
+}
+
+header {
+    height: 80px;
+    width: 1024px;
+    margin: 0 auto;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+
+    @include makeResponsive;
+
+    .logo-image {
+        width: 30px;
+        padding: 0 10px;
+    }
+
+    .logo {
+        display: flex;
+    }
+
+    .fa-user {
+        padding: 0 40px;
+    }
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 600px;
+    flex-wrap: wrap;
+
+    @include makeResponsive;
+}
+
 input[type="range"].slider {
     -webkit-appearance: none;
     width: 100px;
-    margin: 0.7px 0;
 
     &:focus {
         outline: none;
@@ -11,119 +79,162 @@ input[type="range"].slider {
         width: 100%;
         height: 10px;
         cursor: pointer;
-        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
         background: #484d4d;
         border-radius: 0px;
         border: 0px solid #010101;
     }
 
     &::-webkit-slider-thumb {
-        box-shadow: 0px 0px 1px #670000, 0px 0px 0px #810000;
-        border: 0px solid #ff1e00;
-        height: 13px;
+        height: 12px;
         width: 18px;
         border-radius: 0px;
-        background: rgba(214, 67, 95, 0.93);
+        background: $progressBarThumbColor;
         cursor: pointer;
         -webkit-appearance: none;
         margin-top: -0.7px;
     }
 }
 
-.fa-volume-down {
-    color: rgba(214, 67, 95, 0.93);
-    padding: 2px 7px;
-}
-
-.fa-volume-up {
-    color: rgba(214, 67, 95, 0.93);
-    padding: 2px 7px;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    -moz-apperance: none;
-    border-radius: 6px;
-    height: 6px;
-    width: 95%;
-
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        right top,
-        color-stop(15%, #df7164),
-        color-stop(15%, #f5d0cc)
-    );
-
-    background-image: -moz-linear-gradient(
-        left center,
-        #df7164 0%,
-        #df7164 15%,
-        #f5d0cc 15%,
-        #f5d0cc 100%
-    );
-}
-
-input[type="range"]::-moz-range-track {
-    border: none;
-    background: none;
-    outline: none;
-}
-
-input[type="range"]:focus {
-    outline: none;
-    border: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none !important;
-    background-color: #df7164;
-    height: 13px;
-    width: 13px;
-    border-radius: 50%;
-}
-
-input[type="range"]::-moz-range-thumb {
-    -moz-appearance: none !important;
-    background-color: #df7164;
-    border: none;
-    height: 13px;
-    width: 13px;
-    border-radius: 50%;
-}
-
-.full-progress {
-    width: 200px;
-    height: 15px;
-}
-
-.current-progress {
-    width: 10px;
-    background: crimson;
-    height: 100%;
-}
-
-.start-time {
-  position: absolute;
-  top: 75px;
-  left: 0;
-}
-
-.end-time {
-  position: absolute;
-  right: 0;
-  top: 75px;
-}
-
-.player-progress {
-  position: relative;
-  width: 200px;
-  height: 70px;
-}
-
 .player-container {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
+    min-height: 500px;
+
+    .player {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin: 0 5px;
+        width: 100%;
+    }
+
+    .poster {
+        width: 100px;
+        height: 100px;
+        padding: 0 20px;
+    }
+
+    .control-block {
+        display: flex;
+        padding: 20px 0;
+    }
+
+    .play-controls {
+        display: flex;
+    }
+
+    i {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .full-progress {
+        width: 100%;
+        height: 100%;
+        background: $progressBarColor;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+
+    .start-time {
+        position: absolute;
+        top: 20px;
+        left: 0;
+    }
+
+    .end-time {
+        position: absolute;
+        right: 0;
+        top: 20px;
+    }
+
+    .player-progress {
+        position: relative;
+        width: 90%;
+        height: 15px;
+        margin: 10px 20px;
+    }
+
+    .current-progress {
+        width: 100%;
+        height: 100%;
+        background: $progressBarProgressColor;
+        display: block;
+        position: relative;
+        -webkit-transform-origin: 0;
+        transform-origin: 0;
+    }
+
+    .volume-control {
+        display: flex;
+        align-items: center;
+        .fa-volume-up {
+            color: $mainTextColor;
+            padding: 2px 7px;
+        }
+    }
+}
+
+.visualizer {
+    height: 250px;
+    width: 400px;
+
+    @include makeResponsive;
+}
+
+.playlist {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+    min-height: 450px;
+    min-width: 330px;
+    margin: 0 5px;
+
+    @include makeResponsive;
+
+    .poster {
+        width: 60px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .track {
+        display: flex;
+        padding: 8px;
+        cursor: pointer;
+        &:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .playing {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .track-info {
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+
+        .author {
+            color: $secondTextColor;
+        }
+    }
+}
+
+.modal {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+
+    .modal-content {
+        padding-top: 200px;
+        width: 200px;
+    }
 }

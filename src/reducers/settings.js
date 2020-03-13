@@ -1,7 +1,5 @@
-export function settings(state = { volume: 10, source: process.env.PUBLIC_URL + "./test.mp3" }, action) {
+export function settings(state = { volume: 10 }, action) {
     switch (action.type) {
-        case "SET_SOURCE":
-            return { ...state, source: action.payload };
         case "SET_VOLUME":
             return { ...state, volume: action.payload };
         default:
