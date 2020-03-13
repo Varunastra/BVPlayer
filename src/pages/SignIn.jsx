@@ -8,8 +8,8 @@ export function SignIn() {
     return (
         <>
             <ContentWrapper>
-                <h3>Sign in</h3>
                 <div className="sign-in">
+                    <h3>Sign in</h3>
                     <input
                         type="text"
                         onChange={e => setLogin(e.target.value)}

@@ -13,7 +13,7 @@ $mediaMaxWidth: 1024px;
 }
 
 @font-face {
-    font-family: "Montserrat";
+    font-family: "Montserrat", sans-serif;
     src: local("Montserrat"), url(./fonts/Montserrat-Light.ttf) format(ttf)
 }
 
@@ -25,7 +25,6 @@ body,
     height: 100vh;
     width: 100vw;
     overflow: auto;
-    font-family: "Montserrat", sans-serif;
 }
 
 #root {
@@ -226,11 +225,18 @@ input[type="range"].slider {
     }
 }
 
+.sign-in {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .modal {
     position: absolute;
     width: 100vw;
     height: 100vh;
-    display: flex;
+    display: flex; 
     justify-content: center;
 
     .modal-content {
