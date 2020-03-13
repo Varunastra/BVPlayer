@@ -1,23 +1,23 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Track } from "./Track";
-import { setTrack } from "../actions/playlist";
+import React from 'react'
+import { useSelector } from 'react-redux';
 
-export function Playlist() {
-    const tracks = useSelector(state => state.playlist.tracks);
+export function Playlist({ id, name }) {
+    const playlist = useSelector(state => state.playlists.selected);
+    const isPlaying = playlist.id === id;
+
+    const { title, author, poster } = props.track;
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(setTrack(tracks[0]));
-    }, [dispatch, tracks]);
-
-    const tracksRender = tracks.map(track => (
-        <Track track={track} key={track.id} />
-    ));
+    const onPlaylistClicked = () => {
+        dispatch(setTrack(track));
+    };
 
     return (
-        <div className="playlist">
-            <div className="container">{tracksRender}</div>
+        <div className="playlist-folder" onClick={onPlaylistClicked}>
+            <i class="fas fa-folder-open"></i>
+            <div className="cotainer">
+                <strong>name</strong>
+            </div>
         </div>
-    );
+    )
 }

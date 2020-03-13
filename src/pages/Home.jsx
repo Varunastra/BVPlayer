@@ -1,7 +1,7 @@
 import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import { Playlist } from "../components/Playlist";
+import { Tracks } from "../components/Tracks";
 import { reducer } from "../reducers/index";
 import { Player } from "../components/Player/Player";
 import { ContentWrapper } from "./ContentWrapper";
@@ -13,12 +13,14 @@ const store = createStore(
 );
 
 export function Home() {
+    const 
+
     return (
         <ContentWrapper>
             <Provider store={store}>
                 <main className="content">
                     <Player />
-                    <Playlist />
+                    <Tracks />
                 </main>
             </Provider>
         </ContentWrapper>
