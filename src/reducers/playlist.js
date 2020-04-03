@@ -13,10 +13,9 @@ const initialState = {
         poster: process.env.PUBLIC_URL + "./posters/2.jpg"
     }],
     track: {
-        src: "",
-        author: "",
-        title: "",
-        poster: ""
+        title: "Sample track title",
+        author: "Author",
+        poster: process.env.PUBLIC_URL + "./posters/1.jpg"
     },
     trackIndex: 0
 };

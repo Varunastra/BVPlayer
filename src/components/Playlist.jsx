@@ -1,22 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setPlaylist, setIsOpen } from "../actions/playlists";
 
 export function Playlist({ id, name }) {
-    const playlist = useSelector(state => state.playlists.selected);
-    const isPlaying = playlist.id === id;
+    const playing = useSelector(state => state.playlists.current);
+    const isPlaying = playing.id === id;
 
-    const { title, author, poster } = props.track;
     const dispatch = useDispatch();
 
     const onPlaylistClicked = () => {
-        dispatch(setTrack(track));
+        dispatch(setPlaylist({ id, name }));
+        dispatch(setIsOpen());
     };
 
     return (
-        <div className="playlist-folder" onClick={onPlaylistClicked}>
-            <i class="fas fa-folder-open"></i>
-            <div className="cotainer">
-                <strong>name</strong>
+        <div className="playlist" onClick={onPlaylistClicked}>
+            <img className="playlist-folder" src={process.env.PUBLIC_URL + "./playlist.svg"} />
+            <div className="container">
+                <strong>{name}</strong>
             </div>
         </div>
     )
