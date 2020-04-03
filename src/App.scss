@@ -4,6 +4,7 @@ $mainTextColor: #eeeeee;
 $secondTextColor: #808080;
 $progressBarProgressColor: #d72323;
 $progressBarThumbColor: #d72323;
+$borderColor: rgba(134, 83, 99, 0.5);
 $mediaMaxWidth: 1024px;
 
 @mixin makeResponsive {
@@ -183,7 +184,7 @@ input[type="range"].slider {
     @include makeResponsive;
 }
 
-.playlist {
+.tracks {
     display: flex;
     flex-direction: column;
     background: rgba(0, 0, 0, 0.2);
@@ -222,6 +223,53 @@ input[type="range"].slider {
         .author {
             color: $secondTextColor;
         }
+    }
+
+    .header {
+        padding: 0 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid $borderColor;
+
+        .name {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 0 4px;
+        }
+
+        .playlist-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .playlist {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.playlists {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.playlist {
+    display: flex;
+    width: 250px;
+    padding: 10px;
+
+    &-folder {
+        padding: 0 10px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
     }
 }
 
