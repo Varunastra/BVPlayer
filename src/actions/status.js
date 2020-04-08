@@ -13,3 +13,7 @@ export function setDuration(time) {
 export function setSeeking(status) {
     return { type: "SET_SEEKING", payload: status };
 }
+
+export function setVolume(value) {
+    return { type: "SET_VOLUME", payload: value };
+}

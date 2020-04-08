@@ -1,20 +1,24 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Tracks } from "../components/Tracks";
+import React, { useEffect } from "react";
+import { Tracks } from "../components/Tracks/Tracks";
 import { Player } from "../components/Player/Player";
 import { ContentWrapper } from "./ContentWrapper";
-import { Playlists } from "../components/Playlists";
+import { Playlists } from "../components/Playlists/Playlists";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPlaylists } from "../actions/playlists";
 
 export function Home() {
-    const isPlaylistsOpen = useSelector(state => state.playlists.isOpen);
+    const playlistsOpen = useSelector((state) => state.playlists.isOpen);
+    const dispatch = useDispatch();
 
-    console.log("state change");
+    useEffect(() => {
+        dispatch(fetchPlaylists("me"));
+    }, [dispatch]);
 
     return (
         <ContentWrapper>
             <main className="content">
                 <Player />
-            { isPlaylistsOpen ? <Tracks /> : <Playlists /> }
+                {playlistsOpen ? <Tracks /> : <Playlists />}
             </main>
         </ContentWrapper>
     );

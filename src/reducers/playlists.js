@@ -1,31 +1,18 @@
 const initialState = {
-    all: [{
-        id: 1,
-        name: "Maidan",
-    },
-    {
-        id: 2,
-        name: "SlavaUkraine"
-    },
-    {
-        id: 3,
-        name: "Trouble"
-    }],
-    current: {
-        id: 1,
-        name: "Maidan",
-    },
-    isOpen: false
+    all: [],
+    current: null,
+    isOpen: false,
+    error: null
 };
 
 export function playlists(state = initialState, action) {
     switch (action.type) {
         case "FETCH_PLAYLISTS_START":
-            break;
+            return {...state, isLoading: true };
         case "FETCH_PLAYLISTS_ERROR":
-            break;
+            return {...state, isLoading: false, error: action.payload };
         case "FETCH_PLAYLISTS_SUCCESS":
-            break;
+            return {...state, isLoading: false, all: action.payload };
         case "SET_PLAYLIST":
             return { ...state, current: action.payload };
         case "SET_IS_OPEN": {

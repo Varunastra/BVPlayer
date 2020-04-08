@@ -1,3 +1,5 @@
+import { getPlaylist } from "../api/playlist";
+
 export function setTrack(track) {
     return { type: "SET_TRACK", payload: track };
 }
@@ -8,4 +10,20 @@ export function nextTrack() {
 
 export function prevTrack() {
     return { type: "NEXT_TRACK" };
+}
+
+export function fetchTracks(id) {
+    return async (dispatch, getState) => {
+        dispatch({ type: "FETCH_TRACKS_START" });
+        try {
+            const playlistId = id ? id : getState().playlists.current.id;
+            const { tracks } = await getPlaylist(playlistId);
+            tracks.forEach(track =>
+                track.poster = `${process.env.REACT_APP_URL}${track.poster}`);
+            dispatch({ type: "FETCH_TRACKS_SUCCESS", payload: tracks });
+        }
+        catch (e) {
+            dispatch({ type: "FETCH_TRACKS_ERROR", error: e.message });
+        }
+    };
 }

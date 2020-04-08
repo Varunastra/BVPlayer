@@ -13,9 +13,35 @@ $mediaMaxWidth: 1024px;
     }
 }
 
+/* montserrat-regular - cyrillic */
 @font-face {
-    font-family: "Montserrat", sans-serif;
-    src: local("Montserrat"), url(./fonts/Montserrat-Light.ttf) format(ttf)
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Montserrat Regular"), local("Montserrat-Regular"),
+        url("./fonts/montserrat-v14-cyrillic-regular.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("./fonts/montserrat-v14-cyrillic-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* montserrat-500 - cyrillic */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 500;
+    src: local("Montserrat Medium"), local("Montserrat-Medium"),
+        url("./fonts/montserrat-v14-cyrillic-500.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("./fonts/montserrat-v14-cyrillic-500.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* montserrat-600 - cyrillic */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 600;
+    src: local("Montserrat SemiBold"), local("Montserrat-SemiBold"),
+        url("./fonts/montserrat-v14-cyrillic-600.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("./fonts/montserrat-v14-cyrillic-600.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 html,
@@ -26,11 +52,34 @@ body,
     height: 100vh;
     width: 100vw;
     overflow: auto;
+    font-family: "Montserrat", sans-serif;
+}
+
+button,
+input {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+}
+
+input[type="file"] {
+    display: none;
 }
 
 #root {
     background: $containerColor;
     color: $mainTextColor;
+}
+
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    top: 0;
+    left: 0;
 }
 
 header {
@@ -53,7 +102,7 @@ header {
     }
 
     .fa-user {
-        padding: 0 40px;
+        padding: 0 10px;
     }
 }
 
@@ -63,7 +112,6 @@ header {
     align-items: flex-start;
     min-height: 600px;
     flex-wrap: wrap;
-
     @include makeResponsive;
 }
 
@@ -109,10 +157,31 @@ input[type="range"].slider {
         width: 100%;
     }
 
+    .poster-container {
+        position: relative;
+
+        .fa-edit {
+            position: absolute;
+            top: -15px;
+            right: 0px;
+            font-size: 15px;
+            color: $mainTextColor;
+            z-index: 1001;
+        }
+    }
+
     .poster {
         width: 100px;
         height: 100px;
-        padding: 0 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        margin: 0 20px;
+        opacity: 0.7;
+        transition: opacity 300ms;
+         
+        &:hover {
+            opacity: 0.9;
+        }
     }
 
     .control-block {
@@ -196,6 +265,7 @@ input[type="range"].slider {
 
     .poster {
         width: 60px;
+        height: 60px;
     }
 
     .container {
@@ -225,17 +295,17 @@ input[type="range"].slider {
         }
     }
 
-    .header {
-        padding: 0 10px;
+    &-header {
+        padding: 5px 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 2px solid $borderColor;
+        border-bottom: 1px solid $secondTextColor;
 
         .name {
             font-size: 16px;
-            font-weight: 600;
-            padding: 0 4px;
+            font-weight: 500;
+            padding: 0 10px;
         }
 
         .playlist-icon {
@@ -243,10 +313,16 @@ input[type="range"].slider {
             height: 30px;
         }
 
-        .playlist {
-            display: flex;
-            align-items: center;
+        .fa-times {
+            padding: 0 10px;
+            cursor: pointer;
         }
+    }
+
+    &-playlist {
+        display: flex;
+        align-items: center;
+        padding: 10px;
     }
 }
 
@@ -254,22 +330,44 @@ input[type="range"].slider {
     display: flex;
     flex-direction: column;
     background: rgba(0, 0, 0, 0.2);
+    min-height: 450px;
+    min-width: 330px;
+    margin: 0 5px;
+    padding: 5px 0px;
+
+    @include makeResponsive();
 }
 
 .playlist {
     display: flex;
-    width: 250px;
     padding: 10px;
+    align-items: center;
+    cursor: pointer;
 
     &-folder {
         padding: 0 10px;
-        width: 36px;
-        height: 36px;
+        width: 30px;
+        height: 30px;
+    }
+
+    &-controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        padding: 5px;
+    }
+
+    .fa-edit {
+        padding-right: 10px;
     }
 
     .container {
         display: flex;
         align-items: center;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -280,15 +378,56 @@ input[type="range"].slider {
     justify-content: center;
 }
 
-.modal {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    display: flex; 
-    justify-content: center;
+.hidden {
+    display: none;
+}
 
-    .modal-content {
-        padding-top: 200px;
-        width: 200px;
+.error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    .fa-times-circle {
+        color: red;
+    }
+
+    .error-text {
+        color: crimson;
+        padding: 0 5px;
+        font-weight: 500;
+    }
+}
+
+.add-item {
+    padding: 15px 10px;
+    cursor: pointer;
+
+    &-text {
+        font-weight: 500;
+    }
+
+    .fa-plus {
+        padding: 0 10px;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.add-track-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .upload-track {
+        border: 1px solid $mainTextColor;
+        padding: 5px 10px;
+        margin-top: 20px;
+    }
+
+    .button-container {
+        padding-top: 15px;
     }
 }

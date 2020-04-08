@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setVolume } from "../../actions/settings";
+import { setVolume } from "../../actions/status";
 
 export function VolumeControl() {
     const dispatch = useDispatch();
-    const volume = useSelector(state => state.settings.volume);
+    const volume = useSelector(state => state.status.volume);
 
     const volumeChanged = e => {
         dispatch(setVolume(e.target.value));

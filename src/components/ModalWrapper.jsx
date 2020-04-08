@@ -1,11 +1,11 @@
 import React from "react";
 import { createPortal } from "react-dom";
 
-export function ModalWrapper(props) {
+export function ModalWrapper({ children, onToggleModal }) {
     return createPortal(
-        <div className="modal">
-            <div className="modal-content">{props.children}</div>
+        <div className="modal" onClick={onToggleModal}>
+            {children}
         </div>,
-        document.body
+        document.getElementById("modal-root")
     );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTrack } from "../actions/playlist";
+import { setTrack } from "../../actions/playlist";
+import defaultPoster from "../../poster.png";
 
 export function Track(props) {
     const current = useSelector(state => state.playlist.track);
@@ -18,10 +19,10 @@ export function Track(props) {
             className={isPlaying ? "track playing" : "track"}
             onClick={onTrackClicked}
         >
-            <img src={poster} className="poster" alt="poster" />
+            <img src={poster || defaultPoster} className="poster" alt="poster" />
             <div className="track-info">
-                <div>{title}</div>
-                <small className="author">{author}</small>
+                <div>{title || "Enter track name"}</div>
+                <small className="author">{author || "Enter author"}</small>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 const initialState = {
-    currentTime: 0, isPlaying: false, duration: 0, isSeeking: false
+    currentTime: 0, isPlaying: false, duration: 0, isSeeking: false, volume: 10
 };
 
 export function status(state = initialState, action) {
@@ -12,6 +12,8 @@ export function status(state = initialState, action) {
             return { ...state, duration: action.payload };
         case "SET_SEEKING":
             return { ...state, isSeeking: action.payload };
+        case "SET_VOLUME":
+            return { ...state, volume: action.payload };
         default:
             return state;
     }

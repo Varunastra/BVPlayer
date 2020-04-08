@@ -5,15 +5,18 @@ import { PlayerControls } from "./PlayerControls";
 import { Visualizer } from "./Visualizer";
 import { PlayerProgressBar } from "./PlayerProgressBar";
 import { usePrevious } from "../../usePrevious";
-import { nextTrack } from "../../actions/playlist";
+import { nextTrack, fetchTracks } from "../../actions/playlist";
+import defaultPoster from "../../poster.png";
+import FileInput from "../UI/FileInput/FileInput";
+import { updateTrack } from "../../api/playlist";
 
 export function Player() {
-    const track = useSelector(state => state.playlist.track);
-    const volume = useSelector(state => state.settings.volume);
+    const track = useSelector((state) => state.playlist.track);
+    const volume = useSelector((state) => state.status.volume);
 
-    const isPlaying = useSelector(state => state.status.isPlaying);
-    const currentTime = useSelector(state => state.status.currentTime);
-    const isSeeking = useSelector(state => state.status.isSeeking);
+    const isPlaying = useSelector((state) => state.status.isPlaying);
+    const currentTime = useSelector((state) => state.status.currentTime);
+    const isSeeking = useSelector((state) => state.status.isSeeking);
 
     const dispatch = useDispatch();
     const audio = useRef(null);
@@ -22,18 +25,21 @@ export function Player() {
     const prevTrack = usePrevious(track);
 
     useEffect(() => {
-        if (prevTrack !== track) {
-            audio.current.load();
-            if (isPlaying) {
-                audio.current.play();
+        async function loadTrack() {
+            if (prevTrack !== track) {
+                await audio.current.load();
+                if (isPlaying) {
+                    await audio.current.play();
+                }
             }
         }
+        loadTrack();
     });
 
     useEffect(() => {
         const audioElem = audio.current;
 
-        const updateListener = audioElem.addEventListener("timeupdate", e => {
+        const updateListener = audioElem.addEventListener("timeupdate", (e) => {
             if (!waitForSeek.current) {
                 dispatch(setPlayTime(e.target.currentTime));
             } else {
@@ -41,7 +47,7 @@ export function Player() {
             }
         });
 
-        const trackEndListener = audioElem.addEventListener("ended", e => {
+        const trackEndListener = audioElem.addEventListener("ended", (e) => {
             dispatch(nextTrack());
         });
 
@@ -86,20 +92,37 @@ export function Player() {
         audio.current.volume = volume / 100;
     }, [volume]);
 
-    const playerRender = (
+    const handleUpload = async (poster) => {
+        await updateTrack({ poster, id: track.id });
+        dispatch(fetchTracks());
+    };
+
+    return <article className="player-container">
         <div className="player">
-            <audio src={track.src} ref={audio}></audio>
+            <audio
+                src={`${process.env.REACT_APP_URL}${track.src}`}
+                ref={audio}
+                crossOrigin="anonymous"
+            ></audio>
             <Visualizer audio={audio} />
             <div className="control-block">
-                <img src={track.poster} alt="poster" className="poster" />
+                <div className="poster-container">
+                    <FileInput handleUpload={handleUpload}>
+                        <i className="fas fa-edit"></i>
+                    </FileInput>
+                    <img
+                        src={track.poster || defaultPoster}
+                        alt="poster"
+                        className="poster"
+                    />
+                </div>
                 <div>
-                    <strong>{track.author}</strong> - {track.title}
+                    <strong>{track.author || "Sample author"}</strong> -{" "}
+                    {track.title || "Sample title"}
                     <PlayerControls />
                 </div>
             </div>
             <PlayerProgressBar />
         </div>
-    );
-
-    return <article className="player-container">{playerRender}</article>;
+    </article>;
 }

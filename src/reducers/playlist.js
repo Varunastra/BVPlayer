@@ -1,33 +1,22 @@
 const initialState = {
-    tracks: [{
-        id: 0,
-        title: "Slava ukraine",
-        author: "Patau",
-        src: process.env.PUBLIC_URL + "./tracks/1.mp3",
-        poster: process.env.PUBLIC_URL + "./posters/1.jpg"
-    }, {
-        id: 1,
-        title: "Fear Inoculum",
-        author: "Tool",
-        src: process.env.PUBLIC_URL + "./tracks/2.mp3",
-        poster: process.env.PUBLIC_URL + "./posters/2.jpg"
-    }],
+    tracks: [],
     track: {
         title: "Sample track title",
         author: "Author",
-        poster: process.env.PUBLIC_URL + "./posters/1.jpg"
+        poster: null
     },
-    trackIndex: 0
+    trackIndex: 0,
+    error: null
 };
 
 export function playlist(state = initialState, action) {
     switch (action.type) {
         case "FETCH_TRACKS_START":
-            return state;
+            return { ...state, isLoading: true, tracks: [] };
         case "FETCH_TRACKS_SUCCESS":
-            return state;
+            return { ...state, tracks: action.payload, isLoading: false };
         case "FETCH_TRACKS_ERROR":
-            return state;
+            return { ...state, isLoading: false, error: action.payload };
         case "SET_TRACK":
             const newIndex = state.tracks.indexOf(action.payload);
             return { ...state, track: state.tracks[newIndex] };
