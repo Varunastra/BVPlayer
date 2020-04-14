@@ -17,8 +17,9 @@ function PlaylistEdit({ playlist, isEditable, setIsEditable }) {
         };
         if (isEnterPressed) {
             handlePlaylistUpdate();
+            setIsEditable(false);
         }
-    }, [isEnterPressed, dispatch, name, playlist]);
+    }, [isEnterPressed, dispatch, name, playlist, setIsEditable]);
 
     return (
         <EditableText 

@@ -15,6 +15,9 @@ import { setTrack } from '../actions/playlist';
 import { setIsPlaying } from '../actions/status';
 import { Spinner } from '../components/UI/Spinner/Spinner';
 import changePhoto from "../images/change-photo.svg";
+import Dialog from '../components/UI/Dialog/Dialog';
+import { Playlists } from '../components/Playlists/Playlists';
+import { fetchPlaylists } from '../actions/playlists';
 
 function Track() {
     const { id } = useParams();
@@ -22,6 +25,7 @@ function Track() {
     const dispatch = useDispatch();
     const [isEditable, setIsEditable] = useState(false);
     const [isUpdating, setIsUpdating] = useState(true);
+    const [isAddPlaylistClicked, setIsAddPlaylistClicked] = useState(false);
 
     const [title, setTitle] = useState(null);
     const [author, setAuthor] = useState(null);
@@ -74,8 +78,13 @@ function Track() {
     };
 
     const handleAdd = () => {
-
+        dispatch(fetchPlaylists("me"));
+        setIsAddPlaylistClicked(true);
     };
+
+    const handleAddPlaylistClose = () => {
+        setIsAddPlaylistClicked(false);
+    }
 
     return (
         <ContentWrapper>
@@ -85,14 +94,14 @@ function Track() {
                     <>
                         <div className="track-info">
                             <div className="poster" alt="Poster">
-                                    {isEditable && 
-                                        <FileInput handleUpload={uploadPoster}>
-                                            <img className="upload-poster" src={changePhoto} alt="Change poster" />
-                                        </FileInput>}
-                                    <img
-                                        src={poster ? `${process.env.REACT_APP_URL}${poster}` : defaultPoster}
-                                        className={isEditable ? "semi-visible" : ""}
-                                        alt="Poster" />
+                                {isEditable &&
+                                    <FileInput handleUpload={uploadPoster}>
+                                        <img className="upload-poster" src={changePhoto} alt="Change poster" />
+                                    </FileInput>}
+                                <img
+                                    src={poster ? `${process.env.REACT_APP_URL}${poster}` : defaultPoster}
+                                    className={isEditable ? "semi-visible" : ""}
+                                    alt="Poster" />
                                 <div className="actions">
                                     {isCurrentUser && <i className="fa fa-edit" onClick={editTrack} />}
                                     <i className="fa fa-play" onClick={handlePlay} />
@@ -133,6 +142,12 @@ function Track() {
                     </>)
                 }
             </div>
+            <Dialog 
+                open={isAddPlaylistClicked} 
+                title="Select playlist to where add track" 
+                handleClose={handleAddPlaylistClose}>
+                <Playlists type="modal" />
+            </Dialog>
         </ContentWrapper>
     )
 };

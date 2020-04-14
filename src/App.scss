@@ -1,54 +1,20 @@
-$containerColor: rgb(48, 56, 65);
-$progressBarColor: #3a4750;
-$mainTextColor: #eeeeee;
-$secondTextColor: #808080;
-$progressBarProgressColor: #d72323;
-$progressBarThumbColor: #d72323;
-$borderColor: rgba(134, 83, 99, 0.5);
-$mediaMaxWidth: 1360px;
+@import "./styles/variables";
+@import "./styles/mixins";
 
-@mixin makeResponsive {
-    @media screen and (max-width: $mediaMaxWidth) {
-        width: 100%;
-    }
+::-webkit-scrollbar {
+    width: 6px;
 }
-
-@mixin progressBarStyle($timeTop, $timeMargin, $height) {
-    .start-time {
-        position: absolute;
-        top: $timeTop;
-        left: $timeMargin;
-    }
-
-    .end-time {
-        position: absolute;
-        top: $timeTop;
-        right: $timeMargin;
-    }
-
-    .player-progress {
-        position: relative;
-        height: $height;
-    }
-
-    .current-progress {
-        width: 100%;
-        height: 100%;
-        background: $progressBarProgressColor;
-        display: block;
-        position: relative;
-        -webkit-transform-origin: 0;
-        transform-origin: 0;
-    }
-
-    .full-progress {
-        width: 100%;
-        height: 100%;
-        background: $progressBarColor;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-    }
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px $scrollBarColor;
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(163, 214, 238, 0.2);
+    border-radius: 4px;
+    height: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(163, 214, 238, 0.4);
 }
 
 /* montserrat-regular - cyrillic */
@@ -57,9 +23,11 @@ $mediaMaxWidth: 1360px;
     font-style: normal;
     font-weight: 400;
     src: local("Montserrat Regular"), local("Montserrat-Regular"),
-        url("./fonts/montserrat-v14-cyrillic-regular.woff2") format("woff2"),
+        url("./fonts/montserrat-v14-cyrillic-regular.woff2")
+            format("woff2"),
         /* Chrome 26+, Opera 23+, Firefox 39+ */
-            url("./fonts/montserrat-v14-cyrillic-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+            url("./fonts/montserrat-v14-cyrillic-regular.woff")
+            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* montserrat-500 - cyrillic */
 @font-face {
@@ -67,9 +35,11 @@ $mediaMaxWidth: 1360px;
     font-style: normal;
     font-weight: 500;
     src: local("Montserrat Medium"), local("Montserrat-Medium"),
-        url("./fonts/montserrat-v14-cyrillic-500.woff2") format("woff2"),
+        url("./fonts/montserrat-v14-cyrillic-500.woff2")
+            format("woff2"),
         /* Chrome 26+, Opera 23+, Firefox 39+ */
-            url("./fonts/montserrat-v14-cyrillic-500.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+            url("./fonts/montserrat-v14-cyrillic-500.woff")
+            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* montserrat-600 - cyrillic */
 @font-face {
@@ -77,14 +47,17 @@ $mediaMaxWidth: 1360px;
     font-style: normal;
     font-weight: 600;
     src: local("Montserrat SemiBold"), local("Montserrat-SemiBold"),
-        url("./fonts/montserrat-v14-cyrillic-600.woff2") format("woff2"),
+        url("./fonts/montserrat-v14-cyrillic-600.woff2")
+            format("woff2"),
         /* Chrome 26+, Opera 23+, Firefox 39+ */
-            url("./fonts/montserrat-v14-cyrillic-600.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+            url("./fonts/montserrat-v14-cyrillic-600.woff")
+            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 html,
 body,
-#root {
+#root,
+#modal {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -93,12 +66,18 @@ body,
     font-family: "Montserrat", sans-serif;
 }
 
+.modal {
+    color: whitesmoke;
+}
+
 #root {
     display: flex;
     flex-direction: column;
 }
 
-header, footer, .content {
+header,
+footer,
+.content {
     flex-shrink: 0;
 }
 
@@ -149,45 +128,6 @@ header {
         padding-right: 20px;
         user-select: none;
         cursor: pointer;
-    }
-
-    .user {
-        position: relative;
-        margin-left: auto;
-        padding: 0 30px;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .user-menu {
-        background: #0000004d;
-        position: absolute;
-        right: 20px;
-        width: 100%;
-        list-style-image: none;
-        list-style: none;
-        padding: 5px 15px;
-
-        li {
-            line-height: 35px;
-            cursor: pointer;
-        }
-
-        .logout::before {
-            background: url("./images/logout.svg");
-            content: "";   
-            display: inline-block;
-            background-size: 20px;   
-            height: 20px;   
-            width: 20px; 
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-    }
-
-    .fa-user {
-        padding: 0 10px;
-        display: inline;
     }
 }
 
@@ -263,7 +203,7 @@ input[type="range"].slider {
         margin: 0 20px;
         opacity: 0.7;
         transition: opacity 300ms;
-         
+
         &:hover {
             opacity: 0.9;
         }
@@ -316,7 +256,8 @@ input[type="range"].slider {
     background: rgba(0, 0, 0, 0.2);
     min-height: 450px;
     flex-grow: 1;
-    flex-basis: 250px;
+    flex-basis: 300px;
+    max-height: 450px;
     margin: 0px 5px 20px 5px;
 
     @include makeResponsive;
@@ -329,6 +270,7 @@ input[type="range"].slider {
 
     .container {
         padding: 10px;
+        overflow: auto;
     }
 
     .track {
@@ -398,13 +340,17 @@ input[type="range"].slider {
     display: flex;
     flex-direction: column;
     background: rgba(0, 0, 0, 0.2);
-    min-height: 450px;
+    max-height: 450px;
     margin: 0px 5px 15px 5px;
     padding: 5px 0px;
     flex-grow: 1;
-    flex-basis: 250px;
+    flex-basis: 300px;
 
     @include makeResponsive();
+
+    .container {
+        overflow: auto;
+    }
 }
 
 .playlist {
@@ -440,7 +386,8 @@ input[type="range"].slider {
     }
 }
 
-.sign-in, .sign-up {
+.sign-in,
+.sign-up {
     display: flex;
     justify-content: center;
     padding-top: 100px;
@@ -452,7 +399,7 @@ input[type="range"].slider {
         align-items: center;
         flex-direction: column;
         justify-content: center;
-        
+
         a {
             color: grey;
             text-decoration: none;
@@ -656,7 +603,6 @@ input[type="range"].slider {
         padding: 0 10px;
     }
 }
-
 
 .not-found {
     display: flex;

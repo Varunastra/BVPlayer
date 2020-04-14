@@ -22,6 +22,11 @@ function Dialog({ title, children, variant, onSave, open, handleClose }) {
             );
             break;
         default:
+            controls = (
+                <>
+                    <Button onClick={handleClose}>Cancel</Button>
+                </>
+            )
             break;
     }
 

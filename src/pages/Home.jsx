@@ -7,9 +7,10 @@ import { fetchPlaylists } from "../actions/playlists";
 import { AudioRef } from "../components/AudioRef";
 import PlayerContainer from "../components/Player/PlayerContainer";
 
-export function Home({ audioRef }) {
+export function Home() {
     const playlistsOpen = useSelector((state) => state.playlists.isOpen);
     const dispatch = useDispatch();
+    
     useEffect(() => {
         dispatch(fetchPlaylists("me"));
     }, [dispatch]);

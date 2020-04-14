@@ -13,11 +13,6 @@ function EditableText({ value, isEditable, setIsEditable, onChange }) {
         inputRef.current.style.width = newWidth + indent + "px";
     }, []);
 
-    const handleClick = (e) => {
-        e.stopPropagation();
-        setIsEditable(true);
-    };
-
     useEffect(() => {
         if (inputRef.current && isEditable) {
             changeInputWidth();
@@ -31,7 +26,7 @@ function EditableText({ value, isEditable, setIsEditable, onChange }) {
     }, [value, changeInputWidth]);
 
     return (
-        <div className="editable" onClick={handleClick}>
+        <div className="editable">
             {isEditable
                 ? <>
                     <input

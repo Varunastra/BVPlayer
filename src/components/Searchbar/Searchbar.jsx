@@ -3,10 +3,9 @@ import "./Searchbar.scss";
 import { searchTrack } from '../../api/playlist';
 import SearchItem from './SearchItem';
 
-function Searchbar() {
+function Searchbar({ isMenuOpen, setIsMenuOpen }) {
     const [tracks, setTracks] = useState([]);
     const [searchText, setSearchText] = useState("");
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const clearSearch = () => {
         setSearchText("");
@@ -33,7 +32,7 @@ function Searchbar() {
             setTracks([]);
             setIsMenuOpen(false);
         }
-    }, [searchText]);
+    }, [searchText, setIsMenuOpen]);
 
     return (
         <div className="search-bar">

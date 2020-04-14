@@ -36,5 +36,8 @@ export function getBufferLength() {
 }
 
 export function getContext() {
+    if (context.state === "suspended") {
+        context.resume();
+    }
     return context;
 }
