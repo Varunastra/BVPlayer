@@ -3,7 +3,7 @@ import { useSelector, useDispatch, batch } from "react-redux";
 import { setPlayTime, setSeeking } from "../../actions/status";
 import { calculateTime } from "../../helpers/calculateTime"
 
-export function PlayerProgressBar() {
+function PlayerProgressBar() {
     const currentTime = useSelector(state => state.status.currentTime);
     const duration = useSelector(state => state.status.duration);
     const dispatch = useDispatch();
@@ -52,19 +52,17 @@ export function PlayerProgressBar() {
     
     return (
         <div className="player-progress">
-            <span>
+            <div
+                className="full-progress"
+                onMouseMove={onMouseMove}
+                onMouseUp={onMouseUp}
+                onMouseDown={onMouseDown}
+            >
                 <div
-                    className="full-progress"
-                    onMouseMove={onMouseMove}
-                    onMouseUp={onMouseUp}
-                    onMouseDown={onMouseDown}
-                >
-                    <div
-                        className="current-progress"
-                        style={progressScaleStyle}
-                    />
-                </div>
-            </span>
+                    className="current-progress"
+                    style={progressScaleStyle}
+                />
+            </div>
             <small className="start-time">
                 {calculateTime(currentTime)}
             </small>
@@ -74,3 +72,5 @@ export function PlayerProgressBar() {
         </div>
     );
 }
+
+export default PlayerProgressBar;

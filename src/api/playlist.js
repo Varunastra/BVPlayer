@@ -19,9 +19,9 @@ export const createPlaylist = (name) => fetchApi(`playlists`, {
     body: JSON.stringify({ name })
 });
 
-export const createTrack = async (track, playlist_id) => {
+export const createTrack = async ({ track, playlistId }) => {
     const formData = getFormData(track);
-    return fetchApi(`playlists/${playlist_id}/tracks`, {
+    return fetchApi(`playlists/${playlistId}/tracks`, {
         method: "POST",
         body: formData,
         headers: {}
@@ -36,3 +36,19 @@ export const updateTrack = (track) => {
         headers: {}
     });
 };
+
+export const searchTrack = ({ searchText }) => {
+    return fetchApi(`tracks?search=${searchText}`);
+};
+
+export const getTrack = ({ id }) => fetchApi(`tracks/${id}`);
+
+export const addGenre = ({ genre, trackId }) => fetchApi(`tracks/${trackId}/genres`, {
+        method: "POST",
+        body: JSON.stringify(genre)
+    });
+
+export const updatePlaylist = (playlist) => fetchApi(`playlists/${playlist.id}`, {
+    method: "PATCH",
+    body: JSON.stringify(playlist)
+});

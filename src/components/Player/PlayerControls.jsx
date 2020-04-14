@@ -5,7 +5,7 @@ import { getContext } from "../../helpers/audioBuffer";
 import { VolumeControl } from "./VolumeControl";
 import { nextTrack, prevTrack } from "../../actions/playlist";
 
-export function PlayerControls() {
+function PlayerControls() {
     const dispatch = useDispatch();
     const isPlaying = useSelector(state => state.status.isPlaying);
 
@@ -64,3 +64,5 @@ export function PlayerControls() {
         </>
     );
 }
+
+export default PlayerControls;

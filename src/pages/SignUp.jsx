@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { ContentWrapper } from "./ContentWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../actions/user";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import TextField from "../components/UI/TextField/TextField";
 import Button from "../components/UI/Button/Button";
+import ErrorMessage from "../components/UI/Error/ErrorMessage";
 
-function SignUpWithRouter({ history }) {
+function SignUp() {
     const [login, setLogin] = useState();
     const [password, setPassword] = useState();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const error = useSelector((state) => state.user.error);
+    const history = useHistory();
 
     const dispatch = useDispatch();
 
@@ -26,8 +28,8 @@ function SignUpWithRouter({ history }) {
 
     return (
         <>
-            <ContentWrapper>
-                <form className="sign-in" onSubmit={handleRegister}>
+            <form className="sign-up" onSubmit={handleRegister}>
+                <div className="container">
                     <h3>Sign up</h3>
                     <TextField
                         value={login}
@@ -41,11 +43,12 @@ function SignUpWithRouter({ history }) {
                         placeholder="Enter password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <ErrorMessage error={error}/>
                     <Button type="submit">Register</Button>
-                </form>
-            </ContentWrapper>
+                </div>
+            </form>
         </>
     );
 }
 
-export const SignUp = withRouter(SignUpWithRouter);
+export default SignUp;

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { ContentWrapper } from "./ContentWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { auhtorizeUser } from "../actions/user";
-import { withRouter, Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import TextField from "../components/UI/TextField/TextField";
 import Button from "../components/UI/Button/Button";
+import ErrorMessage from "../components/UI/Error/ErrorMessage";
 
-function SignInWithRouter({ history }) {
+function SignIn() {
     const [login, setLogin] = useState();
     const [password, setPassword] = useState();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const error = useSelector((state) => state.user.error);
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -26,8 +28,8 @@ function SignInWithRouter({ history }) {
 
     return (
         <>
-            <ContentWrapper>
-                <form className="sign-in" onSubmit={handleLogin}>
+            <form className="sign-in" onSubmit={handleLogin}>
+                <div className="container">
                     <h3>Sign in</h3>
                     <TextField
                         value={login}
@@ -41,12 +43,13 @@ function SignInWithRouter({ history }) {
                         placeholder="Enter password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <ErrorMessage error={error} />
                     <Button type="submit">Login</Button>
                     <div>First time?, <Link to="/register">register</Link> first</div>
-                </form>
-            </ContentWrapper>
+                </div>
+            </form>
         </>
     );
 }
 
-export const SignIn = withRouter(SignInWithRouter);
+export default SignIn;

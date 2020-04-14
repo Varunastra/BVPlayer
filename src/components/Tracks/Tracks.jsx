@@ -1,17 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Track } from "./Track";
 import { fetchTracks } from "../../actions/playlist";
 import { setIsOpen } from "../../actions/playlists";
 import { Spinner } from "../UI/Spinner/Spinner";
-import playlistLogo from "../../playlist.svg";
+import playlistLogo from "../../images/playlist.svg";
 import NewTrack from "./NewTrack";
+import PlaylistEdit from "./PlaylistEdit";
 
 export function Tracks() {
     const tracks = useSelector((state) => state.playlist.tracks);
     const playlist = useSelector((state) => state.playlists.current);
     const isLoading = useSelector((state) => state.playlist.isLoading);
     const dispatch = useDispatch();
+    const [isPlaylistEditable, setIsPlaylistEditable] = useState(false);
 
     useEffect(() => {
         dispatch(fetchTracks());
@@ -19,6 +21,10 @@ export function Tracks() {
 
     const onBackClicked = () => {
         dispatch(setIsOpen());
+    };
+
+    const handlePlaylistEdit = () => {
+        setIsPlaylistEditable(!isPlaylistEditable);
     };
 
     return (
@@ -30,9 +36,17 @@ export function Tracks() {
                         src={playlistLogo}
                         alt="Playlist"
                     />
-                    <div className="name">{playlist.name}</div>
+                    <div className="name">
+                        <PlaylistEdit
+                            isEditable={isPlaylistEditable}
+                            setIsEditable={setIsPlaylistEditable} 
+                            playlist={playlist} />
+                    </div>
                 </div>
-                <i className="fas fa-times fa-lg" onClick={onBackClicked}></i>
+                <div className="controls">
+                    <i className="fas fa-edit" onClick={handlePlaylistEdit}></i>
+                    <i className="fas fa-times fa-lg" onClick={onBackClicked}></i>
+                </div>
             </div>
             <div className="container">
                 <Spinner isLoading={isLoading} />

@@ -2,14 +2,12 @@ import { obtainToken } from "../api/auth"
 import { getUserProfile, addUser } from "../api/user";
 
 export const auhtorizeUser = (login, password) => async (dispatch) => {
-    const { token, message } = await obtainToken(login, password);
-
-    if (token) {
+    try {
+        const { token } = await obtainToken(login, password);
         localStorage.setItem("token", token);
         dispatch({ type: "USER_LOGIN_SUCCESS" });
-    }
-    else {
-        dispatch({ type: "USER_LOGIN_FAIL", payload: message });
+    } catch(e) {
+        dispatch({ type: "USER_LOGIN_FAIL", payload: "Wrong username or password" });
     }
 };
 
@@ -25,10 +23,13 @@ export const fetchUser = () => async (dispatch) => {
 
 export const registerUser = (user) => async (dispatch) => {
     try {
-        await addUser(user);
+        const { token } = await addUser(user);
+        localStorage.setItem("token", token);
         dispatch({ type: "USER_REGISTER_SUCCESS" });
     }
     catch (e) {
-        dispatch({ type: "USER_REGISTER_ERROR" });
+        dispatch({ type: "USER_REGISTER_ERROR", payload: "User already exists" });
     }
 };
+
+export const logoutUser = () => ({ type: "USER_LOGOUT" });

@@ -26,9 +26,8 @@ function NewTrack() {
     };
 
     const handleSave = async () => {
-        await createTrack({ title, author, track }, id);
+        await createTrack({ track: { title, author, track }, playlistId: id });
         dispatch(fetchTracks(id));
-        setIsDialogOpen(false);
     };
 
     return (
@@ -56,9 +55,7 @@ function NewTrack() {
                         preview={true}
                         handleUpload={(file) => setTrack(file)}
                     >
-                        <div className="button-container">
-                            <Button>Upload track</Button>
-                        </div>
+                    <Button>Upload track</Button>
                     </FileInput>
                 </div>
             </Dialog>

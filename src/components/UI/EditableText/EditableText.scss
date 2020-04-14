@@ -1,0 +1,21 @@
+.editable {
+    display: inline-block;
+    input {
+        background: rgba(0, 0, 0, 0.8);
+        color: inherit;
+        overflow: hidden;
+        font: inherit;
+        padding: 0;
+        margin: 0;
+        width: 0;
+        outline: none;
+        border: none;
+    }
+
+    span {
+        position: absolute;
+        height: 0;
+        overflow: hidden;
+        white-space: pre;
+    }
+}

@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
 import { Tracks } from "../components/Tracks/Tracks";
-import { Player } from "../components/Player/Player";
-import { ContentWrapper } from "./ContentWrapper";
+import ContentWrapper from "../components/containers/ContentWrapper";
 import { Playlists } from "../components/Playlists/Playlists";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPlaylists } from "../actions/playlists";
+import { AudioRef } from "../components/AudioRef";
+import PlayerContainer from "../components/Player/PlayerContainer";
 
-export function Home() {
+export function Home({ audioRef }) {
     const playlistsOpen = useSelector((state) => state.playlists.isOpen);
     const dispatch = useDispatch();
-
     useEffect(() => {
         dispatch(fetchPlaylists("me"));
     }, [dispatch]);
 
     return (
         <ContentWrapper>
-            <main className="content">
-                <Player />
-                {playlistsOpen ? <Tracks /> : <Playlists />}
-            </main>
+            <PlayerContainer audio={AudioRef} />
+            {playlistsOpen ? <Tracks /> : <Playlists />}
         </ContentWrapper>
     );
 }
+
+export default Home;

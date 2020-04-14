@@ -2,8 +2,8 @@ import React from "react";
 import { Playlist } from "./Playlist";
 import { useSelector } from "react-redux";
 import { Spinner } from "../UI/Spinner/Spinner";
-import { ErrorMessage } from "../UI/ErrorMessage";
 import NewPlaylist from "./NewPlaylist";
+import ErrorMessage from "../UI/Error/ErrorMessage";
 
 export function Playlists() {
     const playlists = useSelector((state) => state.playlists.all);
@@ -13,7 +13,7 @@ export function Playlists() {
     return (
         <div className="playlists">
             <Spinner isLoading={isLoading} />
-            <ErrorMessage error={error} />
+            <ErrorMessage hasIcon={true} error={error} />
             {playlists &&
                 playlists.map((playlist) => (
                     <Playlist key={playlist.id} {...playlist} />

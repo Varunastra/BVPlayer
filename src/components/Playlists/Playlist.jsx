@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { setPlaylist, setIsOpen, fetchPlaylists } from "../../actions/playlists";
-import playlistLogo from "../../playlist.svg";
+import playlistLogo from "../../images/playlist.svg";
 import { deletePlaylist } from "../../api/playlist";
 
 export function Playlist(playlist) {
@@ -20,10 +20,6 @@ export function Playlist(playlist) {
         dispatch(fetchPlaylists("me"));
     };
 
-    const handleEdit = async (e) => {
-        e.stopPropagation();
-    };
-
     return (
         <div className="playlist" onClick={onPlaylistClicked}>
             <img
@@ -35,7 +31,6 @@ export function Playlist(playlist) {
                 {name}
             </div>
             <div className="playlist-controls">
-                <i className="fa fa-edit" onClick={handleEdit} />
                 <i className="fas fa-trash" onClick={handleDelete}></i>
             </div>
         </div>

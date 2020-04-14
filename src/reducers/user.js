@@ -3,8 +3,7 @@ const checkAuth = () => !!localStorage.token;
 const initialState = {
     isAuthenticated: checkAuth(),
     isLoading: false,
-    profile: null,
-    isRegisterComplete: false
+    profile: null
 };
 
 export function user(state = initialState, action) {
@@ -14,13 +13,16 @@ export function user(state = initialState, action) {
         case "FETCH_USER_ERROR":
             return { ...state, error: action.payload };
         case "USER_LOGIN_SUCCESS": 
-            return { ...state, isAuthenticated: true };
+            return { ...state, isAuthenticated: true, error: null };
         case "USER_LOGIN_FAIL":
-            return { ...state, isAuthenticated: false };
+            return { ...state, isAuthenticated: false, error: action.payload };
         case "USER_REGISTER_SUCCESS": 
-            return { ...state, isRegisterComplete: true };
+            return { ...state, error: null, isAuthenticated: true };
         case "USER_REGISTER_ERROR": 
-            return { ...state, isRegisterComplete: false, error: action.payload };
+            return { ...state, error: action.payload };
+        case "USER_LOGOUT": 
+            localStorage.removeItem("token");
+            return { ...state, isAuthenticated: false };
         default:
             return { ...state };
     }

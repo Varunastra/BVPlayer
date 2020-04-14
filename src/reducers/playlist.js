@@ -18,11 +18,18 @@ export function playlist(state = initialState, action) {
         case "FETCH_TRACKS_ERROR":
             return { ...state, isLoading: false, error: action.payload };
         case "SET_TRACK":
-            const newIndex = state.tracks.indexOf(action.payload);
+            let newIndex = state.tracks.indexOf(action.payload);
+            if (newIndex === -1) {
+                state.tracks.push(action.payload);
+                newIndex = state.tracks.length - 1;
+            }
             return { ...state, track: state.tracks[newIndex] };
         case "NEXT_TRACK":
             const nextIndex = state.trackIndex === state.tracks.length - 1 ?
                 0 : state.trackIndex + 1;
+            if (state.tracks.length === 0) {
+                return state;
+            }            
             return { ...state, track: state.tracks[nextIndex], trackIndex: nextIndex };
         case "PREV_TRACK":
             const prevIndex = state.trackIndex === 0 ?

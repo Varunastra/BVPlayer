@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { getBufferLength, getAudioBuffer } from "../../helpers/audioBuffer";
 
-export const Visualizer = React.memo(function Visualizer(props) {
+const Visualizer = React.memo(function Visualizer(props) {
     const audio = props.audio;
     const canvas = useRef(null);
 
@@ -55,3 +55,5 @@ export const Visualizer = React.memo(function Visualizer(props) {
 
     return <canvas className="visualizer" ref={canvas}></canvas>;
 });
+
+export default Visualizer;

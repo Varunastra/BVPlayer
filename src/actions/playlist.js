@@ -18,8 +18,6 @@ export function fetchTracks(id) {
         try {
             const playlistId = id ? id : getState().playlists.current.id;
             const { tracks } = await getPlaylist(playlistId);
-            tracks.forEach(track =>
-                track.poster = `${process.env.REACT_APP_URL}${track.poster}`);
             dispatch({ type: "FETCH_TRACKS_SUCCESS", payload: tracks });
         }
         catch (e) {

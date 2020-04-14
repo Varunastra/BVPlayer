@@ -1,3 +1,5 @@
+import store from "../store";
+
 export const fetchApi = async (url, options) => {
     const token = localStorage.token;
 
@@ -26,7 +28,7 @@ export const fetchApi = async (url, options) => {
     }
     else {
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            store.dispatch({ type: "USER_LOGOUT" });
         }
         throw new Error(response.statusText);
     }

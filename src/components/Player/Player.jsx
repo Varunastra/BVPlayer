@@ -1,14 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPlayTime, setDuration, setSeeking } from "../../actions/status";
-import { PlayerControls } from "./PlayerControls";
-import { Visualizer } from "./Visualizer";
-import { PlayerProgressBar } from "./PlayerProgressBar";
-import { usePrevious } from "../../usePrevious";
-import { nextTrack, fetchTracks } from "../../actions/playlist";
-import defaultPoster from "../../poster.png";
-import FileInput from "../UI/FileInput/FileInput";
-import { updateTrack } from "../../api/playlist";
+import { usePrevious } from "../../hooks/usePrevious";
+import { nextTrack } from "../../actions/playlist";
+import { AudioRef } from "../AudioRef";
 
 export function Player() {
     const track = useSelector((state) => state.playlist.track);
@@ -19,7 +14,7 @@ export function Player() {
     const isSeeking = useSelector((state) => state.status.isSeeking);
 
     const dispatch = useDispatch();
-    const audio = useRef(null);
+    const audio = AudioRef;
     const waitForSeek = useRef(false);
 
     const prevTrack = usePrevious(track);
@@ -66,7 +61,7 @@ export function Player() {
             audioElem.removeEventListener("timeupdate", updateListener);
             audioElem.removeEventListener("ended", trackEndListener);
         };
-    }, [dispatch]);
+    }, [dispatch, audio]);
 
     useEffect(() => {
         async function setPlayerIsPlaying() {
@@ -75,7 +70,7 @@ export function Player() {
                 : await audio.current.pause();
         }
         setPlayerIsPlaying();
-    }, [isPlaying]);
+    }, [isPlaying, audio]);
 
     useEffect(() => {
         async function setAudioTime() {
@@ -86,43 +81,17 @@ export function Player() {
             }
         }
         setAudioTime();
-    }, [isSeeking, currentTime, dispatch]);
+    }, [isSeeking, currentTime, dispatch, audio]);
 
     useEffect(() => {
         audio.current.volume = volume / 100;
-    }, [volume]);
+    }, [volume, audio]);
 
-    const handleUpload = async (poster) => {
-        await updateTrack({ poster, id: track.id });
-        dispatch(fetchTracks());
-    };
-
-    return <article className="player-container">
-        <div className="player">
-            <audio
-                src={`${process.env.REACT_APP_URL}${track.src}`}
-                ref={audio}
-                crossOrigin="anonymous"
-            ></audio>
-            <Visualizer audio={audio} />
-            <div className="control-block">
-                <div className="poster-container">
-                    <FileInput handleUpload={handleUpload}>
-                        <i className="fas fa-edit"></i>
-                    </FileInput>
-                    <img
-                        src={track.poster || defaultPoster}
-                        alt="poster"
-                        className="poster"
-                    />
-                </div>
-                <div>
-                    <strong>{track.author || "Sample author"}</strong> -{" "}
-                    {track.title || "Sample title"}
-                    <PlayerControls />
-                </div>
-            </div>
-            <PlayerProgressBar />
-        </div>
-    </article>;
+    return (
+        <audio
+            src={(track && track.src) ? `${process.env.REACT_APP_URL}${track.src}` : null}
+            ref={audio}
+            crossOrigin="anonymous"
+        ></audio>
+    )
 }

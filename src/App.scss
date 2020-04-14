@@ -5,11 +5,49 @@ $secondTextColor: #808080;
 $progressBarProgressColor: #d72323;
 $progressBarThumbColor: #d72323;
 $borderColor: rgba(134, 83, 99, 0.5);
-$mediaMaxWidth: 1024px;
+$mediaMaxWidth: 1360px;
 
 @mixin makeResponsive {
     @media screen and (max-width: $mediaMaxWidth) {
         width: 100%;
+    }
+}
+
+@mixin progressBarStyle($timeTop, $timeMargin, $height) {
+    .start-time {
+        position: absolute;
+        top: $timeTop;
+        left: $timeMargin;
+    }
+
+    .end-time {
+        position: absolute;
+        top: $timeTop;
+        right: $timeMargin;
+    }
+
+    .player-progress {
+        position: relative;
+        height: $height;
+    }
+
+    .current-progress {
+        width: 100%;
+        height: 100%;
+        background: $progressBarProgressColor;
+        display: block;
+        position: relative;
+        -webkit-transform-origin: 0;
+        transform-origin: 0;
+    }
+
+    .full-progress {
+        width: 100%;
+        height: 100%;
+        background: $progressBarColor;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
 }
 
@@ -55,8 +93,18 @@ body,
     font-family: "Montserrat", sans-serif;
 }
 
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+header, footer, .content {
+    flex-shrink: 0;
+}
+
 button,
-input {
+input,
+textarea {
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
 }
@@ -84,35 +132,83 @@ input[type="file"] {
 
 header {
     height: 80px;
-    width: 1024px;
+    width: 70vw;
     margin: 0 auto;
-    justify-content: space-between;
     display: flex;
     align-items: center;
 
     @include makeResponsive;
 
     .logo-image {
-        width: 30px;
+        width: 40px;
         padding: 0 10px;
     }
 
     .logo {
         display: flex;
+        padding-right: 20px;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .user {
+        position: relative;
+        margin-left: auto;
+        padding: 0 30px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .user-menu {
+        background: #0000004d;
+        position: absolute;
+        right: 20px;
+        width: 100%;
+        list-style-image: none;
+        list-style: none;
+        padding: 5px 15px;
+
+        li {
+            line-height: 35px;
+            cursor: pointer;
+        }
+
+        .logout::before {
+            background: url("./images/logout.svg");
+            content: "";   
+            display: inline-block;
+            background-size: 20px;   
+            height: 20px;   
+            width: 20px; 
+            vertical-align: middle;
+            margin-right: 8px;
+        }
     }
 
     .fa-user {
         padding: 0 10px;
+        display: inline;
     }
 }
 
+footer {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
 .content {
+    padding-top: 20px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: 600px;
+    width: 55vw;
     flex-wrap: wrap;
-    @include makeResponsive;
+    margin: 0 auto;
+    flex-grow: 1;
+    @include makeResponsive();
 }
 
 input[type="range"].slider {
@@ -148,26 +244,15 @@ input[type="range"].slider {
     flex-direction: column;
     align-items: center;
     min-height: 500px;
+    flex: 1.5;
+    flex-basis: 400px;
+    margin: 0 10px;
 
     .player {
         display: flex;
         justify-content: center;
         flex-direction: column;
-        margin: 0 5px;
         width: 100%;
-    }
-
-    .poster-container {
-        position: relative;
-
-        .fa-edit {
-            position: absolute;
-            top: -15px;
-            right: 0px;
-            font-size: 15px;
-            color: $mainTextColor;
-            z-index: 1001;
-        }
     }
 
     .poster {
@@ -187,6 +272,7 @@ input[type="range"].slider {
     .control-block {
         display: flex;
         padding: 20px 0;
+        position: relative;
     }
 
     .play-controls {
@@ -198,27 +284,6 @@ input[type="range"].slider {
         cursor: pointer;
     }
 
-    .full-progress {
-        width: 100%;
-        height: 100%;
-        background: $progressBarColor;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-    }
-
-    .start-time {
-        position: absolute;
-        top: 20px;
-        left: 0;
-    }
-
-    .end-time {
-        position: absolute;
-        right: 0;
-        top: 20px;
-    }
-
     .player-progress {
         position: relative;
         width: 90%;
@@ -226,15 +291,7 @@ input[type="range"].slider {
         margin: 10px 20px;
     }
 
-    .current-progress {
-        width: 100%;
-        height: 100%;
-        background: $progressBarProgressColor;
-        display: block;
-        position: relative;
-        -webkit-transform-origin: 0;
-        transform-origin: 0;
-    }
+    @include progressBarStyle(20px, 2px, 15px);
 
     .volume-control {
         display: flex;
@@ -248,7 +305,7 @@ input[type="range"].slider {
 
 .visualizer {
     height: 250px;
-    width: 400px;
+    width: 100%;
 
     @include makeResponsive;
 }
@@ -258,14 +315,16 @@ input[type="range"].slider {
     flex-direction: column;
     background: rgba(0, 0, 0, 0.2);
     min-height: 450px;
-    min-width: 330px;
-    margin: 0 5px;
+    flex-grow: 1;
+    flex-basis: 250px;
+    margin: 0px 5px 20px 5px;
 
     @include makeResponsive;
 
     .poster {
         width: 60px;
         height: 60px;
+        flex-shrink: 0;
     }
 
     .container {
@@ -298,7 +357,6 @@ input[type="range"].slider {
     &-header {
         padding: 5px 10px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid $secondTextColor;
 
@@ -324,6 +382,16 @@ input[type="range"].slider {
         align-items: center;
         padding: 10px;
     }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+
+        .fa-edit {
+            cursor: pointer;
+        }
+    }
 }
 
 .playlists {
@@ -331,9 +399,10 @@ input[type="range"].slider {
     flex-direction: column;
     background: rgba(0, 0, 0, 0.2);
     min-height: 450px;
-    min-width: 330px;
-    margin: 0 5px;
+    margin: 0px 5px 15px 5px;
     padding: 5px 0px;
+    flex-grow: 1;
+    flex-basis: 250px;
 
     @include makeResponsive();
 }
@@ -371,32 +440,28 @@ input[type="range"].slider {
     }
 }
 
-.sign-in {
+.sign-in, .sign-up {
     display: flex;
-    align-items: center;
-    flex-direction: column;
     justify-content: center;
+    padding-top: 100px;
+
+    .container {
+        padding: 20px 40px;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        
+        a {
+            color: grey;
+            text-decoration: none;
+        }
+    }
 }
 
 .hidden {
     display: none;
-}
-
-.error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-
-    .fa-times-circle {
-        color: red;
-    }
-
-    .error-text {
-        color: crimson;
-        padding: 0 5px;
-        font-weight: 500;
-    }
 }
 
 .add-item {
@@ -426,8 +491,180 @@ input[type="range"].slider {
         padding: 5px 10px;
         margin-top: 20px;
     }
+}
 
-    .button-container {
-        padding-top: 15px;
+.track-full {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 50vw;
+    background: rgba(0, 0, 0, 0.3);
+    @include makeResponsive();
+
+    .track-info {
+        display: flex;
+        padding: 30px 20px;
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .track-header {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .title {
+        font-size: 30px;
+        font-weight: 600px;
+        margin-bottom: 10px;
+    }
+
+    .author {
+        color: grey;
+        font-size: 25px;
+        font-weight: 500;
+    }
+
+    .poster {
+        margin: 0 20px;
+        position: relative;
+
+        img {
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: auto;
+
+            &.semi-visible {
+                opacity: 0.5;
+            }
+            @media screen and (max-width: 600px) {
+                width: 100px;
+            }
+        }
+
+        .upload-poster {
+            z-index: 998;
+            background: transparent;
+            position: absolute;
+            width: 30px;
+            padding: 10px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            font-size: 20px;
+            padding-top: 15px;
+            .fa {
+                padding: 0 5px;
+            }
+        }
+    }
+
+    .genres {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .genre {
+        padding: 5px 10px;
+        border-radius: 20px;
+        margin-right: 10px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: 2px inset cornflowerblue;
+        font-size: 16px;
+
+        .fa-plus {
+            padding: 0 5px;
+        }
+    }
+
+    .lyrics {
+        flex: 1;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        textarea {
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            color: $mainTextColor;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 10px;
+            width: 70%;
+            height: 150px;
+            outline: none;
+        }
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        padding: 30px 0;
+    }
+}
+
+.player-bar {
+    display: flex;
+    flex-direction: column;
+    background: rgba($color: $progressBarColor, $alpha: 0.8);
+    position: sticky;
+    margin: 0 auto;
+    width: 70%;
+    bottom: 0px;
+    left: 0px;
+
+    .player-controls {
+        display: flex;
+        align-items: center;
+        .fa {
+            padding: 0 5px;
+        }
+    }
+
+    .track-info {
+        display: flex;
+        padding: 15px 0;
+    }
+
+    .title {
+        font-weight: 500;
+    }
+
+    .author {
+        color: grey;
+    }
+
+    @include progressBarStyle(5px, 5px, 25px);
+    @include makeResponsive();
+
+    img {
+        width: 50px;
+        padding: 0 10px;
+    }
+}
+
+
+.not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 300px;
     }
 }
