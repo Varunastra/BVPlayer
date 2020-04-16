@@ -6,6 +6,7 @@ import { createPlaylist } from "../../api/playlist";
 import { useDispatch } from "react-redux";
 import { fetchPlaylists } from "../../actions/playlists";
 import AddItem from "../AddItem";
+import { addToast } from "../../actions/status";
 
 function NewPlaylist() {
     const [name, setName] = useState("");
@@ -22,8 +23,9 @@ function NewPlaylist() {
 
     const handleSave = async () => {
         if (name.length) {
-            await createPlaylist(name);
+            const { message}  = await createPlaylist(name);
             dispatch(fetchPlaylists("me"));
+            dispatch(addToast({ message, type: "success" }));
         }
     };
 

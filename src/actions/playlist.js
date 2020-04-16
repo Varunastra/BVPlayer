@@ -9,7 +9,7 @@ export function nextTrack() {
 }
 
 export function prevTrack() {
-    return { type: "NEXT_TRACK" };
+    return { type: "PREV_TRACK" };
 }
 
 export function fetchTracks(id) {

@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-function Genre({ name }) {
+function Genre({ genre, handleRemove, isEditable }) {
     return (
         <div className="genre">
-            {name}
+            {isEditable && <i className="fa fa-times" onClick={() => handleRemove(genre)} />}
+            {genre.name}
         </div>
     )
 };

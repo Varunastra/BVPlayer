@@ -1,44 +1,43 @@
 import React, { useRef } from 'react';
 import "./EditableText.scss";
 import { useEffect } from 'react';
-import { useCallback } from 'react';
 
-function EditableText({ value, isEditable, setIsEditable, onChange }) {
-    const indent = 2;
+function EditableText({ value, isEditable, onChange, areaStyle, defaultValue }) {
     const inputRef = useRef();
     const spanRef = useRef();
 
-    const changeInputWidth = useCallback(() => {
-        const newWidth = spanRef.current.offsetWidth;
-        inputRef.current.style.width = newWidth + indent + "px";
-    }, []);
+    const setTextAreaHeight = () => {
+        const spanEl = spanRef.current;
+        const inputEl = inputRef.current;
+        inputEl.style.height = spanEl.offsetHeight + "px";
+    };
 
     useEffect(() => {
-        if (inputRef.current && isEditable) {
-            changeInputWidth();
+        if (inputRef.current && value.length) {
+            setTextAreaHeight();
         }
-    }, [isEditable, changeInputWidth]);
+    }, [value]);
 
     useEffect(() => {
-        if (inputRef.current) {
-            changeInputWidth();
+        if (isEditable) {
+            setTextAreaHeight();
         }
-    }, [value, changeInputWidth]);
+    }, [isEditable]);
 
     return (
         <div className="editable">
             {isEditable
                 ? <>
-                    <input
-                        type="text"
+                    <span ref={spanRef}>{value}</span>
+                    <textarea
+                        style={areaStyle}
                         value={value}
+                        ref={inputRef}
+                        onKeyPress={e => e.key === "Enter" && e.preventDefault() }
                         onChange={onChange}
-                        ref={inputRef} />
-                    <span ref={spanRef}>
-                        {value}
-                    </span>
+                    />
                 </>
-                : value
+                : value || defaultValue
             }
         </div>
     )

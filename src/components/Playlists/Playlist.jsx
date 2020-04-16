@@ -2,16 +2,27 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { setPlaylist, setIsOpen, fetchPlaylists } from "../../actions/playlists";
 import playlistLogo from "../../images/playlist.svg";
-import { deletePlaylist } from "../../api/playlist";
+import { deletePlaylist, addTrack } from "../../api/playlist";
 
-export function Playlist(playlist) {
+export function Playlist({ playlist, trackToAdd, handleAddSuccess, handleAddError }) {
     const { name, id } = playlist;
 
     const dispatch = useDispatch();
 
-    const onPlaylistClicked = () => {
-        dispatch(setPlaylist(playlist));
-        dispatch(setIsOpen());
+    const onPlaylistClicked = async () => {
+        if (trackToAdd) {
+            try {
+                const { message } = await addTrack({ trackId: trackToAdd.id, playlistId: id });
+                handleAddSuccess(message);
+            }
+            catch(e) {
+                handleAddError(e.message);
+            }
+        }
+        else {
+            dispatch(setPlaylist(playlist));
+            dispatch(setIsOpen());
+        }
     };
 
     const handleDelete = async (e) => {
@@ -31,7 +42,7 @@ export function Playlist(playlist) {
                 {name}
             </div>
             <div className="playlist-controls">
-                <i className="fas fa-trash" onClick={handleDelete}></i>
+                {!trackToAdd && <i className="fas fa-trash" onClick={handleDelete}></i>}
             </div>
         </div>
     );

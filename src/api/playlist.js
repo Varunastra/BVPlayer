@@ -48,7 +48,19 @@ export const addGenre = ({ genre, trackId }) => fetchApi(`tracks/${trackId}/genr
         body: JSON.stringify(genre)
     });
 
+export const removeGenre = ({ genre, trackId }) => fetchApi(`tracks/${trackId}/genres`, {
+    method: "DELETE",
+    body: JSON.stringify(genre)
+});
+
 export const updatePlaylist = (playlist) => fetchApi(`playlists/${playlist.id}`, {
     method: "PATCH",
     body: JSON.stringify(playlist)
 });
+
+export const addTrack = async ({ trackId, playlistId }) => {
+    return fetchApi(`playlists/${playlistId}/tracks`, {
+        method: "POST",
+        body: JSON.stringify({ id: trackId })
+    });
+};

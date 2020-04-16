@@ -17,3 +17,11 @@ export function setSeeking(status) {
 export function setVolume(value) {
     return { type: "SET_VOLUME", payload: value };
 }
+
+export function addToast(toast) {
+    return { type: "ADD_TOAST", payload: toast };
+}
+
+export function removeToast(id) {
+    return { type: "REMOVE_TOAST", payload: id };
+}

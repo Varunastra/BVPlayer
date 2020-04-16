@@ -4,6 +4,7 @@ import { fetchPlaylists } from '../../actions/playlists';
 import { useKeyPress } from '../../hooks/useKeyPress';
 import { updatePlaylist } from '../../api/playlist';
 import EditableText from '../UI/EditableText/EditableText';
+import { addToast } from '../../actions/status';
 
 function PlaylistEdit({ playlist, isEditable, setIsEditable }) {
     const [name, setName] = useState(playlist.name);
@@ -12,8 +13,9 @@ function PlaylistEdit({ playlist, isEditable, setIsEditable }) {
 
     useEffect(() => {
         const handlePlaylistUpdate = async () => {
-            await updatePlaylist({ ...playlist, name: name });
+            const { message } = await updatePlaylist({ ...playlist, name: name });
             dispatch(fetchPlaylists("me"));
+            dispatch(addToast({ message, type: "success" }));
         };
         if (isEnterPressed) {
             handlePlaylistUpdate();

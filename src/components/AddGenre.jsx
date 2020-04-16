@@ -2,17 +2,15 @@ import React from 'react'
 import { useState } from 'react';
 import Dialog from './UI/Dialog/Dialog';
 import TextField from './UI/TextField/TextField';
-import { addGenre } from '../api/playlist';
 
-function AddGenre({ trackId, setGenres, genres }) {
+function AddGenre({ handleCreate }) {
     const [name, setName] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const createGenre = async () => {
-        await addGenre({ genre: { name }, trackId });
-        setGenres([...genres, { name }]);
+    const handleSave = () => {
+        handleCreate({ name });
         setIsDialogOpen(false);
-    };
+    }
 
     const handleOpen = () => {
         setIsDialogOpen(true);
@@ -30,7 +28,7 @@ function AddGenre({ trackId, setGenres, genres }) {
         </div>
         <Dialog title={"Assign genre"} 
                     variant="form" 
-                    onSave={createGenre}
+                    onSave={handleSave}
                     handleClose={handleClose}
                     open={isDialogOpen}>
                     <TextField placeholder="Enter genre" 

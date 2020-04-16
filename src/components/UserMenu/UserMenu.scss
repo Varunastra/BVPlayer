@@ -1,3 +1,6 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
 .user-mobile {
     display: none;
     padding: 0 15px;
@@ -6,7 +9,7 @@
     margin-left: auto;
     position: relative;
 
-    @media screen and (max-width: 600px) {
+    @include mediaWidth($mediaMobileWidth) {
         display: flex;
     }
 
@@ -20,7 +23,7 @@
     align-items: center;
     width: 100%;
 
-    @media screen and (max-width: 600px) {
+    @include mediaWidth($mediaMobileWidth) {
         display: none;
     }
 

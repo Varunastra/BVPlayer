@@ -21,15 +21,15 @@ export const fetchApi = async (url, options) => {
     }
     
     const response = await fetch(`${process.env.REACT_APP_URL}/api/${url}`, defaultOptions);
+    const data = await response.json();
 
     if (response.status === 200) {
-        const data = await response.json();
         return data;
     }
     else {
         if (response.status === 401) {
             store.dispatch({ type: "USER_LOGOUT" });
         }
-        throw new Error(response.statusText);
+        throw new Error(data.error);
     }
 }

@@ -1,16 +1,19 @@
 .dialog {
     background:#424242;
     padding: 20px 30px;
+    max-width: 250px;
+    margin-bottom: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-bottom: 100px;
 
     &-title {
         font-size: 18px;
         font-weight: 600;
         padding: 8px 0;
+        text-align: center;
+        word-wrap: break-word;
         margin-bottom: 5px;
     }
 

@@ -4,6 +4,12 @@
     }
 }
 
+@mixin mediaWidth($width) {
+    @media screen and (max-width: $width) {
+        @content
+    }
+}
+
 @mixin progressBarStyle($timeTop, $timeMargin, $height) {
     .start-time {
         position: absolute;

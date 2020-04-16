@@ -1,21 +1,23 @@
 .editable {
-    display: inline-block;
-    input {
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    textarea {
         background: rgba(0, 0, 0, 0.8);
         color: inherit;
-        overflow: hidden;
         font: inherit;
         padding: 0;
         margin: 0;
-        width: 0;
         outline: none;
         border: none;
+        box-sizing: border-box;
+        width: 100%;
     }
 
     span {
         position: absolute;
-        height: 0;
-        overflow: hidden;
-        white-space: pre;
+        visibility: hidden;
+        width: 100%;
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import ContentWrapper from "../components/containers/ContentWrapper";
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getTrack, updateTrack } from '../api/playlist';
+import { getTrack, updateTrack, removeGenre, addGenre } from '../api/playlist';
 import { useState } from 'react';
 import defaultPoster from "../images/poster.svg";
 import Genre from '../components/containers/Genre';
@@ -12,7 +12,7 @@ import AddGenre from '../components/AddGenre';
 import Button from '../components/UI/Button/Button';
 import FileInput from '../components/UI/FileInput/FileInput';
 import { setTrack } from '../actions/playlist';
-import { setIsPlaying } from '../actions/status';
+import { setIsPlaying, addToast } from '../actions/status';
 import { Spinner } from '../components/UI/Spinner/Spinner';
 import changePhoto from "../images/change-photo.svg";
 import Dialog from '../components/UI/Dialog/Dialog';
@@ -73,18 +73,40 @@ function Track() {
     };
 
     const handlePlay = () => {
-        dispatch(setTrack({ title, author, genres, lyrics, poster, id, src }));
+        dispatch(setTrack({ id: parseInt(id), title, author, genres, lyrics, poster, src }));
         dispatch(setIsPlaying(true));
     };
+
+    const handleRemoveGenre = async (oldGenre) => {
+        const { message } = await removeGenre({ genre: oldGenre, trackId: id });
+        setGenres(genres.filter(genre => genre.id !== oldGenre.id));
+        dispatch(addToast({ message, type: "success" }));
+    }
 
     const handleAdd = () => {
         dispatch(fetchPlaylists("me"));
         setIsAddPlaylistClicked(true);
     };
 
+    const onAddMessage = ({ text, isError }) => {
+        if (isError) {
+            dispatch(addToast({ message: text, type: "error" }));
+        }
+        else {
+            dispatch(addToast({ message: text, type: "success" }));
+            setIsAddPlaylistClicked(false);
+        }
+    };
+
     const handleAddPlaylistClose = () => {
         setIsAddPlaylistClicked(false);
     }
+
+    const handleCreateGenre = async (genre) => {
+        const { id: createdId, message } = await addGenre({ genre, trackId: id });
+        setGenres([...genres, { ...genre, id: createdId }]);
+        dispatch(addToast({ message, type: "success" }));
+    };
 
     return (
         <ContentWrapper>
@@ -113,27 +135,36 @@ function Track() {
                                     <EditableText
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
-                                        isEditable={isEditable}
-                                        setIsEditable={setIsEditable} />
+                                        isEditable={isEditable} />
                                 </div>
                                 <div className="author">
                                     <EditableText
                                         value={author}
                                         onChange={(e) => setAuthor(e.target.value)}
-                                        isEditable={isEditable}
-                                        setIsEditable={setIsEditable} />
+                                        isEditable={isEditable} />
                                 </div>
                                 <div className="genres">
                                     {genres &&
-                                        genres.map(genre => <Genre {...genre} key={genre.id} />)}
-                                    {isEditable && <AddGenre genres={genres} trackId={id} setGenres={setGenres} />}
+                                        genres.map(genre =>
+                                            <Genre
+                                                genre={genre}
+                                                isEditable={isEditable}
+                                                handleRemove={handleRemoveGenre}
+                                                key={genre.id} />)}
+                                    {isEditable && <AddGenre handleCreate={handleCreateGenre} />}
                                 </div>
                             </div>
                         </div>
                         <div className="lyrics">
                             <h2>Lyrics</h2>
-                            {!isEditable ? lyrics || "No lyrics attached"
-                                : <textarea onChange={e => setLyrics(e.target.value)} value={lyrics} />}
+                            <div className="lyrics-text">
+                                <EditableText
+                                    value={lyrics || ""}
+                                    onChange={(e) => setLyrics(e.target.value)}
+                                    isEditable={isEditable}
+                                    defaultValue="Lyrics are not attached"
+                                    areaStyle={{ padding: "10px", minHeight: "250px" }} />
+                            </div>
                         </div>
                         <div className="controls">
                             {isEditable && <Button onClick={saveChanges}>Save</Button>}
@@ -142,11 +173,14 @@ function Track() {
                     </>)
                 }
             </div>
-            <Dialog 
-                open={isAddPlaylistClicked} 
-                title="Select playlist to where add track" 
+            <Dialog
+                open={isAddPlaylistClicked}
+                title="Select playlist"
                 handleClose={handleAddPlaylistClose}>
-                <Playlists type="modal" />
+                <Playlists
+                    trackToAdd={{ id }}
+                    onAddMessage={onAddMessage}
+                    style={{ maxHeight: "250px", margin: 0 }} />
             </Dialog>
         </ContentWrapper>
     )

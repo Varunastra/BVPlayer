@@ -8,6 +8,7 @@ import AddItem from "../AddItem";
 import FileInput from "../UI/FileInput/FileInput";
 import { fetchTracks } from "../../actions/playlist";
 import Button from "../UI/Button/Button";
+import { addToast } from "../../actions/status";
 
 function NewTrack() {
     const [title, setTitle] = useState("");
@@ -26,8 +27,9 @@ function NewTrack() {
     };
 
     const handleSave = async () => {
-        await createTrack({ track: { title, author, track }, playlistId: id });
+        const { message } = await createTrack({ track: { title, author, track }, playlistId: id });
         dispatch(fetchTracks(id));
+        dispatch(addToast({ message, type: "success" }));
     };
 
     return (

@@ -18,7 +18,10 @@ export function playlist(state = initialState, action) {
         case "FETCH_TRACKS_ERROR":
             return { ...state, isLoading: false, error: action.payload };
         case "SET_TRACK":
-            let newIndex = state.tracks.indexOf(action.payload);
+            console.log(state.tracks);
+            console.log(action.payload);
+            let newIndex = state.tracks.findIndex(track => track.id === action.payload.id);
+            console.log(newIndex);
             if (newIndex === -1) {
                 state.tracks.push(action.payload);
                 newIndex = state.tracks.length - 1;
@@ -33,7 +36,7 @@ export function playlist(state = initialState, action) {
             return { ...state, track: state.tracks[nextIndex], trackIndex: nextIndex };
         case "PREV_TRACK":
             const prevIndex = state.trackIndex === 0 ?
-                state.tracks.length
+                state.tracks.length - 1
                 : state.trackIndex - 1;
             return { ...state, track: state.tracks[prevIndex], trackIndex: prevIndex };
         default:
