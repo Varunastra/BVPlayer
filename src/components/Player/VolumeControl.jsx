@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setVolume } from "../../actions/status";
 
-export function VolumeControl() {
+export function VolumeControl({ type }) {
     const dispatch = useDispatch();
     const volume = useSelector(state => state.status.volume);
 
@@ -11,7 +11,7 @@ export function VolumeControl() {
     };
 
     return (
-        <div className="volume-control">
+        <div className={`volume-control ${type || ''}`}>
             <span>
                 <i className="fa fa-volume-up"></i>
             </span>

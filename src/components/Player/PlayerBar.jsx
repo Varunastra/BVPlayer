@@ -4,6 +4,7 @@ import PlayerProgressBar from './PlayerProgressBar';
 import { useSelector, useDispatch } from 'react-redux';
 import { nextTrack, prevTrack } from '../../actions/playlist';
 import { setIsPlaying } from '../../actions/status';
+import { VolumeControl } from './VolumeControl';
 
 function PlayerBar() {
     const track = useSelector(state => state.playlist.track);
@@ -41,6 +42,9 @@ function PlayerBar() {
                     <div className="author">
                         {track.author}
                     </div>
+                </div>
+                <div className="volume">
+                    <VolumeControl />
                 </div>
             </div>        
         </div>

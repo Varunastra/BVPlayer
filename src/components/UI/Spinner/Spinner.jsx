@@ -6,9 +6,11 @@ export function Spinner({ isLoading }) {
         <>
             {isLoading && (
                 <div className="spinner">
-                    <div className="circle">
-                        <div />
-                        <div />
+                    <div className="container">
+                        <div className="circle">
+                            <div />
+                            <div />
+                        </div>
                     </div>
                 </div>
             )}

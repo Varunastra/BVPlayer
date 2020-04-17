@@ -1,7 +1,18 @@
 .spinner {
-    display: flex;
-    justify-content: center;
-    padding-top: 80px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    z-index: 1001;
+    left: 0;
+
+    .container {  
+        display: flex;
+        justify-content: center;
+        padding-top: 80px;
+        position: relative; 
+    }
 
     .circle {
         display: inline-block;

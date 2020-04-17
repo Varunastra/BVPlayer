@@ -177,6 +177,18 @@ input[type="range"].slider {
     }
 }
 
+.volume-control {
+    display: flex;
+    align-items: center;
+    .fa-volume-up {
+        color: $mainTextColor;
+        padding: 2px 7px;
+    }
+    &.vertical {
+        transform: rotate(270deg);
+    }
+}
+
 .player-container {
     display: flex;
     flex-direction: column;
@@ -230,15 +242,6 @@ input[type="range"].slider {
     }
 
     @include progressBarStyle(20px, 2px, 15px);
-
-    .volume-control {
-        display: flex;
-        align-items: center;
-        .fa-volume-up {
-            color: $mainTextColor;
-            padding: 2px 7px;
-        }
-    }
 }
 
 .visualizer {
@@ -268,6 +271,7 @@ input[type="range"].slider {
     .container {
         padding: 10px;
         overflow: auto;
+        position: relative;
     }
 
     .track {
@@ -347,6 +351,7 @@ input[type="range"].slider {
 
     .container {
         overflow: auto;
+        position: relative;
     }
 }
 
@@ -391,6 +396,7 @@ input[type="range"].slider {
 
     .container {
         padding: 20px 40px;
+        max-width: 230px;
         background: rgba(0, 0, 0, 0.3);
         display: flex;
         align-items: center;
@@ -441,6 +447,8 @@ input[type="range"].slider {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    min-height: 70vh;
     margin: 0 auto;
     width: 60vw;
     background: rgba(0, 0, 0, 0.3);
@@ -591,7 +599,13 @@ input[type="range"].slider {
     }
 
     .author {
+        font-size: 14px;
         color: grey;
+    }
+
+    .volume {
+        margin-left: auto;
+        padding: 10px 20px;
     }
 
     @include progressBarStyle(5px, 5px, 25px);

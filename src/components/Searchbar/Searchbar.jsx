@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import "./Searchbar.scss";
 import { searchTrack } from '../../api/playlist';
 import SearchItem from './SearchItem';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 
 function Searchbar({ isMenuOpen, setIsMenuOpen }) {
     const [tracks, setTracks] = useState([]);
@@ -11,13 +13,17 @@ function Searchbar({ isMenuOpen, setIsMenuOpen }) {
         setSearchText("");
     };
 
+    const debouncedSearch = useCallback(debounce(() => {
+        searchTrack({ searchText }).then(tracks => setTracks(tracks));
+    }, 350), [searchText]);
+
     const popupMenu = () => {
         if (searchText.length) {
             setIsMenuOpen(!isMenuOpen);
         }
     }
 
-    const performSearch = async (e) => {
+    const performSearch = (e) => {
         setSearchText(e.target.value);
         if (!isMenuOpen) {
             setIsMenuOpen(true);
@@ -26,13 +32,13 @@ function Searchbar({ isMenuOpen, setIsMenuOpen }) {
 
     useEffect(() => {
         if (searchText.length) {
-            searchTrack({ searchText }).then(tracks => setTracks(tracks));
+            debouncedSearch();
         }
         else {
             setTracks([]);
             setIsMenuOpen(false);
         }
-    }, [searchText, setIsMenuOpen]);
+    }, [searchText, setIsMenuOpen, debouncedSearch]);
 
     return (
         <div className="search-bar">
@@ -40,9 +46,9 @@ function Searchbar({ isMenuOpen, setIsMenuOpen }) {
             <li className="fa fa-search" onClick={popupMenu} />
             {isMenuOpen && <i className="fa fa-times" onClick={clearSearch} />}
             {isMenuOpen &&
-            <div className="search-menu">
-                {tracks.map((track) => <SearchItem {...track} key={track.id} />)}
-            </div> }
+                <div className="search-menu">
+                    {tracks.map((track) => <SearchItem {...track} key={track.id} />)}
+                </div>}
         </div>
     )
 };

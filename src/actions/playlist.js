@@ -25,3 +25,7 @@ export function fetchTracks(id) {
         }
     };
 }
+
+export function updatePlaying(track) {
+    return { type: "UPDATE_PLAYING", payload: track };
+};

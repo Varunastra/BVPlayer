@@ -6,7 +6,7 @@ import { nextTrack } from "../../actions/playlist";
 import { AudioRef } from "../AudioRef";
 
 export function Player() {
-    const track = useSelector((state) => state.playlist.track);
+    const track = useSelector((state) => state.playlist.track.src);
     const volume = useSelector((state) => state.status.volume);
 
     const isPlaying = useSelector((state) => state.status.isPlaying);
@@ -89,7 +89,7 @@ export function Player() {
 
     return (
         <audio
-            src={(track && track.src) ? `${process.env.REACT_APP_URL}${track.src}` : null}
+            src={track && `${process.env.REACT_APP_URL}${track}`}
             ref={audio}
             crossOrigin="anonymous"
         ></audio>

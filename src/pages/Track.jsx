@@ -11,7 +11,7 @@ import EditableText from '../components/UI/EditableText/EditableText';
 import AddGenre from '../components/AddGenre';
 import Button from '../components/UI/Button/Button';
 import FileInput from '../components/UI/FileInput/FileInput';
-import { setTrack } from '../actions/playlist';
+import { setTrack, updatePlaying } from '../actions/playlist';
 import { setIsPlaying, addToast } from '../actions/status';
 import { Spinner } from '../components/UI/Spinner/Spinner';
 import changePhoto from "../images/change-photo.svg";
@@ -64,11 +64,13 @@ function Track() {
 
     const saveChanges = async () => {
         await updateTrack({ title, author, lyrics, id });
+        dispatch(updatePlaying({ id: parseInt(id), title, author, poster }));
         setIsEditable(false);
     };
 
     const uploadPoster = async (newPoster) => {
         await updateTrack({ poster: newPoster, id });
+        dispatch(updatePlaying({ id: parseInt(id), poster }));
         setIsUpdating(true);
     };
 
@@ -180,7 +182,7 @@ function Track() {
                 <Playlists
                     trackToAdd={{ id }}
                     onAddMessage={onAddMessage}
-                    style={{ maxHeight: "250px", margin: 0 }} />
+                    style={{ maxHeight: "250px", margin: 0, minWidth: "200px" }} />
             </Dialog>
         </ContentWrapper>
     )

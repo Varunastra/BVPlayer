@@ -9,12 +9,14 @@ import FileInput from "../UI/FileInput/FileInput";
 import { fetchTracks } from "../../actions/playlist";
 import Button from "../UI/Button/Button";
 import { addToast } from "../../actions/status";
+import { Spinner } from "../UI/Spinner/Spinner";
 
 function NewTrack() {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [track, setTrack] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const { id } = useSelector((state) => state.playlists.current);
     const dispatch = useDispatch();
 
@@ -27,6 +29,7 @@ function NewTrack() {
     };
 
     const handleSave = async () => {
+        setIsSaving(true);
         const { message } = await createTrack({ track: { title, author, track }, playlistId: id });
         dispatch(fetchTracks(id));
         dispatch(addToast({ message, type: "success" }));
@@ -57,9 +60,10 @@ function NewTrack() {
                         preview={true}
                         handleUpload={(file) => setTrack(file)}
                     >
-                    <Button>Upload track</Button>
+                        <Button>Upload track</Button>
                     </FileInput>
                 </div>
+                <Spinner isLoading={isSaving} />
             </Dialog>
         </>
     );
