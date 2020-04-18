@@ -183,9 +183,15 @@ input[type="range"].slider {
     .fa-volume-up {
         color: $mainTextColor;
         padding: 2px 7px;
+        &.invisible {
+            display: none;
+        }
     }
     &.vertical {
         transform: rotate(270deg);
+        position: absolute;
+        top: -55px;
+        left: -45px;
     }
 }
 
@@ -449,7 +455,7 @@ input[type="range"].slider {
     align-items: center;
     position: relative;
     min-height: 70vh;
-    margin: 0 auto;
+    margin-bottom: 100px;
     width: 60vw;
     background: rgba(0, 0, 0, 0.3);
     @include mediaWidth($mediaTabletWidth) {
@@ -575,11 +581,12 @@ input[type="range"].slider {
     display: flex;
     flex-direction: column;
     background: $playerBarColor;
-    position: sticky;
+    position: fixed;
     margin: 0 auto;
     width: 70%;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
     .player-controls {
         display: flex;
@@ -604,8 +611,11 @@ input[type="range"].slider {
     }
 
     .volume {
+        position: relative;
+        justify-self: flex-end;
         margin-left: auto;
-        padding: 10px 20px;
+        margin-right: 20px;
+        align-self: center;
     }
 
     @include progressBarStyle(5px, 5px, 25px);

@@ -12,19 +12,15 @@ export function VolumeControl({ type }) {
 
     return (
         <div className={`volume-control ${type || ''}`}>
-            <span>
-                <i className="fa fa-volume-up"></i>
-            </span>
-            <span>
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={volume}
-                    className="slider"
-                    onChange={volumeChanged}
-                />
-            </span>
+            <i className={`fa fa-volume-up ${type === "vertical" ? "invisible" : ""}`}></i>
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value={volume}
+                className="slider"
+                onChange={volumeChanged}
+            />
         </div>
     );
 }

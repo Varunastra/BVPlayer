@@ -5,10 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { nextTrack, prevTrack } from '../../actions/playlist';
 import { setIsPlaying } from '../../actions/status';
 import { VolumeControl } from './VolumeControl';
+import { useState } from 'react';
 
 function PlayerBar() {
     const track = useSelector(state => state.playlist.track);
     const isPlaying = useSelector(state => state.status.isPlaying);
+    const [isVolumeVisible, setIsVolumeVisible] = useState(false);
+
     const dispatch = useDispatch();
 
     const handleFoward = () => {
@@ -21,6 +24,14 @@ function PlayerBar() {
 
     const handleBackward = () => {
         dispatch(prevTrack());
+    };
+
+    const onVolumeEnter = e => {
+        setIsVolumeVisible(true);
+    };
+
+    const onVolumeLeave = e => {
+        setIsVolumeVisible(false);
     };
     
     return (
@@ -43,8 +54,9 @@ function PlayerBar() {
                         {track.author}
                     </div>
                 </div>
-                <div className="volume">
-                    <VolumeControl />
+                <div className="volume" onMouseEnter={onVolumeEnter} onMouseLeave={onVolumeLeave}>
+                    <i className="fa fa-volume-up"/>
+                    {isVolumeVisible && <VolumeControl type="vertical" />}
                 </div>
             </div>        
         </div>

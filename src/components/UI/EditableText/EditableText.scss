@@ -1,5 +1,6 @@
 .editable {
     word-wrap: break-word;
+    overflow-wrap: anywhere;
     display: flex;
     flex-direction: column;
     position: relative;
