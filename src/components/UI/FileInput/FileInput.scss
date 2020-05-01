@@ -1,0 +1,12 @@
+.file-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .preview {
+        margin-top: 10px;
+        max-width: 200px;
+        word-break: break-all;
+    }
+}

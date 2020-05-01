@@ -1,0 +1,74 @@
+@import "../../styles/variables";
+
+.search-bar {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    font-weight: 500;
+
+    .bar {
+        background: $searchBarColor;
+        border: none;
+        width: 100%;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px;
+        color: white;
+
+        &:hover, &:focus {
+            outline: none;
+        }
+
+        &::placeholder {
+            font-weight: 600;
+            color: $searchBarPlaceholderColor;
+        }
+    }
+
+    .fa-search {
+        font-size: 20px;
+        border-radius: 4px;
+        position: absolute;
+        right: 8px;
+    }
+
+    .fa-times {
+        position: absolute;
+        right: 40px;
+        font-size: 20px;
+    }
+}
+
+.search-menu {
+    position: absolute;
+    top: 37px;
+    z-index: 1001;
+    background: $searchMenuColor;
+    left: 0px;
+    max-height: 360px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.search-item {
+    display: flex;
+    padding: 10px 0px;
+    cursor: pointer;
+
+    .author {
+        font-size: 14px;
+        color: rgb(179, 176, 176);
+    }
+
+    img { 
+        width: 40px;
+        padding: 0 10px;
+        height: 40px;
+    }
+    
+    .track-info {
+        display: flex;
+        flex-direction: column;
+    }
+}

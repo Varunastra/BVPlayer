@@ -1,7 +1,157 @@
+@import "./styles/variables";
+@import "./styles/mixins";
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px $scrollBarColor;
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(163, 214, 238, 0.2);
+    border-radius: 4px;
+    height: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(163, 214, 238, 0.4);
+}
+
+/* montserrat-regular - cyrillic */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Montserrat Regular"), local("Montserrat-Regular"),
+        url("./fonts/montserrat-v14-cyrillic-regular.woff2")
+            format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("./fonts/montserrat-v14-cyrillic-regular.woff")
+            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* montserrat-500 - cyrillic */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 500;
+    src: local("Montserrat Medium"), local("Montserrat-Medium"),
+        url("./fonts/montserrat-v14-cyrillic-500.woff2")
+            format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("./fonts/montserrat-v14-cyrillic-500.woff")
+            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* montserrat-600 - cyrillic */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 600;
+    src: local("Montserrat SemiBold"), local("Montserrat-SemiBold"),
+        url("./fonts/montserrat-v14-cyrillic-600.woff2")
+            format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("./fonts/montserrat-v14-cyrillic-600.woff")
+            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    font-family: "Montserrat", sans-serif;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    background: $containerColor;
+    color: $mainTextColor;
+}
+
+header,
+footer,
+.content {
+    flex-shrink: 0;
+}
+
+button,
+input,
+textarea {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#modal-root {
+    display: flex;
+    justify-content: center;
+}
+
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    color: $mainTextColor;
+    top: 0;
+    left: 0;
+}
+
+header {
+    height: 80px;
+    width: 70vw;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+
+    @include makeResponsive;
+
+    .logo-image {
+        width: 40px;
+        padding: 0 10px;
+    }
+
+    .logo {
+        display: flex;
+        padding-right: 20px;
+        user-select: none;
+        cursor: pointer;
+    }
+}
+
+footer {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.content {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 55vw;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    flex-grow: 1;
+    @include makeResponsive;
+}
+
 input[type="range"].slider {
     -webkit-appearance: none;
     width: 100px;
-    margin: 0.7px 0;
 
     &:focus {
         outline: none;
@@ -11,108 +161,481 @@ input[type="range"].slider {
         width: 100%;
         height: 10px;
         cursor: pointer;
-        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
         background: #484d4d;
         border-radius: 0px;
         border: 0px solid #010101;
     }
 
     &::-webkit-slider-thumb {
-        box-shadow: 0px 0px 1px #670000, 0px 0px 0px #810000;
-        border: 0px solid #ff1e00;
-        height: 13px;
+        height: 12px;
         width: 18px;
         border-radius: 0px;
-        background: rgba(214, 67, 95, 0.93);
+        background: $progressBarThumbColor;
         cursor: pointer;
         -webkit-appearance: none;
         margin-top: -0.7px;
     }
 }
 
-.fa-volume-down {
-    color: rgba(214, 67, 95, 0.93);
-    padding: 2px 7px;
-}
-
-.fa-volume-up {
-    color: rgba(214, 67, 95, 0.93);
-    padding: 2px 7px;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    -moz-apperance: none;
-    border-radius: 6px;
-    height: 6px;
-    width: 95%;
-
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        right top,
-        color-stop(15%, #df7164),
-        color-stop(15%, #f5d0cc)
-    );
-
-    background-image: -moz-linear-gradient(
-        left center,
-        #df7164 0%,
-        #df7164 15%,
-        #f5d0cc 15%,
-        #f5d0cc 100%
-    );
-}
-
-input[type="range"]::-moz-range-track {
-    border: none;
-    background: none;
-    outline: none;
-}
-
-input[type="range"]:focus {
-    outline: none;
-    border: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none !important;
-    background-color: #df7164;
-    height: 13px;
-    width: 13px;
-    border-radius: 50%;
-}
-
-input[type="range"]::-moz-range-thumb {
-    -moz-appearance: none !important;
-    background-color: #df7164;
-    border: none;
-    height: 13px;
-    width: 13px;
-    border-radius: 50%;
-}
-
-.start-time {
-  position: absolute;
-  top: 75px;
-  left: 0;
-}
-
-.end-time {
-  position: absolute;
-  right: 0;
-  top: 75px;
-}
-
-.player-progress {
-  position: relative;
-  width: 200px;
-  height: 70px;
+.volume-control {
+    display: flex;
+    align-items: center;
+    .fa-volume-up {
+        color: $mainTextColor;
+        padding: 2px 7px;
+        &.invisible {
+            display: none;
+        }
+    }
+    &.vertical {
+        transform: rotate(270deg);
+        position: absolute;
+        top: -55px;
+        left: -45px;
+    }
 }
 
 .player-container {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
+    min-height: 500px;
+    flex: 1.5;
+    flex-basis: 400px;
+    margin: 0 10px;
+
+    .player {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .poster {
+        width: 100px;
+        height: 100px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        margin: 0 20px;
+        opacity: 0.7;
+        transition: opacity 300ms;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    .control-block {
+        display: flex;
+        padding: 20px 0;
+        position: relative;
+    }
+
+    .play-controls {
+        display: flex;
+    }
+
+    i {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .player-progress {
+        position: relative;
+        width: 90%;
+        height: 15px;
+        margin: 10px 20px;
+    }
+
+    @include progressBarStyle(20px, 2px, 15px);
+}
+
+.visualizer {
+    height: 250px;
+    width: 100%;
+
+    @include makeResponsive;
+}
+
+.tracks {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+    height: 450px;
+    flex-grow: 1;
+    flex-basis: 300px;
+    margin: 0px 5px 20px 5px;
+
+    @include makeResponsive;
+
+    .poster {
+        width: 60px;
+        height: 60px;
+        flex-shrink: 0;
+    }
+
+    .container {
+        padding: 10px;
+        overflow: auto;
+        position: relative;
+    }
+
+    .track {
+        display: flex;
+        padding: 8px;
+        cursor: pointer;
+        &:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .playing {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .track-info {
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+
+        .author {
+            color: $secondTextColor;
+        }
+    }
+
+    &-header {
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid $secondTextColor;
+
+        .name {
+            font-size: 16px;
+            font-weight: 500;
+            padding: 0 10px;
+        }
+
+        .playlist-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .fa-times {
+            padding: 0 10px;
+            cursor: pointer;
+        }
+    }
+
+    &-playlist {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+
+        .fa-edit {
+            cursor: pointer;
+        }
+    }
+}
+
+.playlists {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+    height: 450px;
+    margin: 0px 5px 15px 5px;
+    padding: 5px 0px;
+    flex-grow: 1;
+    flex-basis: 300px;
+
+    @include makeResponsive;
+
+    .container {
+        overflow: auto;
+        position: relative;
+    }
+}
+
+.playlist {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    cursor: pointer;
+
+    &-folder {
+        padding: 0 10px;
+        width: 30px;
+        height: 30px;
+    }
+
+    &-controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        padding: 5px;
+    }
+
+    .fa-edit {
+        padding-right: 10px;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.sign-in,
+.sign-up {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+
+    .container {
+        padding: 20px 40px;
+        max-width: 230px;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+
+        a {
+            color: grey;
+            text-decoration: none;
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.add-item {
+    padding: 15px 10px;
+    cursor: pointer;
+
+    &-text {
+        font-weight: 500;
+    }
+
+    .fa-plus {
+        padding: 0 10px;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.add-track-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .upload-track {
+        border: 1px solid $mainTextColor;
+        padding: 5px 10px;
+        margin-top: 20px;
+    }
+}
+
+.track-full {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-height: 70vh;
+    margin-bottom: 100px;
+    width: 60vw;
+    background: rgba(0, 0, 0, 0.3);
+    @include mediaWidth($mediaTabletWidth) {
+        width: 100%;
+    }
+
+    .track-info {
+        display: flex;
+        padding: 30px 20px;
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .track-header {
+        font-size: 20px;
+        width: 100%;
+        font-weight: 500;
+    }
+
+    .title {
+        font-size: 30px;
+        font-weight: 600px;
+        margin-bottom: 10px;
+    }
+
+    .author {
+        color: grey;
+        font-size: 25px;
+        font-weight: 500;
+    }
+
+    .poster {
+        margin: 0 20px;
+        position: relative;
+
+        img {
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: auto;
+
+            &.semi-visible {
+                opacity: 0.5;
+            }
+            
+            @include mediaWidth($mediaMobileWidth) {
+                width: 100px;
+            }
+        }
+
+        .upload-poster {
+            z-index: 998;
+            background: transparent;
+            position: absolute;
+            width: 30px;
+            padding: 10px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            padding-top: 15px;
+            .fa {
+                padding: 0 5px;
+            }
+        }
+    }
+
+    .genres {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .genre {
+        padding: 5px 10px;
+        border-radius: 20px;
+        margin-right: 10px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: 2px inset cornflowerblue;
+        font-size: 16px;
+
+        .fa {
+            padding: 0 5px;
+        }
+    }
+
+    .lyrics {
+        flex: 1;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        font-weight: 500;
+
+        &-text { 
+            width: 60%;
+
+            @include mediaWidth($mediaMobileWidth) {
+                width: 90%;
+            }
+        }
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        padding: 30px 0;
+    }
+}
+
+.player-bar {
+    display: flex;
+    flex-direction: column;
+    background: $playerBarColor;
+    position: fixed;
+    margin: 0 auto;
+    width: 70%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .player-controls {
+        display: flex;
+        align-items: center;
+        .fa {
+            padding: 0 5px;
+        }
+    }
+
+    .track-info {
+        display: flex;
+        padding: 15px 0;
+    }
+
+    .title {
+        font-weight: 500;
+    }
+
+    .author {
+        font-size: 14px;
+        color: grey;
+    }
+
+    .volume {
+        position: relative;
+        justify-self: flex-end;
+        margin-left: auto;
+        margin-right: 20px;
+        align-self: center;
+    }
+
+    @include progressBarStyle(5px, 5px, 25px);
+    @include mediaWidth($mediaTabletWidth) {
+        width: 100%;
+    }
+
+    img {
+        width: 50px;
+        padding: 0 10px;
+    }
+}
+
+.not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 300px;
+    }
 }
