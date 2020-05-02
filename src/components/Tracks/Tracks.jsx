@@ -7,6 +7,7 @@ import { Spinner } from "../UI/Spinner/Spinner";
 import playlistLogo from "../../images/playlist.svg";
 import NewTrack from "./NewTrack";
 import PlaylistEdit from "./PlaylistEdit";
+import DuplicatePlaylist from "../Playlists/DuplicatePlaylist";
 
 export function Tracks() {
     const tracks = useSelector((state) => state.playlist.tracks);
@@ -54,6 +55,7 @@ export function Tracks() {
                     <Track track={track} key={track.id} />
                 ))}
                 {!isLoading && <NewTrack />}
+                {!isLoading && <DuplicatePlaylist />}
             </div>
         </div>
     );

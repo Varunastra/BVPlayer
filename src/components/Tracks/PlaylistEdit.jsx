@@ -4,7 +4,7 @@ import { fetchPlaylists } from '../../actions/playlists';
 import { useKeyPress } from '../../hooks/useKeyPress';
 import { updatePlaylist } from '../../api/playlist';
 import EditableText from '../UI/EditableText/EditableText';
-import { addToast } from '../../actions/status';
+import { makeToast } from '../../toasts';
 
 function PlaylistEdit({ playlist, isEditable, setIsEditable }) {
     const [name, setName] = useState(playlist.name);
@@ -12,22 +12,24 @@ function PlaylistEdit({ playlist, isEditable, setIsEditable }) {
     const isEnterPressed = useKeyPress("Enter");
 
     useEffect(() => {
-        const handlePlaylistUpdate = async () => {
-            const { message } = await updatePlaylist({ ...playlist, name: name });
-            dispatch(fetchPlaylists("me"));
-            dispatch(addToast({ message, type: "success" }));
-        };
-        if (isEnterPressed) {
-            handlePlaylistUpdate();
-            setIsEditable(false);
+        if (isEditable) {
+            const handlePlaylistUpdate = async () => {
+                const { message } = await updatePlaylist({ ...playlist, name: name });
+                dispatch(fetchPlaylists("me"));
+                makeToast({ message });
+            };
+            if (isEnterPressed) {
+                handlePlaylistUpdate();
+                setIsEditable(false);
+            }
         }
-    }, [isEnterPressed, dispatch, name, playlist, setIsEditable]);
+    }, [isEnterPressed, dispatch, name, playlist, setIsEditable, isEditable]);
 
     return (
-        <EditableText 
+        <EditableText
             value={name}
             onChange={e => setName(e.target.value)}
-            isEditable={isEditable} 
+            isEditable={isEditable}
             setIsEditable={setIsEditable}
         />
     )

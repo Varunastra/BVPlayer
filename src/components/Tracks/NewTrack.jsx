@@ -2,14 +2,14 @@ import React from "react";
 import Dialog from "../UI/Dialog/Dialog";
 import { useState } from "react";
 import TextField from "../UI/TextField/TextField";
-import { createTrack } from "../../api/playlist";
+import { createTrack, removeTrack } from "../../api/playlist";
 import { useDispatch, useSelector } from "react-redux";
 import AddItem from "../AddItem";
 import FileInput from "../UI/FileInput/FileInput";
 import { fetchTracks } from "../../actions/playlist";
 import Button from "../UI/Button/Button";
-import { addToast } from "../../actions/status";
 import { Spinner } from "../UI/Spinner/Spinner";
+import { makeToast } from "../../toasts";
 
 function NewTrack() {
     const [title, setTitle] = useState("");
@@ -30,9 +30,14 @@ function NewTrack() {
 
     const handleSave = async () => {
         setIsSaving(true);
-        const { message } = await createTrack({ track: { title, author, track }, playlistId: id });
+        const { message, id: trackId } = await createTrack({ track: { title, author, track }, playlistId: id });
         dispatch(fetchTracks(id));
-        dispatch(addToast({ message, type: "success" }));
+        makeToast({
+            message, undoAction: async () => {
+                await removeTrack({ playlistId: id, trackId });
+                dispatch(fetchTracks(id));
+            }
+        });
     };
 
     return (

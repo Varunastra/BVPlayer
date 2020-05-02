@@ -3,14 +3,20 @@ import "./Toast.scss";
 import { useDispatch } from 'react-redux';
 import { removeToast } from '../../../actions/status';
 
-function Toast({ id, type, message, delay = 2500 }) {
+function Toast({ id, type, message, delay = 3000, undoAction }) {
     const dispatch = useDispatch();
 
     const barStyle = {
         animationDuration: `${delay}ms`
     }
 
-    setTimeout(() => {
+    const handleUndo = async () => {
+        clearTimeout(toastTimeout);
+        dispatch(removeToast(id));
+        undoAction();
+    }
+
+    const toastTimeout = setTimeout(() => {
         dispatch(removeToast(id));
     }, delay);
 
@@ -25,6 +31,7 @@ function Toast({ id, type, message, delay = 2500 }) {
             }
             <span>{message}</span>
             <i className="fa fa-times" onClick={handleRemove} />
+            {undoAction && <i onClick={handleUndo} className="fas fa-undo" />}
             <div className="bar" style={barStyle} />
         </div>
     );

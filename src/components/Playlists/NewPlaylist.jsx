@@ -2,11 +2,11 @@ import React from "react";
 import Dialog from "../UI/Dialog/Dialog";
 import { useState } from "react";
 import TextField from "../UI/TextField/TextField";
-import { createPlaylist } from "../../api/playlist";
+import { removePlaylist, createPlaylist } from "../../api/playlist";
 import { useDispatch } from "react-redux";
 import { fetchPlaylists } from "../../actions/playlists";
 import AddItem from "../AddItem";
-import { addToast } from "../../actions/status";
+import { makeToast } from "../../toasts";
 
 function NewPlaylist() {
     const [name, setName] = useState("");
@@ -23,9 +23,15 @@ function NewPlaylist() {
 
     const handleSave = async () => {
         if (name.length) {
-            const { message}  = await createPlaylist(name);
+            const { message, id } = await createPlaylist({ name });
             dispatch(fetchPlaylists("me"));
-            dispatch(addToast({ message, type: "success" }));
+            makeToast({
+                undoAction: async () => {
+                    await removePlaylist(id);
+                    dispatch(fetchPlaylists("me"));
+                },
+                message
+            });
         }
     };
 
