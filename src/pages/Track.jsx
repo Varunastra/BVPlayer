@@ -12,12 +12,12 @@ import AddGenre from '../components/AddGenre';
 import Button from '../components/UI/Button/Button';
 import FileInput from '../components/UI/FileInput/FileInput';
 import { setTrack, updatePlaying } from '../actions/playlist';
-import { setIsPlaying, addToast } from '../actions/status';
+import { setIsPlaying } from '../actions/status';
 import { Spinner } from '../components/UI/Spinner/Spinner';
-import changePhoto from "../images/change-photo.svg";
 import Dialog from '../components/UI/Dialog/Dialog';
 import { Playlists } from '../components/Playlists/Playlists';
 import { fetchPlaylists } from '../actions/playlists';
+import { makeToast } from '../toasts';
 
 function Track() {
     const { id } = useParams();
@@ -34,6 +34,7 @@ function Track() {
     const [poster, setPoster] = useState(null);
     const [userId, setUserId] = useState(null);
     const [src, setSrc] = useState(null);
+    const [prevState, setPrevState] = useState(null);
 
     const isCurrentUser = (profile && !isUpdating) && profile.id === userId;
 
@@ -48,6 +49,7 @@ function Track() {
             setLyrics(lyrics);
             setSrc(src);
             setIsUpdating(false);
+            setPrevState({ title, author, genres, lyrics, poster, UserId, src, id: parseInt(id) });
         }
         if (isUpdating) {
             fetchTrack();
@@ -62,16 +64,33 @@ function Track() {
         setIsEditable(!isEditable);
     };
 
-    const saveChanges = async () => {
-        await updateTrack({ title, author, lyrics, id });
+    const saveTrackChanges = async (state) => {
+        const { message } = await updateTrack(state);
         dispatch(updatePlaying({ id: parseInt(id), title, author, poster }));
         setIsEditable(false);
+        setIsUpdating(true);
+        return message;
+    }
+
+    const saveChanges = async () => {
+        const message = await saveTrackChanges({ title, author, lyrics, id: parseInt(id) });
+        makeToast({
+            undoAction: () => saveTrackChanges(prevState),
+            message
+        });
     };
 
     const uploadPoster = async (newPoster) => {
-        await updateTrack({ poster: newPoster, id });
+        const { message } = await updateTrack({ poster: newPoster, id });
         dispatch(updatePlaying({ id: parseInt(id), poster }));
         setIsUpdating(true);
+        makeToast({
+            message, undoAction: async () => {
+                await updateTrack({ poster, id });
+                dispatch(updatePlaying({ id: parseInt(id), poster }));
+                setIsUpdating(true);
+            }
+        });
     };
 
     const handlePlay = () => {
@@ -79,11 +98,27 @@ function Track() {
         dispatch(setIsPlaying(true));
     };
 
-    const handleRemoveGenre = async (oldGenre) => {
+    const removeGenreAction = async (oldGenre, showToast = true) => {
         const { message } = await removeGenre({ genre: oldGenre, trackId: id });
         setGenres(genres.filter(genre => genre.id !== oldGenre.id));
-        dispatch(addToast({ message, type: "success" }));
-    }
+        if (showToast)
+            makeToast({ message, undoAction: () => { createGenreAction(oldGenre, false) } });
+    };
+
+    const createGenreAction = async (genre, showToast = true) => {
+        const { id: createdId, message } = await addGenre({ genre, trackId: id });
+        setGenres((genres) => [...genres, { ...genre, id: createdId }]);
+        if (showToast)
+            makeToast({
+                message, undoAction: () => {
+                    removeGenreAction({ ...genre, id: createdId }, false)
+                }
+            });
+    };
+
+    useEffect(() => {
+        console.log(genres);
+    }, [genres]);
 
     const handleAdd = () => {
         dispatch(fetchPlaylists("me"));
@@ -92,10 +127,10 @@ function Track() {
 
     const onAddMessage = ({ text, isError }) => {
         if (isError) {
-            dispatch(addToast({ message: text, type: "error" }));
+            makeToast({ message: text, type: "error" });
         }
         else {
-            dispatch(addToast({ message: text, type: "success" }));
+            makeToast({ message: text, type: "success" });
             setIsAddPlaylistClicked(false);
         }
     };
@@ -103,12 +138,6 @@ function Track() {
     const handleAddPlaylistClose = () => {
         setIsAddPlaylistClicked(false);
     }
-
-    const handleCreateGenre = async (genre) => {
-        const { id: createdId, message } = await addGenre({ genre, trackId: id });
-        setGenres([...genres, { ...genre, id: createdId }]);
-        dispatch(addToast({ message, type: "success" }));
-    };
 
     return (
         <ContentWrapper>
@@ -120,7 +149,9 @@ function Track() {
                             <div className="poster" alt="Poster">
                                 {isEditable &&
                                     <FileInput handleUpload={uploadPoster}>
-                                        <img className="upload-poster" src={changePhoto} alt="Change poster" />
+                                        <div className="upload-poster">
+                                            <i className="fas fa-camera" alt="Change poster" />
+                                        </div>
                                     </FileInput>}
                                 <img
                                     src={poster ? `${process.env.REACT_APP_URL}${poster}` : defaultPoster}
@@ -151,9 +182,9 @@ function Track() {
                                             <Genre
                                                 genre={genre}
                                                 isEditable={isEditable}
-                                                handleRemove={handleRemoveGenre}
+                                                handleRemove={removeGenreAction}
                                                 key={genre.id} />)}
-                                    {isEditable && <AddGenre handleCreate={handleCreateGenre} />}
+                                    {isEditable && <AddGenre handleCreate={createGenreAction} />}
                                 </div>
                             </div>
                         </div>

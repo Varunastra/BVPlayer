@@ -28,16 +28,25 @@ export const getPlaylist = (id) => fetchApi(`playlists/${id}`);
 export const getUserPlaylists = (id) =>
     fetchApi(`users/${id}/playlists`);
 
-export const deletePlaylist = (id) =>
-    fetchApi(`playlists/${id}`, {
+export const createPlaylist = (playlist) => {
+    return fetchApi(`playlists`, {
+        method: "POST",
+        body: JSON.stringify(playlist),
+    });
+}
+
+export const removePlaylist = (id) => {
+    return fetchApi(`playlists/${id}`, {
         method: "DELETE",
     });
+};
 
-export const createPlaylist = (name) =>
-    fetchApi(`playlists`, {
+export const duplicatePlaylist = ({ id, newName }) => {
+    return fetchApi(`playlists/${id}?method=duplicate`, {
         method: "POST",
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ newName }),
     });
+};
 
 export const createTrack = async ({ track, playlistId }) => {
     const formData = getFormData(track);
@@ -60,6 +69,12 @@ export const updateTrack = async (track) => {
 export const searchTrack = ({ searchText }) => {
     return fetchApi(`tracks?search=${searchText}`);
 };
+
+export const removeTrack = ({ playlistId, trackId }) => {
+    return fetchApi(`playlists/${playlistId}/tracks/${trackId}`, {
+        method: "DELETE"
+    });
+};  
 
 export const getTrack = ({ id }) => fetchApi(`tracks/${id}`);
 

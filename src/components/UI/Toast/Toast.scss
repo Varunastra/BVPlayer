@@ -1,7 +1,7 @@
 .toast {
     display: flex;
-    width: 270px;
-    padding: 25px 10px;
+    min-width: 270px;
+    padding: 25px 15px;
     margin: 5px 0px;
     position: relative;
     align-items: center;
@@ -23,6 +23,13 @@
         top: 0;
         right: 0;
         padding: 6px 10px;
+        cursor: pointer;
+    }
+
+    .fa-undo {
+        padding: 4px;
+        cursor: pointer;
+        color: rgb(246, 241, 231);
     }
 
     span {

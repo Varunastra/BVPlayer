@@ -2,7 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { setPlaylist, setIsOpen, fetchPlaylists } from "../../actions/playlists";
 import playlistLogo from "../../images/playlist.svg";
-import { deletePlaylist, addTrack } from "../../api/playlist";
+import { addTrack, removePlaylist, getPlaylist, createPlaylist } from "../../api/playlist";
+import { makeToast } from "../../toasts";
 
 export function Playlist({ playlist, trackToAdd, handleAddSuccess, handleAddError }) {
     const { name, id } = playlist;
@@ -27,8 +28,14 @@ export function Playlist({ playlist, trackToAdd, handleAddSuccess, handleAddErro
 
     const handleDelete = async (e) => {
         e.stopPropagation();
-        await deletePlaylist(id);
+        const playlist = await getPlaylist(id);
+        const tracks = playlist.tracks.map(track => track.id);
+        const { message } = await removePlaylist(id);
         dispatch(fetchPlaylists("me"));
+        makeToast({ message, undoAction: async () => {
+            await createPlaylist({ ...playlist, tracks });
+            dispatch(fetchPlaylists("me"));
+        } });
     };
 
     return (

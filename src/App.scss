@@ -233,6 +233,7 @@ input[type="range"].slider {
 
     .play-controls {
         display: flex;
+        padding: 3px 0;
     }
 
     i {
@@ -428,7 +429,7 @@ input[type="range"].slider {
         font-weight: 500;
     }
 
-    .fa-plus {
+    .fa {
         padding: 0 10px;
     }
 
@@ -491,28 +492,44 @@ input[type="range"].slider {
     .poster {
         margin: 0 20px;
         position: relative;
+        min-width: 250px;
+        min-height: 250px;
+        max-width: 300px;
+        max-height: 300px;
+        @include mediaWidth($mediaMobileWidth) {
+            min-width: 125px;
+            min-height: 125px;
+        }
 
         img {
             top: 0;
             right: 0;
-            width: 200px;
-            height: auto;
 
             &.semi-visible {
                 opacity: 0.5;
             }
-            
-            @include mediaWidth($mediaMobileWidth) {
-                width: 100px;
-            }
+
+            max-height: 100%;
+            max-width: 100%;
         }
 
         .upload-poster {
             z-index: 998;
-            background: transparent;
+            width: 100%;
+            height: 100%;
+            top: -20px;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: absolute;
-            width: 30px;
-            padding: 10px;
+
+            .fa-camera {
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 25px;
+                padding: 20px;
+                font-size: 30px;
+            }
         }
 
         .actions {
