@@ -6,92 +6,87 @@ import { nextTrack } from "../../actions/playlist";
 import { AudioRef } from "../AudioRef";
 
 export const Player = React.memo(function Player() {
-    const track = useSelector((state) => state.playlist.track.src);
-    const volume = useSelector((state) => state.status.volume);
+  const track = useSelector((state) => state.playlist.track.src);
+  const volume = useSelector((state) => state.status.volume);
 
-    const isPlaying = useSelector((state) => state.status.isPlaying);
-    const currentTime = useSelector((state) => state.status.currentTime);
-    const isSeeking = useSelector((state) => state.status.isSeeking);
+  const isPlaying = useSelector((state) => state.status.isPlaying);
+  const currentTime = useSelector((state) => state.status.currentTime);
+  const isSeeking = useSelector((state) => state.status.isSeeking);
 
-    const dispatch = useDispatch();
-    const audio = AudioRef;
-    const waitForSeek = useRef(false);
+  const dispatch = useDispatch();
+  const audio = AudioRef;
+  const waitForSeek = useRef(false);
 
-    const prevTrack = usePrevious(track);
+  const prevTrack = usePrevious(track);
 
-    useEffect(() => {
-        async function loadTrack() {
-            if (prevTrack !== track) {
-                await audio.current.load();
-                if (isPlaying) {
-                    await audio.current.play();
-                }
-            }
+  useEffect(() => {
+    async function loadTrack() {
+      if (prevTrack !== track) {
+        await audio.current.load();
+        if (isPlaying) {
+          await audio.current.play();
         }
-        loadTrack();
-    }, [prevTrack, track, isPlaying, audio]);
+      }
+    }
+    loadTrack();
+  }, [prevTrack, track, isPlaying, audio]);
 
-    useEffect(() => {
-        const audioElem = audio.current;
+  useEffect(() => {
+    const audioElem = audio.current;
 
-        const updateListener = audioElem.addEventListener("timeupdate", (e) => {
-            if (!waitForSeek.current) {
-                dispatch(setPlayTime(e.target.currentTime));
-            } else {
-                waitForSeek.current = false;
-            }
-        });
+    const updateListener = audioElem.addEventListener("timeupdate", (e) => {
+      if (!waitForSeek.current) {
+        dispatch(setPlayTime(e.target.currentTime));
+      } else {
+        waitForSeek.current = false;
+      }
+    });
 
-        const trackEndListener = audioElem.addEventListener("ended", (e) => {
-            dispatch(nextTrack());
-        });
+    const trackEndListener = audioElem.addEventListener("ended", (e) => {
+      dispatch(nextTrack());
+    });
 
-        const metadataLoadListener = audioElem.addEventListener(
-            "loadedmetadata",
-            () => {
-                dispatch(setDuration(audioElem.duration));
-            }
-        );
+    const metadataLoadListener = audioElem.addEventListener(
+      "loadedmetadata",
+      () => {
+        dispatch(setDuration(audioElem.duration));
+      }
+    );
 
-        return () => {
-            audioElem.removeEventListener(
-                "loadedmetadata",
-                metadataLoadListener
-            );
-            audioElem.removeEventListener("timeupdate", updateListener);
-            audioElem.removeEventListener("ended", trackEndListener);
-        };
-    }, [dispatch, audio]);
+    return () => {
+      audioElem.removeEventListener("loadedmetadata", metadataLoadListener);
+      audioElem.removeEventListener("timeupdate", updateListener);
+      audioElem.removeEventListener("ended", trackEndListener);
+    };
+  }, [dispatch, audio]);
 
-    useEffect(() => {
-        async function setPlayerIsPlaying() {
-            isPlaying
-                ? await audio.current.play()
-                : await audio.current.pause();
-        }
-        setPlayerIsPlaying();
-    }, [isPlaying, audio]);
+  useEffect(() => {
+    async function setPlayerIsPlaying() {
+      isPlaying ? await audio.current.play() : await audio.current.pause();
+    }
+    setPlayerIsPlaying();
+  }, [isPlaying, audio]);
 
-    useEffect(() => {
-        async function setAudioTime() {
-            if (isSeeking) {
-                audio.current.currentTime = currentTime;
-                dispatch(setSeeking(false));
-                waitForSeek.current = true;
-            }
-        }
-        setAudioTime();
-    }, [isSeeking, currentTime, dispatch, audio]);
+  useEffect(() => {
+    async function setAudioTime() {
+      if (isSeeking) {
+        audio.current.currentTime = currentTime;
+        dispatch(setSeeking(false));
+        waitForSeek.current = true;
+      }
+    }
+    setAudioTime();
+  }, [isSeeking, currentTime, dispatch, audio]);
 
-    useEffect(() => {
-        audio.current.volume = volume / 100;
-    }, [volume, audio]);
+  useEffect(() => {
+    audio.current.volume = volume / 100;
+  }, [volume, audio]);
 
-    return (
-        <audio
-            src={track && `${process.env.REACT_APP_URL}${track}`}
-            ref={audio}
-            crossOrigin="anonymous"
-        ></audio>
-    )
+  return (
+    <audio
+      src={track && `${process.env.REACT_APP_URL}${track}`}
+      ref={audio}
+      crossOrigin="anonymous"
+    ></audio>
+  );
 });

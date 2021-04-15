@@ -1,9 +1,9 @@
-version: '3.7'
+version: "3.7"
 
 services:
   backend:
     image: node:14-alpine
-    working_dir: '/backend'
+    working_dir: "/backend"
     container_name: bvplayer_backend
     command: sh -c "yarn && yarn start"
     environment:
@@ -22,7 +22,7 @@ services:
 
   frontend:
     image: node:14-alpine
-    working_dir: '/frontend'
+    working_dir: "/frontend"
     container_name: bvplayer_frontend
     command: sh -c "yarn && yarn start"
     depends_on:

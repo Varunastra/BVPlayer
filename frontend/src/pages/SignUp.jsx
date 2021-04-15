@@ -7,48 +7,48 @@ import Button from "../components/UI/Button/Button";
 import ErrorMessage from "../components/UI/Error/ErrorMessage";
 
 function SignUp() {
-    const [login, setLogin] = useState();
-    const [password, setPassword] = useState();
-    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-    const error = useSelector((state) => state.user.error);
-    const history = useHistory();
+  const [login, setLogin] = useState();
+  const [password, setPassword] = useState();
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const error = useSelector((state) => state.user.error);
+  const history = useHistory();
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const handleRegister = (e) => {
-        e.preventDefault();
-        dispatch(registerUser({ login, password }));
-    };
+  const handleRegister = (e) => {
+    e.preventDefault();
+    dispatch(registerUser({ login, password }));
+  };
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            history.replace("/");
-        }
-    }, [isAuthenticated, history]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.replace("/");
+    }
+  }, [isAuthenticated, history]);
 
-    return (
-        <>
-            <form className="sign-up" onSubmit={handleRegister}>
-                <div className="container">
-                    <h3>Sign up</h3>
-                    <TextField
-                        value={login}
-                        type="text"
-                        onChange={(e) => setLogin(e.target.value)}
-                        placeholder="Enter login"
-                    />
-                    <TextField
-                        value={password}
-                        type="password"
-                        placeholder="Enter password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <ErrorMessage error={error}/>
-                    <Button type="submit">Register</Button>
-                </div>
-            </form>
-        </>
-    );
+  return (
+    <>
+      <form className="sign-up" onSubmit={handleRegister}>
+        <div className="container">
+          <h3>Sign up</h3>
+          <TextField
+            value={login}
+            type="text"
+            onChange={(e) => setLogin(e.target.value)}
+            placeholder="Enter login"
+          />
+          <TextField
+            value={password}
+            type="password"
+            placeholder="Enter password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <ErrorMessage error={error} />
+          <Button type="submit">Register</Button>
+        </div>
+      </form>
+    </>
+  );
 }
 
 export default SignUp;

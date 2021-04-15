@@ -2,828 +2,828 @@
 @import "./styles/mixins";
 
 ::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px $scrollBarColor;
-    border-radius: 6px;
+  box-shadow: inset 0 0 5px $scrollBarColor;
+  border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(163, 214, 238, 0.2);
-    border-radius: 4px;
-    height: 100px;
+  background: rgba(163, 214, 238, 0.2);
+  border-radius: 4px;
+  height: 100px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(163, 214, 238, 0.4);
+  background: rgba(163, 214, 238, 0.4);
 }
 
 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* montserrat-regular - cyrillic */
 @font-face {
-    font-family: "Montserrat";
-    font-style: normal;
-    font-weight: 400;
-    src: local("Montserrat Regular"), local("Montserrat-Regular"),
-        url("./fonts/montserrat-v14-cyrillic-regular.woff2")
-            format("woff2"),
-        /* Chrome 26+, Opera 23+, Firefox 39+ */
-            url("./fonts/montserrat-v14-cyrillic-regular.woff")
-            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Montserrat Regular"), local("Montserrat-Regular"),
+    url("./fonts/montserrat-v14-cyrillic-regular.woff2") format("woff2"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("./fonts/montserrat-v14-cyrillic-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* montserrat-500 - cyrillic */
 @font-face {
-    font-family: "Montserrat";
-    font-style: normal;
-    font-weight: 500;
-    src: local("Montserrat Medium"), local("Montserrat-Medium"),
-        url("./fonts/montserrat-v14-cyrillic-500.woff2")
-            format("woff2"),
-        /* Chrome 26+, Opera 23+, Firefox 39+ */
-            url("./fonts/montserrat-v14-cyrillic-500.woff")
-            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Montserrat Medium"), local("Montserrat-Medium"),
+    url("./fonts/montserrat-v14-cyrillic-500.woff2") format("woff2"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("./fonts/montserrat-v14-cyrillic-500.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* montserrat-600 - cyrillic */
 @font-face {
-    font-family: "Montserrat";
-    font-style: normal;
-    font-weight: 600;
-    src: local("Montserrat SemiBold"), local("Montserrat-SemiBold"),
-        url("./fonts/montserrat-v14-cyrillic-600.woff2")
-            format("woff2"),
-        /* Chrome 26+, Opera 23+, Firefox 39+ */
-            url("./fonts/montserrat-v14-cyrillic-600.woff")
-            format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  src: local("Montserrat SemiBold"), local("Montserrat-SemiBold"),
+    url("./fonts/montserrat-v14-cyrillic-600.woff2") format("woff2"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("./fonts/montserrat-v14-cyrillic-600.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 html,
 body,
 #root {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: auto;
-    font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: auto;
+  font-family: "Montserrat", sans-serif;
 }
 
 #root {
-    display: flex;
-    flex-direction: column;
-    background: $containerColor;
-    color: $mainTextColor;
+  display: flex;
+  flex-direction: column;
+  background: $containerColor;
+  color: $mainTextColor;
 }
 
 header,
 footer,
 .content {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 button,
 input,
 textarea {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
 }
 
 input[type="file"] {
-    display: none;
+  display: none;
 }
 
 #modal-root {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .modal {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.3);
-    color: $mainTextColor;
-    top: 0;
-    left: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  color: $mainTextColor;
+  top: 0;
+  left: 0;
 }
 
 header {
-    height: 80px;
-    width: 70vw;
-    margin: 0 auto;
+  height: 80px;
+  width: 70vw;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+
+  @include makeResponsive;
+
+  .logo-image {
+    width: 40px;
+    padding: 0 10px;
+  }
+
+  .logo {
     display: flex;
-    align-items: center;
-
-    @include makeResponsive;
-
-    .logo-image {
-        width: 40px;
-        padding: 0 10px;
-    }
-
-    .logo {
-        display: flex;
-        padding-right: 20px;
-        user-select: none;
-        cursor: pointer;
-    }
+    padding-right: 20px;
+    user-select: none;
+    cursor: pointer;
+  }
 }
 
 footer {
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
 }
 
 .content {
-    padding-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: 55vw;
-    flex-wrap: wrap;
-    margin: 0 auto;
-    flex-grow: 1;
-    @include makeResponsive;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 55vw;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  flex-grow: 1;
+  @include makeResponsive;
 }
 
 input[type="range"].slider {
+  -webkit-appearance: none;
+  width: 100px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    background: #484d4d;
+    border-radius: 0px;
+    border: 0px solid #010101;
+  }
+
+  &::-webkit-slider-thumb {
+    height: 12px;
+    width: 18px;
+    border-radius: 0px;
+    background: $progressBarThumbColor;
+    cursor: pointer;
     -webkit-appearance: none;
-    width: 100px;
-
-    &:focus {
-        outline: none;
-    }
-
-    &::-webkit-slider-runnable-track {
-        width: 100%;
-        height: 10px;
-        cursor: pointer;
-        background: #484d4d;
-        border-radius: 0px;
-        border: 0px solid #010101;
-    }
-
-    &::-webkit-slider-thumb {
-        height: 12px;
-        width: 18px;
-        border-radius: 0px;
-        background: $progressBarThumbColor;
-        cursor: pointer;
-        -webkit-appearance: none;
-        margin-top: -0.7px;
-    }
+    margin-top: -0.7px;
+  }
 }
 
 .volume-control {
-    display: flex;
-    align-items: center;
-    .fa-volume-up {
-        color: $mainTextColor;
-        padding: 2px 7px;
-        &.invisible {
-            display: none;
-        }
+  display: flex;
+  align-items: center;
+  .fa-volume-up {
+    color: $mainTextColor;
+    padding: 2px 7px;
+    &.invisible {
+      display: none;
     }
-    &.vertical {
-        transform: rotate(270deg);
-        position: absolute;
-        top: -55px;
-        left: -45px;
-    }
+  }
+  &.vertical {
+    transform: rotate(270deg);
+    position: absolute;
+    top: -55px;
+    left: -45px;
+  }
 }
 
 .player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 500px;
+  flex: 1.5;
+  flex-basis: 400px;
+  margin: 0 10px;
+
+  .player {
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    align-items: center;
-    min-height: 500px;
-    flex: 1.5;
-    flex-basis: 400px;
-    margin: 0 10px;
+    width: 100%;
+  }
 
-    .player {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        width: 100%;
+  .poster {
+    width: 100px;
+    height: 100px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin: 0 20px;
+    opacity: 0.7;
+    transition: opacity 300ms;
+
+    &:hover {
+      opacity: 0.9;
     }
+  }
 
-    .poster {
-        width: 100px;
-        height: 100px;
-        border-top-right-radius: 20px;
-        border-bottom-left-radius: 20px;
-        margin: 0 20px;
-        opacity: 0.7;
-        transition: opacity 300ms;
+  .control-block {
+    display: flex;
+    padding: 20px 0;
+    position: relative;
+  }
 
-        &:hover {
-            opacity: 0.9;
-        }
+  .play-controls {
+    display: flex;
+    padding: 8px 0;
+    font-size: 20px;
+
+    span {
+      padding-right: 8px;
     }
+  }
 
-    .control-block {
-        display: flex;
-        padding: 20px 0;
-        position: relative;
-    }
+  i {
+    padding: 5px;
+    cursor: pointer;
+  }
 
-    .play-controls {
-        display: flex;
-        padding: 3px 0;
-    }
+  .player-progress {
+    position: relative;
+    width: 90%;
+    height: 15px;
+    margin: 10px 20px;
+  }
 
-    i {
-        padding: 5px;
-        cursor: pointer;
-    }
-
-    .player-progress {
-        position: relative;
-        width: 90%;
-        height: 15px;
-        margin: 10px 20px;
-    }
-
-    @include progressBarStyle(20px, 2px, 15px);
+  @include progressBarStyle(20px, 2px, 15px);
 }
 
 .visualizer {
-    height: 250px;
-    width: 100%;
+  height: 250px;
+  width: 100%;
 
-    @include makeResponsive;
+  @include makeResponsive;
 }
 
 .tracks {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.2);
+  height: 450px;
+  flex-grow: 1;
+  flex-basis: 300px;
+  margin: 0px 5px 20px 5px;
+
+  @include makeResponsive;
+
+  .poster {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+  }
+
+  .container {
+    padding: 10px;
+    overflow: auto;
+    position: relative;
+  }
+
+  .track {
+    display: flex;
+    padding: 8px;
+    cursor: pointer;
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .playing {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .track-info {
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.2);
-    height: 450px;
-    flex-grow: 1;
-    flex-basis: 300px;
-    margin: 0px 5px 20px 5px;
+    padding: 0 10px;
 
-    @include makeResponsive;
+    .author {
+      color: $secondTextColor;
+    }
+  }
 
-    .poster {
-        width: 60px;
-        height: 60px;
-        flex-shrink: 0;
+  &-header {
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $secondTextColor;
+
+    .name {
+      font-size: 16px;
+      font-weight: 500;
+      padding: 0 10px;
     }
 
-    .container {
-        padding: 10px;
-        overflow: auto;
-        position: relative;
+    .playlist-icon {
+      width: 30px;
+      height: 30px;
     }
 
-    .track {
-        display: flex;
-        padding: 8px;
-        cursor: pointer;
-        &:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
+    .fa-times {
+      padding: 0 10px;
+      cursor: pointer;
     }
+  }
 
-    .playing {
-        background: rgba(0, 0, 0, 0.1);
+  &-playlist {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    .fa-edit {
+      cursor: pointer;
     }
-
-    .track-info {
-        display: flex;
-        flex-direction: column;
-        padding: 0 10px;
-
-        .author {
-            color: $secondTextColor;
-        }
-    }
-
-    &-header {
-        padding: 5px 10px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid $secondTextColor;
-
-        .name {
-            font-size: 16px;
-            font-weight: 500;
-            padding: 0 10px;
-        }
-
-        .playlist-icon {
-            width: 30px;
-            height: 30px;
-        }
-
-        .fa-times {
-            padding: 0 10px;
-            cursor: pointer;
-        }
-    }
-
-    &-playlist {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-    }
-
-    .controls {
-        display: flex;
-        align-items: center;
-        margin-left: auto;
-
-        .fa-edit {
-            cursor: pointer;
-        }
-    }
+  }
 }
 
 .playlists {
-    display: flex;
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.2);
-    height: 450px;
-    margin: 0px 5px 15px 5px;
-    padding: 5px 0px;
-    flex-grow: 1;
-    flex-basis: 300px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.2);
+  height: 450px;
+  margin: 0px 5px 15px 5px;
+  padding: 5px 0px;
+  flex-grow: 1;
+  flex-basis: 300px;
 
-    @include makeResponsive;
+  @include makeResponsive;
 
-    .container {
-        overflow: auto;
-        position: relative;
-    }
+  .container {
+    overflow: auto;
+    position: relative;
+  }
 }
 
 .playlist {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  cursor: pointer;
+
+  &-folder {
+    padding: 0 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  &-controls {
     display: flex;
-    padding: 10px;
     align-items: center;
-    cursor: pointer;
+    margin-left: auto;
+    padding: 5px;
+  }
 
-    &-folder {
-        padding: 0 10px;
-        width: 30px;
-        height: 30px;
-    }
+  .fa-edit {
+    padding-right: 10px;
+  }
 
-    &-controls {
-        display: flex;
-        align-items: center;
-        margin-left: auto;
-        padding: 5px;
-    }
+  .container {
+    display: flex;
+    align-items: center;
+  }
 
-    .fa-edit {
-        padding-right: 10px;
-    }
-
-    .container {
-        display: flex;
-        align-items: center;
-    }
-
-    &:hover {
-        background: rgba(0, 0, 0, 0.1);
-    }
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
 }
 
 .sign-in,
 .sign-up {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+
+  .container {
+    padding: 20px 40px;
+    max-width: 230px;
+    background: rgba(0, 0, 0, 0.3);
     display: flex;
+    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    padding-top: 100px;
 
-    .container {
-        padding: 20px 40px;
-        max-width: 230px;
-        background: rgba(0, 0, 0, 0.3);
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-
-        a {
-            color: grey;
-            text-decoration: none;
-        }
+    a {
+      color: grey;
+      text-decoration: none;
     }
+  }
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .add-item {
-    padding: 15px 10px;
-    cursor: pointer;
+  padding: 15px 10px;
+  cursor: pointer;
 
-    &-text {
-        font-weight: 500;
-    }
+  &-text {
+    font-weight: 500;
+  }
 
-    .fa {
-        padding: 0 10px;
-    }
+  .fa {
+    padding: 0 10px;
+  }
 
-    &:hover {
-        background: rgba(0, 0, 0, 0.1);
-    }
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
 }
 
 .add-track-container {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
-    .upload-track {
-        border: 1px solid $mainTextColor;
-        padding: 5px 10px;
-        margin-top: 20px;
-    }
+  .upload-track {
+    border: 1px solid $mainTextColor;
+    padding: 5px 10px;
+    margin-top: 20px;
+  }
 }
 
 .track-full {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-height: 70vh;
+  margin-bottom: 100px;
+  width: 60vw;
+  background: rgba(0, 0, 0, 0.3);
+  @include mediaWidth($mediaTabletWidth) {
+    width: 100%;
+  }
+
+  .track-info {
+    display: flex;
+    padding: 30px 20px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .track-header {
+    font-size: 20px;
+    width: 100%;
+    font-weight: 500;
+  }
+
+  .title {
+    font-size: 30px;
+    font-weight: 600px;
+    margin-bottom: 10px;
+  }
+
+  .author {
+    color: grey;
+    font-size: 25px;
+    font-weight: 500;
+  }
+
+  .poster {
+    margin: 0 20px;
+    position: relative;
+    min-width: 250px;
+    min-height: 250px;
+    max-width: 300px;
+    max-height: 300px;
+    @include mediaWidth($mediaMobileWidth) {
+      min-width: 125px;
+      min-height: 125px;
+    }
+
+    img {
+      top: 0;
+      right: 0;
+
+      &.semi-visible {
+        opacity: 0.5;
+      }
+
+      max-height: 100%;
+      max-width: 100%;
+    }
+
+    .upload-poster {
+      z-index: 998;
+      width: 100%;
+      height: 100%;
+      top: -20px;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+
+      .fa-camera {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 20px;
+        font-size: 30px;
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      padding-top: 15px;
+      .fa {
+        padding: 0 5px;
+      }
+    }
+  }
+
+  .genres {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .genre {
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 2px inset cornflowerblue;
+    font-size: 16px;
+
+    .fa {
+      padding: 0 5px;
+    }
+  }
+
+  .lyrics {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    min-height: 70vh;
-    margin-bottom: 100px;
-    width: 60vw;
-    background: rgba(0, 0, 0, 0.3);
-    @include mediaWidth($mediaTabletWidth) {
-        width: 100%;
+    text-align: center;
+    font-weight: 500;
+
+    &-text {
+      width: 60%;
+
+      @include mediaWidth($mediaMobileWidth) {
+        width: 90%;
+      }
     }
+  }
 
-    .track-info {
-        display: flex;
-        padding: 30px 20px;
-        position: relative;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .track-header {
-        font-size: 20px;
-        width: 100%;
-        font-weight: 500;
-    }
-
-    .title {
-        font-size: 30px;
-        font-weight: 600px;
-        margin-bottom: 10px;
-    }
-
-    .author {
-        color: grey;
-        font-size: 25px;
-        font-weight: 500;
-    }
-
-    .poster {
-        margin: 0 20px;
-        position: relative;
-        min-width: 250px;
-        min-height: 250px;
-        max-width: 300px;
-        max-height: 300px;
-        @include mediaWidth($mediaMobileWidth) {
-            min-width: 125px;
-            min-height: 125px;
-        }
-
-        img {
-            top: 0;
-            right: 0;
-
-            &.semi-visible {
-                opacity: 0.5;
-            }
-
-            max-height: 100%;
-            max-width: 100%;
-        }
-
-        .upload-poster {
-            z-index: 998;
-            width: 100%;
-            height: 100%;
-            top: -20px;
-            right: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-
-            .fa-camera {
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 25px;
-                padding: 20px;
-                font-size: 30px;
-            }
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
-            padding-top: 15px;
-            .fa {
-                padding: 0 5px;
-            }
-        }
-    }
-
-    .genres {
-        margin-top: 20px;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .genre {
-        padding: 5px 10px;
-        border-radius: 20px;
-        margin-right: 10px;
-        font-weight: 500;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        border: 2px inset cornflowerblue;
-        font-size: 16px;
-
-        .fa {
-            padding: 0 5px;
-        }
-    }
-
-    .lyrics {
-        flex: 1;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 0 40px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        font-weight: 500;
-
-        &-text { 
-            width: 60%;
-
-            @include mediaWidth($mediaMobileWidth) {
-                width: 90%;
-            }
-        }
-    }
-
-    .controls {
-        display: flex;
-        justify-content: center;
-        padding: 30px 0;
-    }
+  .controls {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+  }
 }
 
 .player-bar {
+  display: flex;
+  flex-direction: column;
+  background: $playerBarColor;
+  position: fixed;
+  margin: 0 auto;
+  width: 70%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .player-controls {
     display: flex;
-    flex-direction: column;
-    background: $playerBarColor;
-    position: fixed;
-    margin: 0 auto;
-    width: 70%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    .player-controls {
-        display: flex;
-        align-items: center;
-        .fa {
-            padding: 0 5px;
-        }
+    align-items: center;
+    .fa {
+      padding: 0 5px;
     }
+  }
 
-    .track-info {
-        display: flex;
-        padding: 15px 0;
-    }
+  .track-info {
+    display: flex;
+    padding: 15px 0;
+  }
 
-    .title {
-        font-weight: 500;
-    }
+  .title {
+    font-weight: 500;
+  }
 
-    .author {
-        font-size: 14px;
-        color: grey;
-    }
+  .author {
+    font-size: 14px;
+    color: grey;
+  }
 
-    .volume {
-        position: relative;
-        justify-self: flex-end;
-        margin-left: auto;
-        margin-right: 20px;
-        align-self: center;
-    }
+  .volume {
+    position: relative;
+    justify-self: flex-end;
+    margin-left: auto;
+    margin-right: 20px;
+    align-self: center;
+  }
 
-    @include progressBarStyle(5px, 5px, 25px);
-    @include mediaWidth($mediaTabletWidth) {
-        width: 100%;
-    }
+  @include progressBarStyle(5px, 5px, 25px);
+  @include mediaWidth($mediaTabletWidth) {
+    width: 100%;
+  }
 
-    img {
-        width: 50px;
-        padding: 0 10px;
-    }
+  img {
+    width: 50px;
+    padding: 0 10px;
+  }
 }
 
 .not-found {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-    img {
-        width: 300px;
-    }
+  img {
+    width: 300px;
+  }
 }
 
 .side-menu {
-    padding: 10px 15px;
-    background: rgba(0, 0, 0, 0.85);
+  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.85);
 
-    li {
-        padding: 10px 8px;
-    }
+  li {
+    padding: 10px 8px;
+  }
 }
 
 .nav-header {
-    display: flex;
-    @include makeResponsive;
+  display: flex;
+  @include makeResponsive;
 }
 
 .user-mobile {
-    display: none;
-    padding: 0 15px;
-    align-items: center;
-    display: none;
-    margin-left: auto;
-    position: relative;
+  display: none;
+  padding: 0 15px;
+  align-items: center;
+  display: none;
+  margin-left: auto;
+  position: relative;
 
-    @include mediaWidth($mediaMobileWidth) {
-        display: flex;
-    }
+  @include mediaWidth($mediaMobileWidth) {
+    display: flex;
+  }
 
-    .fa-list-ul {
-        padding-left: 15px;
-    }
+  .fa-list-ul {
+    padding-left: 15px;
+  }
 }
 
 .user-desktop {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 
-    @include mediaWidth($mediaMobileWidth) {
-        display: none;
-    }
+  @include mediaWidth($mediaMobileWidth) {
+    display: none;
+  }
 
-    .user {
-        position: relative;
-        margin-left: auto;
-        padding: 0 30px;
-        cursor: pointer;
-        user-select: none;
-    }  
+  .user {
+    position: relative;
+    margin-left: auto;
+    padding: 0 30px;
+    cursor: pointer;
+    user-select: none;
+  }
 }
 
 .fa-user {
-    padding: 0 10px;
-    display: inline;
-} 
+  padding: 0 10px;
+  display: inline;
+}
 
 .user-menu {
-    background: #0000004d;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    width: 100%;
-    list-style-image: none;
-    list-style: none;
-    padding: 5px 15px;
+  background: #0000004d;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  width: 100%;
+  list-style-image: none;
+  list-style: none;
+  padding: 5px 15px;
 
-    li {
-        line-height: 35px;
-        cursor: pointer;
-    }
+  li {
+    line-height: 35px;
+    cursor: pointer;
+  }
 
-    .logout::before {
-        background: url("./images/logout.svg");
-        content: "";
-        display: inline-block;
-        background-size: 20px;
-        height: 20px;
-        width: 20px;
-        vertical-align: middle;
-        margin-right: 8px;
-    }
+  .logout::before {
+    background: url("./images/logout.svg");
+    content: "";
+    display: inline-block;
+    background-size: 20px;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
 }
 
 .search-open {
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 70vw;
-    position: fixed;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1001;
-    padding: 15px 10px;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 70vw;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  padding: 15px 10px;
 }
 
 .search-bar {
-    display: flex;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  font-weight: 500;
+
+  .bar {
+    background: $searchBarColor;
+    border: none;
     width: 100%;
-    align-items: center;
-    position: relative;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px;
+    color: white;
 
-    .bar {
-        background: $searchBarColor;
-        border: none;
-        width: 100%;
-        font-weight: 600;
-        font-size: 14px;
-        padding: 10px;
-        color: white;
-
-        &:hover, &:focus {
-            outline: none;
-        }
-
-        &::placeholder {
-            font-weight: 600;
-            color: $searchBarPlaceholderColor;
-        }
+    &:hover,
+    &:focus {
+      outline: none;
     }
 
-    .fa-search {
-        font-size: 20px;
-        border-radius: 4px;
-        position: absolute;
-        right: 8px;
+    &::placeholder {
+      font-weight: 600;
+      color: $searchBarPlaceholderColor;
     }
+  }
 
-    .fa-times {
-        position: absolute;
-        right: 40px;
-        font-size: 20px;
-    }
+  .fa-search {
+    font-size: 20px;
+    border-radius: 4px;
+    position: absolute;
+    right: 8px;
+  }
+
+  .fa-times {
+    position: absolute;
+    right: 40px;
+    font-size: 20px;
+  }
 }
 
 .search-menu {
-    position: absolute;
-    top: 37px;
-    z-index: 1001;
-    background: $searchMenuColor;
-    left: 0px;
-    max-height: 360px;
-    width: 100%;
-    overflow-y: auto;
+  position: absolute;
+  top: 37px;
+  z-index: 1001;
+  background: $searchMenuColor;
+  left: 0px;
+  max-height: 360px;
+  width: 100%;
+  overflow-y: auto;
 }
 
 .search-item {
+  display: flex;
+  padding: 10px 0px;
+  cursor: pointer;
+
+  .author {
+    font-size: 14px;
+    color: rgb(179, 176, 176);
+  }
+
+  img {
+    width: 40px;
+    padding: 0 10px;
+    height: 40px;
+  }
+
+  .track-info {
     display: flex;
-    padding: 10px 0px;
-    cursor: pointer;
-
-    .author {
-        font-size: 14px;
-        color: rgb(179, 176, 176);
-    }
-
-    img { 
-        width: 40px;
-        padding: 0 10px;
-        height: 40px;
-    }
-    
-    .track-info {
-        display: flex;
-        flex-direction: column;
-    }
+    flex-direction: column;
+  }
 }

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const { sequelize } = require("./sequelize");
 const bodyParser = require("body-parser");
@@ -19,19 +19,17 @@ app.use(express.static(path.join(__dirname, "build")));
 initializeRoutes(app);
 
 app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 (async () => {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log(
-        "Connection to DB has been established successfully."
-    );
+  await sequelize.authenticate();
+  await sequelize.sync();
+  console.log("Connection to DB has been established successfully.");
 })();
 
 app.listen(port, () => {
-    console.log(`Server started on ${port}`);
+  console.log(`Server started on ${port}`);
 });
 
 module.exports = app;

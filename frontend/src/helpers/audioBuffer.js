@@ -13,31 +13,30 @@ let analyser, dataArr, bufferLength, context;
 // analyser.fftSize = 32768;
 
 export function getAudioBuffer(audio) {
-    if (!dataArr) {
-        context = new AudioContext();
-        let src = context.createMediaElementSource(audio);
-        analyser = context.createAnalyser();
-        src.connect(analyser);
-        analyser.connect(context.destination);
+  if (!dataArr) {
+    context = new AudioContext();
+    let src = context.createMediaElementSource(audio);
+    analyser = context.createAnalyser();
+    src.connect(analyser);
+    analyser.connect(context.destination);
 
-        analyser.fftSize = FFTSize;
+    analyser.fftSize = FFTSize;
 
-        bufferLength = analyser.frequencyBinCount;
-        dataArr = new Uint8Array(bufferLength);
-    }
-    else {
-        analyser.getByteFrequencyData(dataArr);
-    }
-    return dataArr;
+    bufferLength = analyser.frequencyBinCount;
+    dataArr = new Uint8Array(bufferLength);
+  } else {
+    analyser.getByteFrequencyData(dataArr);
+  }
+  return dataArr;
 }
 
 export function getBufferLength() {
-    return bufferLength;
+  return bufferLength;
 }
 
 export function getContext() {
-    if (context.state === "suspended") {
-        context.resume();
-    }
-    return context;
+  if (context.state === "suspended") {
+    context.resume();
+  }
+  return context;
 }

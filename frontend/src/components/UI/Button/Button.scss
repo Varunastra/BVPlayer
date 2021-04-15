@@ -1,30 +1,30 @@
- .button {
-    margin: 20px 8px 8px 8px;
-    background: rgba(0, 0, 0, 0);
-    color: ghostwhite;
-    padding: 8px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    outline: 0;
-    font-weight: 500;
-    line-height: 1.75;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    transition: background 0.2s;
+.button {
+  margin: 20px 8px 8px 8px;
+  background: rgba(0, 0, 0, 0);
+  color: ghostwhite;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: 0;
+  font-weight: 500;
+  line-height: 1.75;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  transition: background 0.2s;
 
-    &.outline {
-        border: 1px solid rgba(144, 202, 249, 0.5);
-    }
+  &.outline {
+    border: 1px solid rgba(144, 202, 249, 0.5);
+  }
 
-    &.borderless {
-        border: none;
-    }
+  &.borderless {
+    border: none;
+  }
 
-    &.outline:hover,
-    &.borderless:hover,
-    &.outline:active,
-    &.borderless:active {
-        background: rgba(144, 202, 249, 0.5);
-        transition: background ease 0.2;
-    }
+  &.outline:hover,
+  &.borderless:hover,
+  &.outline:active,
+  &.borderless:active {
+    background: rgba(144, 202, 249, 0.5);
+    transition: background ease 0.2;
+  }
 }

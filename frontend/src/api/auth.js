@@ -1,6 +1,7 @@
 import { fetchApi } from "../helpers/fetchApi";
 
-export const obtainToken = (login, password) => fetchApi("token/obtain", {
+export const obtainToken = (login, password) =>
+  fetchApi("token/obtain", {
     method: "POST",
-    body: JSON.stringify({ login, password })
-});
+    body: JSON.stringify({ login, password }),
+  });

@@ -4,75 +4,73 @@ const jwt = require("jsonwebtoken");
 
 const secret = process.env.JWT_SECRET;
 
-
 function userRoutes(app) {
-    app.get("/api/users/:id", checkToken, async (req, res) => {
-        const { id } = req.params;
+  app.get("/api/users/:id", checkToken, async (req, res) => {
+    const { id } = req.params;
 
-        if (id === "me") {
-            const user = await User.findOne({
-                include: [{
-                    model: Playlist
-                }],
-                where: {
-                    id: req.decoded.id
-                },
-                attributes: {
-                    exclude: ["password", "createdAt", "updatedAt"]
-                }
-            });
+    if (id === "me") {
+      const user = await User.findOne({
+        include: [
+          {
+            model: Playlist,
+          },
+        ],
+        where: {
+          id: req.decoded.id,
+        },
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt"],
+        },
+      });
 
-            res.json(user.toJSON());
-        }
-        else {
-            res.json("Not implemented");
-        }
-    });
+      res.json(user.toJSON());
+    } else {
+      res.json("Not implemented");
+    }
+  });
 
-    app.get("/api/users/:id/playlists", checkToken, async (req, res) => {
-        const { id } = req.params;
-        
-        if (id) {
-            const searchId = id === "me" ? req.decoded.id : id;
-            const playlists = await Playlist.findAll({
-                where: {
-                    UserId: searchId
-                },
-                attributes: {
-                    exclude: ["createdAt", "updatedAt"]
-                }
-            });
+  app.get("/api/users/:id/playlists", checkToken, async (req, res) => {
+    const { id } = req.params;
 
-            res.json(playlists);
-        }
-    });
+    if (id) {
+      const searchId = id === "me" ? req.decoded.id : id;
+      const playlists = await Playlist.findAll({
+        where: {
+          UserId: searchId,
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      });
 
-    app.post("/api/users", async (req, res) => {
-        const { login, password } = req.body;
+      res.json(playlists);
+    }
+  });
 
-        if (login && password) {
-            const [user, isCreated] = await User.findOrCreate({
-                where: {
-                    login
-                },
-                defaults: {
-                    login,
-                    password
-                }
-            });
+  app.post("/api/users", async (req, res) => {
+    const { login, password } = req.body;
 
-            if (isCreated) {
-                const token = jwt.sign({ login, id: user.id }, secret);
-                res.json({ message: "User created successfully", token });
-            }
-            else {
-                res.status(400).json({ message: "User already exist"});
-            }
-        }
-        else {
-            res.json({ message: "Wrong fields provided" });
-        }
-    });
+    if (login && password) {
+      const [user, isCreated] = await User.findOrCreate({
+        where: {
+          login,
+        },
+        defaults: {
+          login,
+          password,
+        },
+      });
+
+      if (isCreated) {
+        const token = jwt.sign({ login, id: user.id }, secret);
+        res.json({ message: "User created successfully", token });
+      } else {
+        res.status(400).json({ message: "User already exist" });
+      }
+    } else {
+      res.json({ message: "Wrong fields provided" });
+    }
+  });
 }
 
 module.exports = userRoutes;
