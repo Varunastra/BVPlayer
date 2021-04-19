@@ -12,15 +12,15 @@ export function prevTrack() {
   return { type: "PREV_TRACK" };
 }
 
-export function fetchTracks(id) {
+export function fetchPlaylist(id) {
   return async (dispatch, getState) => {
-    dispatch({ type: "FETCH_TRACKS_START" });
+    dispatch({ type: "FETCH_PLAYLIST_START" });
     try {
       const playlistId = id ? id : getState().playlists.current.id;
-      const { tracks } = await getPlaylist(playlistId);
-      dispatch({ type: "FETCH_TRACKS_SUCCESS", payload: tracks });
+      const playlist = await getPlaylist(playlistId);
+      dispatch({ type: "FETCH_PLAYLIST_SUCCESS", payload: playlist });
     } catch (e) {
-      dispatch({ type: "FETCH_TRACKS_ERROR", error: e.message });
+      dispatch({ type: "FETCH_PLAYLIST_ERROR", error: e.message });
     }
   };
 }

@@ -23,6 +23,7 @@ import {
   PlayCircleOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
+import { useTitle } from "../hooks/useTitle";
 
 function Track() {
   const { id } = useParams();
@@ -31,6 +32,7 @@ function Track() {
   const [isEditable, setIsEditable] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
   const [isAddPlaylistClicked, setIsAddPlaylistClicked] = useState(false);
+  useTitle("Track");
 
   const [title, setTitle] = useState(null);
   const [author, setAuthor] = useState(null);

@@ -6,7 +6,7 @@ import { createTrack, removeTrack } from "../../api/playlist";
 import { useDispatch, useSelector } from "react-redux";
 import AddItem from "../AddItem";
 import FileInput from "../UI/FileInput/FileInput";
-import { fetchTracks } from "../../actions/playlist";
+import { fetchPlaylist } from "../../actions/playlist";
 import Button from "../UI/Button/Button";
 import { Spinner } from "../UI/Spinner/Spinner";
 import { makeToast } from "../../toasts";
@@ -34,12 +34,12 @@ function NewTrack() {
       track: { title, author, track },
       playlistId: id,
     });
-    dispatch(fetchTracks(id));
+    dispatch(fetchPlaylist(id));
     makeToast({
       message,
       undoAction: async () => {
         await removeTrack({ playlistId: id, trackId });
-        dispatch(fetchTracks(id));
+        dispatch(fetchPlaylist(id));
       },
     });
   };

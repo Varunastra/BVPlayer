@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Track } from "./Track";
-import { fetchTracks } from "../../actions/playlist";
+import { fetchPlaylist } from "../../actions/playlist";
 import { setIsOpen } from "../../actions/playlists";
 import { Spinner } from "../UI/Spinner/Spinner";
 import playlistLogo from "../../images/playlist.svg";
@@ -18,7 +18,7 @@ export function Tracks() {
   const [isPlaylistEditable, setIsPlaylistEditable] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchTracks());
+    dispatch(fetchPlaylist());
   }, [playlist, dispatch]);
 
   const onBackClicked = () => {

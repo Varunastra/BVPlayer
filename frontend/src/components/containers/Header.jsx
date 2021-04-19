@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../../images/logo.svg";
 import UserMenu from "./UserMenu";
 import { useHistory } from "react-router-dom";
 
@@ -13,7 +12,7 @@ function Header() {
   return (
     <header>
       <div className="logo" onClick={handleHomeClick}>
-        <img className="logo-image" src={logo} alt="logo" />
+        <img className="logo-image" src={`${process.env.PUBLIC_URL}/logo.svg`} alt="logo" />
         <h3>BVPlayer</h3>
       </div>
       <UserMenu />

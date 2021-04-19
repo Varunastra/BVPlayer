@@ -1,7 +1,10 @@
 import React from "react";
+import { useTitle } from "../hooks/useTitle";
 import notFound from "../images/404.svg";
 
 function NotFound() {
+  useTitle("Page not exist");
+
   return (
     <>
       <div className="not-found">

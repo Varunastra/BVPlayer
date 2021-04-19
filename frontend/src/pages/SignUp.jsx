@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import TextField from "../components/UI/TextField/TextField";
 import Button from "../components/UI/Button/Button";
 import ErrorMessage from "../components/UI/Error/ErrorMessage";
+import { useTitle } from "../hooks/useTitle";
 
 function SignUp() {
   const [login, setLogin] = useState();
@@ -12,6 +13,7 @@ function SignUp() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const error = useSelector((state) => state.user.error);
   const history = useHistory();
+  useTitle("SingUp");
 
   const dispatch = useDispatch();
 

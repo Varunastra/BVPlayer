@@ -1,15 +1,14 @@
 import React from "react";
-import PlayerProgressBar from "./PlayerProgressBar";
-import TrackInfo from "./TrackInfo";
-import Visualizer from "./Visualizer";
+import PlaylistsMod from "../Playlists/PlaylistsMod";
+// import Visualizer from "./Visualizer";
 
 function PlayerContainer() {
   return (
     <article className="player-container">
       <div className="player">
-        <Visualizer />
-        <TrackInfo />
-        <PlayerProgressBar />
+        {/* <Visualizer /> */}
+        <PlaylistsMod title="Your's playlists" />
+        <PlaylistsMod title="Recommendations" canCreatePlaylist={false} />
       </div>
     </article>
   );

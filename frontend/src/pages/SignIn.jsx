@@ -5,6 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import TextField from "../components/UI/TextField/TextField";
 import Button from "../components/UI/Button/Button";
 import ErrorMessage from "../components/UI/Error/ErrorMessage";
+import { useTitle } from "../hooks/useTitle";
 
 function SignIn() {
   const [login, setLogin] = useState();
@@ -14,6 +15,7 @@ function SignIn() {
 
   const dispatch = useDispatch();
   const history = useHistory();
+  useTitle("Sign In");
 
   const handleLogin = (e) => {
     e.preventDefault();

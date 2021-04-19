@@ -1,5 +1,9 @@
 const initialState = {
-  tracks: [],
+  playlist: {
+    tracks: [],
+    title: null,
+    poster: null,
+  },
   track: {
     title: "Sample track title",
     author: "Author",
@@ -11,46 +15,50 @@ const initialState = {
 
 export function playlist(state = initialState, action) {
   switch (action.type) {
-    case "FETCH_TRACKS_START":
-      return { ...state, isLoading: true, tracks: [] };
-    case "FETCH_TRACKS_SUCCESS":
+    case "FETCH_PLAYLIST_START":
+      return { ...state, isLoading: true, playlist: initialState.playlist };
+    case "FETCH_PLAYLIST_SUCCESS":
       return {
         ...state,
-        tracks: action.payload,
+        playlist: action.payload,
         isLoading: false,
       };
-    case "FETCH_TRACKS_ERROR":
+    case "FETCH_PLAYLIST_ERROR":
       return {
         ...state,
         isLoading: false,
         error: action.payload,
       };
     case "SET_TRACK":
-      let newIndex = state.tracks.findIndex(
+      let newIndex = state.playlist.tracks.findIndex(
         (track) => track.id === action.payload.id
       );
       if (newIndex === -1) {
-        state.tracks.push(action.payload);
+        state.playlist.tracks.push(action.payload);
         newIndex = state.tracks.length - 1;
       }
-      return { ...state, track: state.tracks[newIndex] };
+      return { ...state, track: state.playlist.tracks[newIndex] };
     case "NEXT_TRACK":
       const nextIndex =
-        state.trackIndex === state.tracks.length - 1 ? 0 : state.trackIndex + 1;
-      if (state.tracks.length === 0) {
+        state.trackIndex === state.playlist.tracks.length - 1
+          ? 0
+          : state.trackIndex + 1;
+      if (state.playlist.tracks.length === 0) {
         return state;
       }
       return {
         ...state,
-        track: state.tracks[nextIndex],
+        track: state.playlist.tracks[nextIndex],
         trackIndex: nextIndex,
       };
     case "PREV_TRACK":
       const prevIndex =
-        state.trackIndex === 0 ? state.tracks.length - 1 : state.trackIndex - 1;
+        state.trackIndex === 0
+          ? state.playlist.tracks.length - 1
+          : state.trackIndex - 1;
       return {
         ...state,
-        track: state.tracks[prevIndex],
+        track: state.playlist.tracks[prevIndex],
         trackIndex: prevIndex,
       };
     case "UPDATE_PLAYING":

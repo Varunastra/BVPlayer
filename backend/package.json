@@ -26,9 +26,7 @@
   },
   "nodemonConfig": {
     "env": {
-      "JWT_SECRET": "sdibidoa",
-      "AWS_ACCESS_KEY_ID": "AKIAIWG4RMQ6W3L7HGDQ",
-      "AWS_SECRET_ACCESS_KEY": "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"
+      "JWT_SECRET": "sdibidoa"
     },
     "delay": "1000"
   }

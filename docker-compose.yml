@@ -40,7 +40,7 @@ services:
       API_URL: "localhost:8000"
 
   postgres:
-    image: "postgres:13.1-alpine"
+    image: "postgres:13.2-alpine"
     env_file: ./backend/.env
     ports:
       - 5432:5432

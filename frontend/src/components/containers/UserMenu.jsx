@@ -40,7 +40,7 @@ function UserMenu() {
         <Searchbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <div className="user" onClick={toggleMenu}>
           <span>{user && user.login}</span>
-          <UserOutlined />
+          <UserOutlined className="user-logo" />
           {isUserMenuOpen && (
             <ul className="user-menu">
               <li className="logout" onClick={handleLogout}>
@@ -52,10 +52,10 @@ function UserMenu() {
       </div>
       <div className="user-mobile">
         <div className="user" onClick={toggleMenu}>
-          <UserOutlined />
           <span>{user && user.login}</span>
+          <UserOutlined className="user-logo" />
         </div>
-        <MenuOutlined onClick={toggleSearchMenu} />
+        <MenuOutlined onClick={toggleSearchMenu} className="menu-icon" />
         {isUserMenuOpen && (
           <ul className="user-menu">
             <li className="logout" onClick={handleLogout}>

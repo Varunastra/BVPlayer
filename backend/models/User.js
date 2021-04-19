@@ -1,5 +1,5 @@
 const { sequelize } = require("../sequelize");
-const { STRING, INTEGER } = require("sequelize");
+const { STRING, INTEGER, DATEONLY, ENUM } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const { Playlist } = require("./Playlist");
 const { Track } = require("./Track");
@@ -21,6 +21,14 @@ const User = sequelize.define(
       type: STRING,
       field: "password",
     },
+    birthdate: {
+      type: DATEONLY,
+      field: "birthdate",
+    },
+    sex: {
+      type: ENUM,
+      values: ['Male', 'Female', 'Others']
+    }
   },
   {
     freezeTableName: true,

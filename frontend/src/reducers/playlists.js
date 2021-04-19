@@ -1,6 +1,6 @@
 const initialState = {
   all: [],
-  current: null,
+  current: { name: "", tracks: [] },
   isOpen: false,
   error: null,
 };

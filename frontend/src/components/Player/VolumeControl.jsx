@@ -13,7 +13,6 @@ export function VolumeControl({ type }) {
 
   return (
     <div className={`volume-control ${type || ""}`}>
-      <SoundOutlined className={`${type === "vertical" ? "invisible" : ""}`} />
       <input
         type="range"
         min="0"

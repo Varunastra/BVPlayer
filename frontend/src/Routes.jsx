@@ -9,12 +9,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "./actions/user";
 import MiddleWares from "./MiddleWares";
 import ContentWrapper from "./components/containers/ContentWrapper";
+import Home from "./pages/Home";
+import { Spinner } from "./components/UI/Spinner/Spinner";
 
 const SignUp = React.lazy(() => import("./pages/SignUp"));
-const Home = React.lazy(() => import("./pages/Home"));
 const SignIn = React.lazy(() => import("./pages/SignIn"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const Track = React.lazy(() => import("./pages/Track"));
+const Playlist = React.lazy(() => import("./pages/Playlist"));
 
 export function Routes() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -26,7 +28,7 @@ export function Routes() {
 
   return (
     <>
-      <React.Suspense fallback={<></>}>
+      <React.Suspense fallback={<Spinner />}>
         <Router>
           <Switch>
             <Route path="/login" component={SignIn} />
@@ -35,16 +37,18 @@ export function Routes() {
               <ContentWrapper>
                 <Switch>
                   {isAuthenticated ? (
-                    <Route exact path="/" component={Home} />
+                  <Route exact path="/" component={Home} />
                   ) : (
-                    <Redirect to="/login" />
+                     <Redirect to="/login" />
                   )}
                   <Route path="/tracks/:id" component={Track} />
+                  <Route path="/playlists/:id" component={Playlist} />
                   <Route path="/404" component={NotFound} />
-                  <Redirect to="/404" />
                 </Switch>
               </ContentWrapper>
             </Route>
+
+            <Redirect to="/404" />
           </Switch>
           <MiddleWares />
         </Router>

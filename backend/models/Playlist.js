@@ -8,6 +8,10 @@ const Playlist = sequelize.define(
       type: STRING,
       field: "name",
     },
+    poster: {
+      type: STRING,
+      field: "poster",
+    },
   },
   {
     freezeTableName: true,
