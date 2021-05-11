@@ -1,5 +1,5 @@
 const { checkToken } = require("../middlewares/auth");
-const { Playlist, Track, Genre } = require("../models/index");
+const { Playlist, Track, Genre, User } = require("../models/index");
 const { like } = require("sequelize").Op;
 
 function getSearchQuery(queryParams) {
@@ -16,37 +16,70 @@ function playlistsRoute(app) {
   app.get("/api/playlists/:id", checkToken, async (req, res) => {
     const { id } = req.params;
 
+    let playlist;
+
     if (id) {
-      const tracks = await Playlist.findOne({
-        include: [
-          {
-            model: Track,
-            as: "tracks",
-            through: {
-              attributes: [],
-            },
-            attributes: {
-              exclude: ["createdAt", "updatedAt"],
-            },
-            include: [
-              {
-                model: Genre,
-                as: "genres",
-                through: {
-                  attributes: [],
+      if (id === "liked") {
+        const { id: UserId } = req.decoded;
+        const tracks = await User.findOne({
+          include: [
+            {
+              model: Track,
+              as: "trackLikes",
+              through: {
+                where: {
+                  rating: 1,
                 },
               },
-            ],
+            },
+          ],
+          attributes: [],
+          where: {
+            id: UserId,
           },
-        ],
-        attributes: {
-          exclude: ["createdAt", "updatedAt"],
-        },
-        where: {
-          id,
-        },
-      });
-      res.json(tracks);
+          plain: false,
+          raw: true,
+          nest: true,
+        });
+        playlist = { tracks: tracks.map((track) => track["trackLikes"]) };
+      } else {
+        playlist = await Playlist.findOne({
+          include: [
+            {
+              model: Track,
+              as: "tracks",
+              through: {
+                attributes: [],
+              },
+              attributes: {
+                exclude: ["createdAt", "updatedAt"],
+              },
+              order: ["id", "DESC"],
+              include: [
+                {
+                  model: Genre,
+                  as: "genres",
+                  through: {
+                    attributes: [],
+                  },
+                },
+              ],
+            },
+          ],
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+          where: {
+            id,
+          },
+        });
+      }
+      playlist.tracks.forEach(
+        (track) =>
+          (track.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${track.poster}`)
+      );
+      playlist.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${playlist.poster}`;
+      res.json(playlist);
     } else {
       res.json({ error: "'id' field is not provided" });
     }
@@ -61,7 +94,7 @@ function playlistsRoute(app) {
       },
     });
 
-    res.json(playlist.toJSON());
+    res.json(playlist);
   });
 
   app.post("/api/playlists", checkToken, async (req, res) => {

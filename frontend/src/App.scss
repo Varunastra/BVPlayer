@@ -148,7 +148,7 @@ footer {
   margin: 0 auto;
   flex-grow: 1;
   @include makeResponsive;
-  margin-bottom: 100px;
+  margin-bottom: 130px;
 }
 
 input[type="range"].slider {
@@ -350,6 +350,7 @@ input[type="range"].slider {
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding: 0 8px;
 
   .track {
     display: flex;
@@ -357,20 +358,78 @@ input[type="range"].slider {
     background: rgba(0, 0, 0, 0.2);
     margin: 5px 0;
 
+    .play {
+      display: flex;
+      min-width: 35px;
+      justify-content: center;
+      &:hover {
+        .play-circle {
+          display: block;
+          font-size: 22px;
+        }
+
+        .count {
+          display: none;
+        }
+      }
+    }
+
+    .play-circle {
+      display: none;
+    }
+
+    .count {
+      font-size: 18px;
+    }
+
     .poster {
       width: 50px;
       height: 50px;
       margin-right: 10px;
     }
 
-    .count {
-      width: 40px;
-      text-align: center;
+    .controls {
+      display: flex;
+      padding-right: 18px;
+      align-items: center;
+
+      .duration {
+        display: flex;
+        align-items: center;
+        padding-right: 20px;
+      }
+
+      .like-button {
+        border: none;
+        outline: none;
+        background: none;
+        cursor: pointer;
+        &::after {
+          background-image: url("./images/heart-outline.svg");
+          background-size: 24px;
+          width: 24px;
+          height: 24px;
+          display: block;
+          content: "";
+        }
+
+        &:hover,
+        &.liked {
+          &::after {
+            background-image: url("./images/heart.svg");
+          }
+        }
+      }
+      
+      .dislike-button {
+        font-size: 18px;
+      }
     }
 
     .info {
       display: flex;
       flex-direction: column;
+      width: 100%;
 
       .name {
         -webkit-line-clamp: 1;
@@ -528,6 +587,7 @@ input[type="range"].slider {
     font-size: 20px;
     width: 100%;
     font-weight: 500;
+    padding-top: 8px;
   }
 
   .title {
@@ -545,14 +605,6 @@ input[type="range"].slider {
   .poster {
     margin: 0 20px;
     position: relative;
-    min-width: 250px;
-    min-height: 250px;
-    max-width: 300px;
-    max-height: 300px;
-    @include mediaWidth($mediaMobileWidth) {
-      min-width: 125px;
-      min-height: 125px;
-    }
 
     img {
       top: 0;
@@ -562,8 +614,13 @@ input[type="range"].slider {
         opacity: 0.5;
       }
 
-      max-height: 100%;
-      max-width: 100%;
+      @include mediaWidth($mediaMobileWidth) {
+        width: 125px;
+        height: 125px;
+      }
+
+      width: 250px;
+      height: 250px;
     }
 
     .upload-poster {
@@ -591,8 +648,9 @@ input[type="range"].slider {
       cursor: pointer;
       font-size: 20px;
       padding-top: 15px;
-      .fa {
+      span {
         padding: 0 5px;
+        font-size: 22px;
       }
     }
   }
@@ -682,10 +740,8 @@ input[type="range"].slider {
   }
 
   .volume {
-    position: relative;
-    justify-self: flex-end;
-    margin-left: auto;
-    margin-right: 20px;
+    position: absolute;
+    right: 15px;
     align-self: center;
 
     span {
@@ -896,6 +952,7 @@ input[type="range"].slider {
   transition: background-color 0.3s ease;
   cursor: pointer;
   position: relative;
+  min-height: 230px;
 
   &.new {
     border: 5px dashed #484d4d;
@@ -924,7 +981,6 @@ input[type="range"].slider {
     position: absolute;
     top: 30%;
     font-size: 48px;
-    color: green;
     opacity: 0;
     transition: opacity 0.3s linear;
     visibility: hidden;
@@ -937,20 +993,41 @@ input[type="range"].slider {
 
   .title {
     font-weight: 600;
+    margin-top: 16px;
   }
 
   .photo {
-    max-width: 100%;
-    margin-bottom: 16px;
+    width: 100%;
+    max-height: 300px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  .songs-titles {
+  .description {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     display: -webkit-box;
     margin-top: 4px;
     white-space: normal;
     overflow: hidden;
+  }
+
+  .liked {
+    background: rgb(30, 30, 65);
+    display: flex;
+    justify-content: center;
+    height: 180px;
+
+    &::after {
+      background-image: url("./images/heart.svg");
+      background-size: 150px;
+      width: 150px;
+      height: 150px;
+      display: block;
+      content: "";
+    }
   }
 }
 
@@ -969,7 +1046,6 @@ input[type="range"].slider {
 
 .player-header {
   display: flex;
-  @include makeResponsive;
   margin-bottom: 20px;
 
   .poster {
@@ -977,6 +1053,10 @@ input[type="range"].slider {
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     margin: 0 15px;
+
+    @media screen and (max-width: 768px) {
+      width: 150px;
+    }
   }
 }
 
@@ -988,10 +1068,12 @@ input[type="range"].slider {
   position: relative;
 
   .actions {
-    position: sticky;
+    position: fixed;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 15px;
+    bottom: 115px;
+    width: 70vw;
+    @include makeResponsive();
 
     span {
       font-size: 45px;
@@ -1010,11 +1092,47 @@ input[type="range"].slider {
 
     .remove-playlist {
       transition: transform 100ms ease-out;
+      color: #bb3131;
       cursor: pointer;
 
       &:hover {
         transform: scale(1.05);
       }
     }
+  }
+}
+
+.upload-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .poster,
+  .no-poster {
+    width: 150px;
+    height: 150px;
+    margin: 10px 0;
+  }
+
+  .title {
+    font-size: 18px;
+    padding-bottom: 8px;
+  }
+
+  .artist {
+    font-size: 16px;
+    color: grey;
+  }
+
+  .track-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .no-poster {
+    background: rgba(0, 0, 0, 0.1);
   }
 }

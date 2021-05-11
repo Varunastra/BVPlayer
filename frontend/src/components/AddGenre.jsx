@@ -29,7 +29,6 @@ function AddGenre({ handleCreate }) {
       </div>
       <Dialog
         title={"Assign genre"}
-        variant="form"
         onSave={handleSave}
         handleClose={handleClose}
         open={isDialogOpen}

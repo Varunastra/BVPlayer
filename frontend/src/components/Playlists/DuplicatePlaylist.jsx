@@ -43,7 +43,6 @@ function DuplicatePlaylist() {
     <>
       <AddItem title="Duplicate playlist" onAdd={handleOpen} icon="copy" />
       <Dialog
-        variant="form"
         title="Duplicate playlist"
         open={isDialogOpen}
         handleClose={handleClose}

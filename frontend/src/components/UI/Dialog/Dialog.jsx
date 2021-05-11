@@ -3,8 +3,8 @@ import { ModalWrapper } from "../../containers/ModalWrapper";
 import Button from "../Button/Button";
 import "./Dialog.scss";
 
-function Dialog({ title, children, variant, onSave, open, handleClose }) {
-  let controls = <></>;
+function Dialog({ title, children, onSave, open, handleClose, handleEdit }) {
+  let controls = [];
 
   const handleSubmit = (e) => {
     if (e.keyCode === 13) {
@@ -12,22 +12,16 @@ function Dialog({ title, children, variant, onSave, open, handleClose }) {
     }
   };
 
-  switch (variant) {
-    case "form":
-      controls = (
-        <>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={onSave}>Save</Button>
-        </>
-      );
-      break;
-    default:
-      controls = (
-        <>
-          <Button onClick={handleClose}>Cancel</Button>
-        </>
-      );
-      break;
+  if (handleEdit) {
+    controls.push(<Button onClick={handleEdit} key={1}>Edit</Button>);
+  }
+  
+  if (handleClose) {
+    controls.push(<Button onClick={handleClose} key={2}>Cancel</Button>);
+  }
+
+  if (onSave) {
+    controls.push(<Button onClick={onSave} key={3}>Save</Button>);
   }
 
   return (

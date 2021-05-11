@@ -55,16 +55,12 @@ export function PlayerBar() {
           <ForwardOutlined onClick={handleFoward} />
         </div>
         <img
-          src={
-            track.poster
-              ? `${process.env.REACT_APP_URL}${track.poster}`
-              : defaultPoster
-          }
+          src={track.poster || defaultPoster}
           alt="Poster"
         />
         <div className="description">
           <div className="title">{track.title}</div>
-          <div className="author">{track.author}</div>
+          <div className="author">{track.artist}</div>
         </div>
         <div
           className="volume"

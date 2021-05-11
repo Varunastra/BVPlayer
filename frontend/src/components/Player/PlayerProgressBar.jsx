@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useSelector, useDispatch, batch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setPlayTime, setSeeking } from "../../actions/status";
 import { calculateTime } from "../../helpers/calculateTime";
 
@@ -36,22 +36,23 @@ function PlayerProgressBar() {
     }
   }, []);
 
-  const onMouseDown = useCallback((e) => {
+  const onMouseDown = () => {
     isMouseDown.current = true;
-  }, []);
+  };
 
   const onMouseUp = useCallback(
     (e) => {
       const current = getBarProgress(e);
-
-      batch(() => {
-        dispatch(setSeeking(true));
-        dispatch(setPlayTime(current * duration));
-      });
+      dispatch(setSeeking(true));
+      dispatch(setPlayTime(current * duration));
       isMouseDown.current = false;
     },
     [dispatch, duration]
   );
+
+  const onMouseLeave = () => {
+    isMouseDown.current = false;
+  };
 
   return (
     <div className="player-progress">
@@ -60,6 +61,7 @@ function PlayerProgressBar() {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseDown={onMouseDown}
+        onMouseLeave={onMouseLeave}
       >
         <div className="current-progress" style={progressScaleStyle} />
       </div>

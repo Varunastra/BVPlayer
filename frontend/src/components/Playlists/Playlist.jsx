@@ -1,10 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  setPlaylist,
-  setIsOpen,
-  fetchPlaylists,
-} from "../../actions/playlists";
+import { fetchPlaylists } from "../../actions/playlists";
 import playlistLogo from "../../images/playlist.svg";
 import {
   addTrack,
@@ -36,9 +32,6 @@ export function Playlist({
       } catch (e) {
         handleAddError(e.message);
       }
-    } else {
-      dispatch(setPlaylist(playlist));
-      dispatch(setIsOpen());
     }
   };
 

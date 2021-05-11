@@ -39,7 +39,6 @@ function NewPlaylist() {
     <>
       <AddItem title="Add new playlist" onAdd={handleOpen} />
       <Dialog
-        variant="form"
         title="Add new playlist"
         open={isDialogOpen}
         handleClose={handleClose}

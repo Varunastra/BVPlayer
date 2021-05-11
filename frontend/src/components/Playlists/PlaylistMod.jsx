@@ -1,15 +1,16 @@
-import { PlayCircleFilled } from "@ant-design/icons";
+import { PlayCircleTwoTone } from "@ant-design/icons";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { setPlaylist } from "../../actions/playlists";
+// import { useDispatch } from "react-redux";
+// import { fetchPlaylist, setTrack } from "../../actions/playlist";
+// import { setIsPlaying } from "../../actions/status";
 import defaultPoster from "../../images/poster.svg";
 
-function PlaylistMod({ playlist }) {
-  const { id, name, poster, tracks } = playlist;
+function PlaylistMod({ playlist, description }) {
+  const { id, name, poster, tracks = [] } = playlist;
 
   const history = useHistory();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const onPlaylistClick = () => {
     history.push(`/playlists/${id}`);
@@ -17,57 +18,28 @@ function PlaylistMod({ playlist }) {
 
   const onPlayClick = (e) => {
     e.stopPropagation();
-    dispatch(setPlaylist(playlist));
   };
-
-  // const onAddTrack = async () => {
-  //   if (trackToAdd) {
-  //     try {
-  //       const { message } = await addTrack({
-  //         trackId: trackToAdd.id,
-  //         playlistId: id,
-  //       });
-  //       handleAddSuccess(message);
-  //     } catch (e) {
-  //       handleAddError(e.message);
-  //     }
-  //   } else {
-  //     dispatch(setPlaylist(playlist));
-  //     dispatch(setIsOpen());
-  //   }
-  // };
-
-  // const handleDelete = async (e) => {
-  //   e.stopPropagation();
-  //   const playlist = await getPlaylist(id);
-  //   const tracks = playlist.tracks.map((track) => track.id);
-  //   const { message } = await removePlaylist(id);
-  //   dispatch(fetchPlaylists("me"));
-  //   makeToast({
-  //     message,
-  //     undoAction: async () => {
-  //       await createPlaylist({ ...playlist, tracks });
-  //       dispatch(fetchPlaylists("me"));
-  //     },
-  //   });
-  // };
 
   return (
     <div className="playlist-mod" onClick={onPlaylistClick}>
-      <img src={poster || defaultPoster} className="photo" alt={name} />
+      <div className="photo">
+        <img src={poster || defaultPoster} alt={name} />
+      </div>
       <div className="info">
         <div className="title">{name}</div>
-        <div className="songs-titles">
-          {tracks.length
-            ? tracks
+        <div className="description">{description ||
+          <div className="songs-titles">
+            {tracks.length
+              ? tracks
                 .slice(0, 5)
                 .map((song) => song.title)
                 .join(", ")
-            : "Playlist is empty"}
+              : "Playlist is empty"}
+          </div>}
         </div>
       </div>
       <div className="play-container" onClick={onPlayClick}>
-        <PlayCircleFilled />
+        <PlayCircleTwoTone twoToneColor="#1db954" />
       </div>
     </div>
   );

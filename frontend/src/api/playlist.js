@@ -45,12 +45,10 @@ export const duplicatePlaylist = ({ id, newName }) => {
   });
 };
 
-export const createTrack = async ({ track, playlistId }) => {
-  const formData = getFormData(track);
-  return fetchApi(`playlists/${playlistId}/tracks`, {
+export const createTrack = async ({ cacheTrackIndex, playlistId }) => {
+  return fetchApi(`playlists/${playlistId}/track-save`, {
     method: "POST",
-    body: formData,
-    headers: {},
+    body: JSON.stringify({ cacheTrackIndex }),
   });
 };
 
@@ -97,5 +95,20 @@ export const addTrack = async ({ trackId, playlistId }) => {
   return fetchApi(`playlists/${playlistId}/tracks`, {
     method: "POST",
     body: JSON.stringify({ id: trackId }),
+  });
+};
+
+export const uploadTrack = async (track) => {
+  return fetchApi(`track-upload`, {
+    method: "POST",
+    body: getFormData({ track }),
+    headers: {},
+  });
+};
+
+export const rateTrack = async ({ trackId, rating }) => {
+  return fetchApi(`tracks/${trackId}/rate`, {
+    method: "POST",
+    body: JSON.stringify({ rating }),
   });
 };

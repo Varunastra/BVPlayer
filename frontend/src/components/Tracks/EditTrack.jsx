@@ -4,34 +4,22 @@ import { useState } from "react";
 import TextField from "../UI/TextField/TextField";
 import { createTrack, removeTrack } from "../../api/playlist";
 import { useDispatch, useSelector } from "react-redux";
-import AddItem from "../AddItem";
-import FileInput from "../UI/FileInput/FileInput";
 import { fetchPlaylist } from "../../actions/playlist";
-import Button from "../UI/Button/Button";
 import { Spinner } from "../UI/Spinner/Spinner";
 import { makeToast } from "../../toasts";
 
-function NewTrack() {
+function EditTrack({ isOpen, setIsOpen }) {
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [track, setTrack] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [artist, setArtist] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const { id } = useSelector((state) => state.playlists.current);
+  const { id } = useSelector((state) => state.playlist.playlist);
   const dispatch = useDispatch();
 
-  const handleOpen = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsDialogOpen(false);
-  };
-
+  const toggleDialog = () => setIsOpen(!isOpen);
   const handleSave = async () => {
     setIsSaving(true);
     const { message, id: trackId } = await createTrack({
-      track: { title, author, track },
+      track: { title, artist },
       playlistId: id,
     });
     dispatch(fetchPlaylist(id));
@@ -46,12 +34,10 @@ function NewTrack() {
 
   return (
     <>
-      <AddItem title="Add new track" onAdd={handleOpen} />
       <Dialog
-        variant="form"
-        title="Add new track"
-        open={isDialogOpen}
-        handleClose={handleClose}
+        title="Edit track"
+        open={isOpen}
+        handleClose={toggleDialog}
         onSave={handleSave}
       >
         <div className="add-track-container">
@@ -61,13 +47,10 @@ function NewTrack() {
             placeholder="Enter track name"
           />
           <TextField
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder="Enter track author"
+            value={artist}
+            onChange={(e) => setArtist(e.target.value)}
+            placeholder="Enter track artist"
           />
-          <FileInput preview={true} handleUpload={(file) => setTrack(file)}>
-            <Button>Upload track</Button>
-          </FileInput>
         </div>
         <Spinner isLoading={isSaving} />
       </Dialog>
@@ -75,4 +58,4 @@ function NewTrack() {
   );
 }
 
-export default NewTrack;
+export default EditTrack;

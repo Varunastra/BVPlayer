@@ -11,6 +11,7 @@ export function user(state = initialState, action) {
     case "FETCH_USER_SUCCESS":
       return { ...state, profile: action.payload };
     case "FETCH_USER_ERROR":
+      localStorage.removeItem("token");
       return { ...state, error: action.payload };
     case "USER_LOGIN_SUCCESS":
       return { ...state, isAuthenticated: true, error: null };

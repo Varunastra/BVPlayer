@@ -1,5 +1,5 @@
 const { checkToken } = require("../middlewares/auth");
-const { Playlist, User } = require("../models/index");
+const { Playlist, User, Track, Like } = require("../models/index");
 const jwt = require("jsonwebtoken");
 
 const secret = process.env.JWT_SECRET;
@@ -10,11 +10,6 @@ function userRoutes(app) {
 
     if (id === "me") {
       const user = await User.findOne({
-        include: [
-          {
-            model: Playlist,
-          },
-        ],
         where: {
           id: req.decoded.id,
         },
@@ -23,7 +18,11 @@ function userRoutes(app) {
         },
       });
 
-      res.json(user.toJSON());
+      if (user) {
+        res.json(user.toJSON());
+      } else {
+        res.end(400);
+      }
     } else {
       res.json("Not implemented");
     }
@@ -41,7 +40,19 @@ function userRoutes(app) {
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
+        include: [
+          {
+            model: Track,
+            as: "tracks",
+            attributes: ["title"],
+          },
+        ],
       });
+
+      playlists.forEach(
+        (playlist) =>
+          (playlist.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${playlist.poster}`)
+      );
 
       res.json(playlists);
     }

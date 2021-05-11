@@ -49,7 +49,7 @@ function Track() {
     async function fetchTrack() {
       const {
         title,
-        author,
+        artist,
         genres,
         lyrics,
         poster,
@@ -57,7 +57,7 @@ function Track() {
         src,
       } = await getTrack({ id });
       setTitle(title);
-      setAuthor(author);
+      setAuthor(artist);
       setPoster(poster);
       setGenres(genres);
       setUserId(UserId);
@@ -66,7 +66,7 @@ function Track() {
       setIsUpdating(false);
       setPrevState({
         title,
-        author,
+        artist,
         genres,
         lyrics,
         poster,
@@ -90,7 +90,7 @@ function Track() {
 
   const saveTrackChanges = async (state) => {
     const { message } = await updateTrack(state);
-    dispatch(updatePlaying({ id: parseInt(id), title, author, poster }));
+    dispatch(updatePlaying({ id: parseInt(id), title, artist: author, poster }));
     setIsEditable(false);
     setIsUpdating(true);
     return message;

@@ -5,7 +5,6 @@ import { fetchPlaylist } from "../../actions/playlist";
 import { setIsOpen } from "../../actions/playlists";
 import { Spinner } from "../UI/Spinner/Spinner";
 import playlistLogo from "../../images/playlist.svg";
-import NewTrack from "./NewTrack";
 import PlaylistEdit from "./PlaylistEdit";
 import DuplicatePlaylist from "../Playlists/DuplicatePlaylist";
 import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
@@ -52,7 +51,6 @@ export function Tracks() {
         {tracks.map((track) => (
           <Track track={track} key={track.id} />
         ))}
-        {!isLoading && <NewTrack />}
         {!isLoading && <DuplicatePlaylist />}
       </div>
     </div>

@@ -4,17 +4,16 @@ const initialState = {
     title: null,
     poster: null,
   },
-  track: {
-    title: "Sample track title",
-    author: "Author",
-    poster: null,
-  },
+  track: JSON.parse(localStorage.getItem('track')),
   trackIndex: 0,
   error: null,
 };
 
 export function playlist(state = initialState, action) {
   switch (action.type) {
+    case "SET_PLAYLIST":
+      localStorage.setItem('playlistId', action.payload.id);
+      return { ...state, playlist: action.payload };
     case "FETCH_PLAYLIST_START":
       return { ...state, isLoading: true, playlist: initialState.playlist };
     case "FETCH_PLAYLIST_SUCCESS":
@@ -30,12 +29,13 @@ export function playlist(state = initialState, action) {
         error: action.payload,
       };
     case "SET_TRACK":
+      localStorage.setItem('track', JSON.stringify({ ...action.payload }));
       let newIndex = state.playlist.tracks.findIndex(
         (track) => track.id === action.payload.id
       );
       if (newIndex === -1) {
         state.playlist.tracks.push(action.payload);
-        newIndex = state.tracks.length - 1;
+        newIndex = state.playlist.tracks.length - 1;
       }
       return { ...state, track: state.playlist.tracks[newIndex] };
     case "NEXT_TRACK":

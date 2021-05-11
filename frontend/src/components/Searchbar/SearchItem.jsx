@@ -2,7 +2,7 @@ import React from "react";
 import defaultPoster from "../../images/poster.svg";
 import { useHistory } from "react-router-dom";
 
-function SearchItem({ title, author, poster, id }) {
+function SearchItem({ title, artist, poster, id }) {
   const history = useHistory();
 
   const handleClick = () => {
@@ -17,7 +17,7 @@ function SearchItem({ title, author, poster, id }) {
       />
       <div className="track-info">
         <div className="title">{title}</div>
-        <div className="author">{author}</div>
+        <div className="author">{artist}</div>
       </div>
     </div>
   );

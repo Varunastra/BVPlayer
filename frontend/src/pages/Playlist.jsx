@@ -1,60 +1,122 @@
-import { DeleteOutlined, PlusCircleFilled } from "@ant-design/icons";
-import React, { useEffect } from "react";
+import {
+  DeleteOutlined,
+  PlusCircleFilled,
+  PlayCircleOutlined,
+  ClockCircleOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router";
-import { fetchPlaylist } from "../actions/playlist";
+import { useParams } from "react-router";
+import { setTrack } from "../actions/playlist";
+import { calculateTime } from "../helpers/calculateTime";
 import PlaylistHeader from "../components/Playlists/PlaylistHeader";
-import defaultPoster from "../images/poster.svg";
+import {
+  removePlaylist,
+  getPlaylist,
+  createPlaylist,
+  rateTrack
+} from "../api/playlist";
+import { makeToast } from "../toasts";
+import { setCurrentPlaylist } from "../actions/playlist";
+import UploadTrack from "../components/Tracks/UploadTrack";
+import { setIsPlaying } from "../actions/status";
+import { useTitle } from "../hooks/useTitle";
 
-const fakeData = {
-  poster: defaultPoster,
-  name: "Title 1",
-  tracks: [
-    {
-      name: "Sample 1",
-      poster: defaultPoster,
-      author: "Author 1",
-    },
-    {
-      name: "Sample 2",
-      poster: defaultPoster,
-      author: "Author 2",
-    },
-  ],
-};
+const Track = ({ onLike, onDislike, onPlay, track, index }) => (<div className="track" key={track.id}>
+  <div className="play">
+    <PlayCircleOutlined className="play-circle" onClick={() => onPlay(track)} />
+    <span className="count">{index + 1}</span>
+  </div>
+  <img src={track.poster} alt={track.name} className="poster" />
+  <section className="info">
+    <span className="name">{track.title}</span>
+    <span className="author">{track.artist}</span>
+  </section>
+  <section className="controls">
+    <span className="duration">
+      {calculateTime(track.duration)}
+      <ClockCircleOutlined style={{ padding: '0 8px', fontSize: '12px' }} />
+    </span>
+    <StopOutlined className="dislike-button" onClick={() => onDislike(track)} />
+    <button className={`like-button ${track.liked ? 'liked' : ''}`} onClick={() => onLike(track)} />
+  </section>
+</div>);
 
 export function Playlists() {
   const dispatch = useDispatch();
-  const { id } = useLocation();
-  const playlist = useSelector((state) => state.playlists.current);
+  const { id } = useParams();
+  const [playlist, setPlaylist] = useState({ tracks: [], name: '', poster: null });
+  const currentPlaylist = useSelector(state => state.playlist.playlist);
+
+  useTitle(playlist.name);
+
+  const [uploadTrackModal, setUploadTrackModal] = useState(false);
+
+  const toggleTrackModal = () => setUploadTrackModal(!uploadTrackModal);
+
+  const onUploadModalClose = () => {
+    toggleTrackModal();
+    fetchPlaylist();
+  }
+
+  const fetchPlaylist = useCallback(async () => {
+    const playlist = await getPlaylist(id);
+    setPlaylist(playlist);
+  }, [id]);
 
   useEffect(() => {
-    dispatch(fetchPlaylist(id));
-  }, [dispatch, id]);
+    fetchPlaylist();
+  }, [fetchPlaylist]);
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    const playlist = await getPlaylist(id);
+    const tracks = playlist.tracks.map((track) => track.id);
+    const { message } = await removePlaylist(id);
+    fetchPlaylist();
+    makeToast({
+      message,
+      undoAction: async () => {
+        await createPlaylist({ ...playlist, tracks });
+        fetchPlaylist();
+      },
+    });
+  };
+
+  const onPlay = (track) => {
+    if (currentPlaylist !== playlist) {
+      dispatch(setCurrentPlaylist(playlist));
+    }
+    dispatch(setTrack(track));
+    dispatch(setIsPlaying(true));
+  };
+
+  const onLike = async (track) => {
+    await rateTrack({ trackId: track.id, rating: track.liked ? -1 : 1 });
+    fetchPlaylist();
+  };
+
+  const onDislike = async (track) => {
+    await rateTrack({ trackId: track.id, rating: 0 });
+    fetchPlaylist();
+  }
 
   return (
     <div className="playlist-view">
       <PlaylistHeader
-        name={playlist.name}
-        tracks={playlist.tracks}
+        {...playlist}
       />
       <div className="tracks">
-        {fakeData.tracks.map((track, i) => (
-          <div className="track" key={i}>
-            <span className="count">{i + 1}</span>
-            <img src={track.poster} alt={track.name} className="poster" />
-            <section className="info">
-              <span className="name">{track.name}</span>
-              <span className="author">{track.author}</span>
-            </section>
-            <span>{track.time}</span>
-          </div>
-        ))}
+        {playlist.tracks.map((track, i) =>
+          <Track track={track} index={i} key={track.id} onPlay={onPlay} onLike={onLike} onDislike={onDislike} />
+        )}
       </div>
       <div className="actions">
-        <PlusCircleFilled className="add-track" />
-        <DeleteOutlined className="remove-playlist" />
+        <PlusCircleFilled className="add-track" onClick={toggleTrackModal} />
+        <DeleteOutlined className="remove-playlist" onClick={handleDelete} />
       </div>
+      <UploadTrack isOpen={uploadTrackModal} onClose={onUploadModalClose} />
     </div>
   );
 }

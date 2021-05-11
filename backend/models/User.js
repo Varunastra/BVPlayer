@@ -1,8 +1,6 @@
 const { sequelize } = require("../sequelize");
 const { STRING, INTEGER, DATEONLY, ENUM } = require("sequelize");
 const bcrypt = require("bcryptjs");
-const { Playlist } = require("./Playlist");
-const { Track } = require("./Track");
 
 const User = sequelize.define(
   "User",
@@ -47,11 +45,5 @@ User.beforeCreate((user) => {
       throw new Error("Cannot be hashed");
     });
 });
-
-User.hasMany(Playlist);
-Playlist.belongsTo(User);
-
-User.hasMany(Track);
-Track.belongsTo(User);
 
 module.exports = { User };

@@ -52,8 +52,8 @@ function Searchbar({ isMenuOpen, setIsMenuOpen }) {
         onChange={performSearch}
         placeholder="Enter performers name or title"
       />
-      <SearchOutlined onClick={popupMenu} />
-      {isMenuOpen && <CloseOutlined onClick={clearSearch} />}
+      {!searchText.length ? <SearchOutlined onClick={popupMenu} />
+        : <CloseOutlined onClick={clearSearch} />}
       {isMenuOpen && (
         <div className="search-menu">
           {tracks.map((track) => (

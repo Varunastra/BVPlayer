@@ -1,5 +1,10 @@
 import { getPlaylist } from "../api/playlist";
 
+export const setCurrentPlaylist = (playlist) => ({
+  type: "SET_PLAYLIST",
+  payload: playlist,
+});
+
 export function setTrack(track) {
   return { type: "SET_TRACK", payload: track };
 }

@@ -11,7 +11,7 @@ const port = process.env.PORT || 8000;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
 app.use("/tracks", express.static(process.cwd() + "/tracks"));
 app.use("/posters", express.static(process.cwd() + "/posters"));

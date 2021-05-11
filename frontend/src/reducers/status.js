@@ -5,7 +5,7 @@ const initialState = {
   isPlaying: false,
   duration: 0,
   isSeeking: false,
-  volume: 5,
+  volume: 20,
   toasts: [],
   buffer: null,
 };

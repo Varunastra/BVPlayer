@@ -1,66 +1,178 @@
 const { checkToken } = require("../middlewares/auth");
 const multer = require("multer");
+const mm = require("music-metadata");
+const mime = require("mime-types");
 const path = require("path");
+const fs = require("fs");
 const { Op } = require("sequelize");
-const { Track, Playlist, Genre, PlaylistTracks } = require("../models/index");
+const {
+  Track,
+  Playlist,
+  Genre,
+  PlaylistTracks,
+  Like,
+} = require("../models/index");
 
-const tracksStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, `${process.cwd()}/tracks/`);
-  },
-  filename: function (req, file, cb) {
-    const { id } = req.decoded;
-    cb(null, `track-${Date.now()}${id}${path.extname(file.originalname)}`);
-  },
-});
+const memoryCache = {};
 
-const postersStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, `${process.cwd()}/posters/`);
-  },
-  filename: function (req, file, cb) {
-    const { id } = req.decoded;
-    cb(null, `track-${Date.now()}${id}${path.extname(file.originalname)}`);
-  },
-});
+let cacheTrackIndex = 0;
+
+const addToCache = (key, value) => {
+  memoryCache[key] = {
+    data: value,
+    timer: setTimeout(() => {
+      delete memoryCache[key];
+    }, 1000 * 60 * 2),
+  };
+};
+
+const removeFromCache = (key) => {
+  clearTimeout(memoryCache[key].timer);
+  delete memoryCache[key];
+};
+
+const getFromCache = (key) => {
+  return memoryCache[key].data;
+};
+
+// const tracksStorage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, `${process.cwd()}/tracks/`);
+//   },
+//   filename: function (req, file, cb) {
+//     const { id } = req.decoded;
+//     cb(null, `track-${Date.now()}${id}${path.extname(file.originalname)}`);
+//   },
+// });
+
+// const postersStorage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, `${process.cwd()}/posters/`);
+//   },
+//   filename: function (req, file, cb) {
+//     const { id } = req.decoded;
+//     cb(null, `track-${Date.now()}${id}${path.extname(file.originalname)}`);
+//   },
+// });
+
+const tracksStorage = multer.memoryStorage();
+const postersStorage = multer.memoryStorage();
 
 const uploadTrack = multer({ storage: tracksStorage });
 const uploadPoster = multer({ storage: postersStorage });
 
 function tracksRoute(app) {
+  app.post("/api/playlists/:id/tracks", checkToken, async (req, res) => {
+    const { id } = req.params;
+    const { title, author, id: trackId } = req.body;
+    const { id: UserId } = req.decoded;
+
+    if (trackId) {
+      const track = await Track.findByPk(trackId);
+      const playlistTrack = await PlaylistTracks.findOne({
+        where: {
+          PlaylistId: id,
+          TrackId: trackId,
+        },
+      });
+      if (!playlistTrack) {
+        const playlist = await Playlist.findByPk(id);
+        playlist.addTrack(track);
+        res.json({ message: "Track added successfully" });
+      } else {
+        res.status(409).json({
+          error: "Track already in playlist",
+        });
+      }
+    } else {
+      const [track, playlist] = await Promise.all([
+        Track.create({
+          src: `/tracks/${filename}`,
+          UserId,
+          title,
+          author,
+        }),
+        Playlist.findOne({
+          where: {
+            id,
+          },
+        }),
+      ]);
+      if (!playlist.poster) {
+        playlist.poster = track.poster;
+      }
+      await Promise.all([playlist.addTrack(track), playlist.save()]);
+      res.json({ message: "Track uploaded successufuly", id: track.id });
+    }
+  });
+
   app.post(
-    "/api/playlists/:id/tracks",
+    "/api/track-upload",
     [checkToken, uploadTrack.single("track")],
     async (req, res) => {
-      const { id } = req.params;
-      const { title, author, id: trackId } = req.body;
-      const { id: UserId } = req.decoded;
-
-      if (trackId) {
-        const track = await Track.findByPk(trackId);
-        const playlistTrack = await PlaylistTracks.findOne({
-          where: {
-            PlaylistId: id,
-            TrackId: trackId,
-          },
+      const { buffer, mimetype } = req.file;
+      const { id: userId } = req.decoded;
+      const {
+        format: { duration },
+        common: { title, picture, artist },
+      } = await mm.parseBuffer(buffer, "audio/mpeg");
+      addToCache(cacheTrackIndex++, {
+        picture,
+        title,
+        artist,
+        userId,
+        duration,
+        track: { buffer, type: mime.extension(mimetype) },
+      });
+      if (picture) {
+        const [{ data }] = picture;
+        res.json({
+          title,
+          artist,
+          poster: { buffer: data.toString("base64") },
+          cacheTrackIndex: cacheTrackIndex - 1,
+          duration,
         });
-        if (!playlistTrack) {
-          const playlist = await Playlist.findByPk(id);
-          playlist.addTrack(track);
-          res.json({ message: "Track added successfully" });
-        } else {
-          res.status(409).json({
-            error: "Track already in playlist",
-          });
-        }
       } else {
-        const { filename } = req.file;
-        const [track, playlist] = await Promise.all([
+        res.json({
+          title,
+          artist,
+          cacheTrackIndex: cacheTrackIndex - 1,
+          duration,
+        });
+      }
+    }
+  );
+
+  app.post(
+    "/api/playlists/:id/track-save",
+    [checkToken, uploadPoster.single("poster")],
+    async (req, res) => {
+      const { id } = req.params;
+      const { cacheTrackIndex, title, artist } = req.body;
+      const { id: UserId } = req.decoded;
+      const trackInfo = getFromCache(cacheTrackIndex);
+      if (trackInfo.userId === UserId) {
+        const posterPath = `/posters/track-${UserId}-${Date.now()}.${mime.extension(
+          trackInfo.picture[0].format
+        )}`;
+        const trackPath = `/tracks/track-${UserId}-${Date.now()}.${
+          trackInfo.track.type
+        }`;
+        fs.createWriteStream(`${process.cwd()}${posterPath}`).write(
+          req?.file?.poster || trackInfo.picture[0].data
+        );
+        fs.createWriteStream(`${process.cwd()}${trackPath}`).write(
+          trackInfo.track.buffer
+        );
+        const [newTrack, playlist] = await Promise.all([
           Track.create({
-            src: `/tracks/${filename}`,
+            src: trackPath,
+            poster: posterPath,
+            title: title || trackInfo.title,
+            artist: artist || trackInfo.artist,
+            duration: Math.round(trackInfo.duration),
             UserId,
-            title,
-            author,
           }),
           Playlist.findOne({
             where: {
@@ -68,52 +180,55 @@ function tracksRoute(app) {
             },
           }),
         ]);
-        await playlist.addTrack(track);
-        res.json({ message: "Track uploaded successufuly", id: track.id });
+        if (!playlist.poster) {
+          playlist.poster = newTrack.poster;
+        }
+        await Promise.all([playlist.addTrack(newTrack), playlist.save()]);
+        removeFromCache(cacheTrackIndex);
+        res.json({ message: "Track uploaded successufuly", id: newTrack.id });
       }
     }
   );
-
-  // app.get("/api/sign-s3", async (req, res) => {
-  //     const { type, kind } = req.query;
-
-  //     const filename = `${kind}s/${kind}-${Date.now()}`;
-
-  //     try {
-  //         const signedRequest = await s3.getSignedUrlPromise("putObject", {
-  //             Bucket: "bvplayer",
-  //             ContentType: type,
-  //             ACL: "public-read",
-  //             Key: filename,
-  //         });
-  //         res.json({
-  //             url: `https://bvplayer.s3.amazonaws.com/${filename}`,
-  //             signedRequest
-  //         });
-  //     } catch (e) {
-  //         console.log(e);
-  //         res.json({ error: e.message });
-  //     }
-  // });
 
   app.patch(
     "/api/tracks/:id",
     [checkToken, uploadPoster.single("poster")],
     async (req, res) => {
       const { id } = req.params;
+      const { id: UserId } = req.decoded;
 
-      let poster;
+      let posterPath;
 
       if (req.file) {
-        poster = req.file.filename;
+        const { buffer, mimetype } = req.file;
+        posterPath = `/tracks/track-${UserId}-${Date.now()}.${mime.extension(
+          mimetype
+        )}`;
+        fs.createWriteStream(`${process.cwd()}${posterPath}`).write(buffer);
       }
 
       const track = await Track.findByPk(id);
 
       if (track) {
-        const updateFields = poster
-          ? { ...req.body, poster: `/posters/${poster}` }
+        const updateFields = posterPath
+          ? { ...req.body, poster: posterPath }
           : req.body;
+
+        if ("liked" in updateFields) {
+          if (updateFields.liked === "true") {
+            Like.upsert({
+              rating: 1,
+              UserId: req.decoded.id,
+              TrackId: id,
+            });
+          } else {
+            Like.upsert({
+              rating: 0,
+              UserId: req.decoded.id,
+              TrackId: id,
+            });
+          }
+        }
 
         await track.update({
           ...updateFields,
@@ -134,7 +249,7 @@ function tracksRoute(app) {
         where: {
           [Op.or]: [
             { title: { [Op.iLike]: `%${search}%` } },
-            { author: { [Op.iLike]: `%${search}%` } },
+            { artist: { [Op.iLike]: `%${search}%` } },
           ],
         },
       });
@@ -142,6 +257,34 @@ function tracksRoute(app) {
     } else {
       res.status(400).json({ error: "Wrong fields provided" });
     }
+  });
+
+  app.post("/api/tracks/:id/rate", checkToken, async (req, res) => {
+    const { id: TrackId } = req.params;
+    const { id: UserId } = req.decoded;
+    const { rating } = req.body;
+
+    const track = await Track.findByPk(TrackId);
+    if (track) {
+      track.liked = rating > 0;
+      await track.save();
+    }
+
+    const like = await Like.findOne({
+      where: { UserId, TrackId },
+    });
+    
+    if (like) {
+      if (rating >= 0) {
+        like.rating = rating;
+        like.save();
+      } else {
+        like.destroy();
+      }
+    } else {
+      Like.create({ UserId, TrackId, rating });
+    }
+    res.json({ message: "Rated your track" });
   });
 
   app.get("/api/tracks/:id", checkToken, async (req, res) => {
@@ -162,7 +305,7 @@ function tracksRoute(app) {
       if (track) {
         res.json(track);
       } else {
-        res.json({ error: "No track with that id found " });
+        res.json({ error: "No track with that id found" });
       }
     } else {
       res.status(400).json({ error: "Wrong fields provided" });

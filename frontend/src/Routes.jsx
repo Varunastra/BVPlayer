@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Redirect,
-  Route,
+  Route
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUser } from "./actions/user";
+import { fetchUser, logoutUser } from "./actions/user";
 import MiddleWares from "./MiddleWares";
 import ContentWrapper from "./components/containers/ContentWrapper";
 import Home from "./pages/Home";
-import { Spinner } from "./components/UI/Spinner/Spinner";
+import { fetchPlaylist } from "./actions/playlist";
 
 const SignUp = React.lazy(() => import("./pages/SignUp"));
 const SignIn = React.lazy(() => import("./pages/SignIn"));
@@ -20,15 +20,28 @@ const Playlist = React.lazy(() => import("./pages/Playlist"));
 
 export function Routes() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
-  if (isAuthenticated) {
-    dispatch(fetchUser());
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      const playlistId = localStorage.getItem('playlistId');
+      dispatch(fetchUser());
+      if (playlistId) {
+        dispatch(fetchPlaylist(playlistId));
+      }
+    }
+  }, [isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(logoutUser());
+    }
+  }, [error, dispatch]);
 
   return (
     <>
-      <React.Suspense fallback={<Spinner />}>
+      <React.Suspense fallback={null}>
         <Router>
           <Switch>
             <Route path="/login" component={SignIn} />
@@ -37,9 +50,9 @@ export function Routes() {
               <ContentWrapper>
                 <Switch>
                   {isAuthenticated ? (
-                  <Route exact path="/" component={Home} />
+                    <Route exact path="/" component={Home} />
                   ) : (
-                     <Redirect to="/login" />
+                    <Redirect to="/login" />
                   )}
                   <Route path="/tracks/:id" component={Track} />
                   <Route path="/playlists/:id" component={Playlist} />
@@ -47,12 +60,11 @@ export function Routes() {
                 </Switch>
               </ContentWrapper>
             </Route>
-
             <Redirect to="/404" />
           </Switch>
-          <MiddleWares />
         </Router>
       </React.Suspense>
+      <MiddleWares />
     </>
   );
 }

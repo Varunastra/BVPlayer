@@ -27,6 +27,7 @@ function NewPlaylistMod() {
         message,
       });
     }
+    toggleDialog();
   };
 
   return (
@@ -36,7 +37,6 @@ function NewPlaylistMod() {
         Create new playlist
       </div>
       <Dialog
-        variant="form"
         title="Add new playlist"
         open={isDialogOpen}
         handleClose={toggleDialog}

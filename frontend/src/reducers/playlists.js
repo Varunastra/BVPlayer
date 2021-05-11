@@ -1,6 +1,5 @@
 const initialState = {
   all: [],
-  current: { name: "", tracks: [] },
   isOpen: false,
   error: null,
 };
@@ -13,8 +12,6 @@ export function playlists(state = initialState, action) {
       return { ...state, isLoading: false, error: action.payload };
     case "FETCH_PLAYLISTS_SUCCESS":
       return { ...state, isLoading: false, all: action.payload, error: null };
-    case "SET_PLAYLIST":
-      return { ...state, current: action.payload };
     case "SET_IS_OPEN": {
       return { ...state, isOpen: !state.isOpen };
     }

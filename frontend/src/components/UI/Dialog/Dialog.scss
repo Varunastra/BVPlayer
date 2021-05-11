@@ -20,6 +20,11 @@
 
   &-controls {
     display: flex;
+    flex-wrap: wrap;
     padding-top: 5px;
+
+    button {
+      flex: 1 0 25%;
+    }
   }
 }
