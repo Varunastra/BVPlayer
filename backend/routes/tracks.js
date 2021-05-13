@@ -35,26 +35,6 @@ const getFromCache = (key) => {
   return memoryCache[key].data;
 };
 
-// const tracksStorage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, `${process.cwd()}/tracks/`);
-//   },
-//   filename: function (req, file, cb) {
-//     const { id } = req.decoded;
-//     cb(null, `track-${Date.now()}${id}${path.extname(file.originalname)}`);
-//   },
-// });
-
-// const postersStorage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, `${process.cwd()}/posters/`);
-//   },
-//   filename: function (req, file, cb) {
-//     const { id } = req.decoded;
-//     cb(null, `track-${Date.now()}${id}${path.extname(file.originalname)}`);
-//   },
-// });
-
 const tracksStorage = multer.memoryStorage();
 const postersStorage = multer.memoryStorage();
 
@@ -124,23 +104,17 @@ function tracksRoute(app) {
         duration,
         track: { buffer, type: mime.extension(mimetype) },
       });
+      let response = {
+        title,
+        artist,
+        cacheTrackIndex: cacheTrackIndex - 1,
+        duration,
+      };
       if (picture) {
         const [{ data }] = picture;
-        res.json({
-          title,
-          artist,
-          poster: { buffer: data.toString("base64") },
-          cacheTrackIndex: cacheTrackIndex - 1,
-          duration,
-        });
-      } else {
-        res.json({
-          title,
-          artist,
-          cacheTrackIndex: cacheTrackIndex - 1,
-          duration,
-        });
+        response = { ...response, poster: { buffer: data.toString("base64") } };
       }
+      res.json(response);
     }
   );
 
@@ -273,7 +247,7 @@ function tracksRoute(app) {
     const like = await Like.findOne({
       where: { UserId, TrackId },
     });
-    
+
     if (like) {
       if (rating >= 0) {
         like.rating = rating;
@@ -303,6 +277,8 @@ function tracksRoute(app) {
         ],
       });
       if (track) {
+        track.poster &&
+          (track.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${track.poster}`);
         res.json(track);
       } else {
         res.json({ error: "No track with that id found" });

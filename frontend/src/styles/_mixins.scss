@@ -11,15 +11,17 @@
 }
 
 @mixin progressBarStyle($timeTop, $timeMargin, $height) {
-  .start-time {
+  .start-time, .end-time {
     position: absolute;
     top: $timeTop;
+    pointer-events: none;
+  }
+
+  .start-time {
     left: $timeMargin;
   }
 
   .end-time {
-    position: absolute;
-    top: $timeTop;
     right: $timeMargin;
   }
 

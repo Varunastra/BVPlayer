@@ -76,9 +76,12 @@ function playlistsRoute(app) {
       }
       playlist.tracks.forEach(
         (track) =>
+          track.poster &&
           (track.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${track.poster}`)
       );
-      playlist.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${playlist.poster}`;
+      if (playlist.poster) {
+        playlist.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${playlist.poster}`;
+      }
       res.json(playlist);
     } else {
       res.json({ error: "'id' field is not provided" });

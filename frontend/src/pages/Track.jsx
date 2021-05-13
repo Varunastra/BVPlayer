@@ -125,7 +125,7 @@ function Track() {
 
   const handlePlay = () => {
     dispatch(
-      setTrack({ id: parseInt(id), title, author, genres, lyrics, poster, src })
+      setTrack({ id: parseInt(id), title, artist: author, genres, lyrics, poster, src })
     );
     dispatch(setIsPlaying(true));
   };
@@ -192,11 +192,7 @@ function Track() {
                   </FileInput>
                 )}
                 <img
-                  src={
-                    poster
-                      ? `${process.env.REACT_APP_URL}${poster}`
-                      : defaultPoster
-                  }
+                  src={poster || defaultPoster}
                   className={isEditable ? "semi-visible" : ""}
                   alt="Poster"
                 />

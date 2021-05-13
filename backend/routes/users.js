@@ -51,6 +51,7 @@ function userRoutes(app) {
 
       playlists.forEach(
         (playlist) =>
+          playlist.poster &&
           (playlist.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${playlist.poster}`)
       );
 
