@@ -15,13 +15,13 @@ function Dialog({ title, children, onSave, open, handleClose, handleEdit }) {
   if (handleEdit) {
     controls.push(<Button onClick={handleEdit} key={1}>Edit</Button>);
   }
-  
-  if (handleClose) {
-    controls.push(<Button onClick={handleClose} key={2}>Cancel</Button>);
-  }
 
   if (onSave) {
-    controls.push(<Button onClick={onSave} key={3}>Save</Button>);
+    controls.push(<Button onClick={onSave} key={2}>Save</Button>);
+  }
+  
+  if (handleClose) {
+    controls.push(<Button onClick={handleClose} key={3}>Cancel</Button>);
   }
 
   return (

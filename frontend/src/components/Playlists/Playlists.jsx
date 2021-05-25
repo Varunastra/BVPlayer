@@ -2,7 +2,6 @@ import React from "react";
 import { Playlist } from "./Playlist";
 import { useSelector } from "react-redux";
 import { Spinner } from "../UI/Spinner/Spinner";
-import NewPlaylist from "./NewPlaylist";
 import ErrorMessage from "../UI/Error/ErrorMessage";
 
 export function Playlists({ trackToAdd, onAddMessage, style }) {
@@ -33,7 +32,6 @@ export function Playlists({ trackToAdd, onAddMessage, style }) {
               handleAddError={handleError}
             />
           ))}
-        {!isLoading && !error && !trackToAdd && <NewPlaylist />}
       </div>
     </div>
   );

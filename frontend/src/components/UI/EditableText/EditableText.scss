@@ -3,7 +3,6 @@
   overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
-  position: relative;
   textarea {
     background: rgba(0, 0, 0, 0.8);
     color: inherit;
@@ -17,8 +16,8 @@
   }
 
   span {
-    position: absolute;
-    visibility: hidden;
     width: 100%;
+    padding: inherit;
+    margin: inherit;
   }
 }

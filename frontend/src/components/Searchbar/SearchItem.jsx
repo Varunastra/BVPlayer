@@ -1,14 +1,7 @@
 import React from "react";
 import defaultPoster from "../../images/poster.svg";
-import { useHistory } from "react-router-dom";
 
-function SearchItem({ title, artist, poster, id }) {
-  const history = useHistory();
-
-  const handleClick = () => {
-    history.push(`/tracks/${id}`);
-  };
-
+function SearchItem({ title, artist, poster, handleClick }) {
   return (
     <div className="search-item" onClick={handleClick}>
       <img

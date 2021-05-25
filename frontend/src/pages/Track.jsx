@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { getTrack, updateTrack, removeGenre, addGenre } from "../api/playlist";
+import { getTrack, updateTrack, removeGenre, addGenre, rateTrack } from "../api/playlist";
 import { useState } from "react";
 import defaultPoster from "../images/poster.svg";
 import Genre from "../components/containers/Genre";
@@ -22,6 +22,7 @@ import {
   FileImageOutlined,
   PlayCircleOutlined,
   PlusOutlined,
+  StopOutlined
 } from "@ant-design/icons";
 import { useTitle } from "../hooks/useTitle";
 
@@ -32,7 +33,6 @@ function Track() {
   const [isEditable, setIsEditable] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
   const [isAddPlaylistClicked, setIsAddPlaylistClicked] = useState(false);
-  useTitle("Track");
 
   const [title, setTitle] = useState(null);
   const [author, setAuthor] = useState(null);
@@ -40,8 +40,11 @@ function Track() {
   const [lyrics, setLyrics] = useState(null);
   const [poster, setPoster] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [rating, setRating] = useState(-1);
   const [src, setSrc] = useState(null);
   const [prevState, setPrevState] = useState(null);
+
+  useTitle(title || '');
 
   const isCurrentUser = profile && !isUpdating && profile.id === userId;
 
@@ -54,6 +57,7 @@ function Track() {
         lyrics,
         poster,
         UserId,
+        rating,
         src,
       } = await getTrack({ id });
       setTitle(title);
@@ -63,6 +67,7 @@ function Track() {
       setUserId(UserId);
       setLyrics(lyrics);
       setSrc(src);
+      setRating(rating);
       setIsUpdating(false);
       setPrevState({
         title,
@@ -71,6 +76,7 @@ function Track() {
         lyrics,
         poster,
         UserId,
+        rating,
         src,
         id: parseInt(id),
       });
@@ -100,7 +106,7 @@ function Track() {
     const message = await saveTrackChanges({
       title,
       author,
-      lyrics,
+      ...(lyrics && { lyrics }),
       id: parseInt(id),
     });
     makeToast({
@@ -154,10 +160,6 @@ function Track() {
       });
   };
 
-  useEffect(() => {
-    console.log(genres);
-  }, [genres]);
-
   const handleAdd = () => {
     dispatch(fetchPlaylists("me"));
     setIsAddPlaylistClicked(true);
@@ -175,6 +177,16 @@ function Track() {
   const handleAddPlaylistClose = () => {
     setIsAddPlaylistClicked(false);
   };
+
+  const handleLike = async () => {
+    await rateTrack({ trackId: id, rating: rating > 0 ? -1 : 1 });
+    setRating(rating > 0 ? -1 : 1);
+  };
+
+  const handleDislike = async () => {
+    await rateTrack({ trackId: id, rating: 0 });
+    setRating(0);
+  }
 
   return (
     <>
@@ -200,6 +212,8 @@ function Track() {
                   {isCurrentUser && <EditOutlined onClick={editTrack} />}
                   <PlayCircleOutlined onClick={handlePlay} />
                   <PlusOutlined onClick={handleAdd} />
+                  <button className={`like-button ${rating > 0 ? 'liked' : ''}`} onClick={handleLike} />
+                  <StopOutlined onClick={handleDislike} />
                 </div>
               </div>
               <div className="track-header">

@@ -1,5 +1,5 @@
 const { sequelize } = require("../sequelize");
-const { STRING, TEXT, INTEGER, BOOLEAN } = require("sequelize");
+const { STRING, TEXT, INTEGER } = require("sequelize");
 
 const Track = sequelize.define(
   "Track",
@@ -27,10 +27,6 @@ const Track = sequelize.define(
     duration: {
       type: INTEGER,
       name: "duration",
-    },
-    liked: {
-      type: BOOLEAN,
-      name: "liked",
     },
   },
   {

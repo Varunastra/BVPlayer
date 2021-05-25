@@ -49,6 +49,19 @@ services:
     networks:
       - bvplayer_network
 
+  engine:
+    working_dir: "/engine"
+    env_file: ./engine/.env
+    build: ./engine
+    volumes:
+      - ./engine:/engine
+    ports:
+      - "5000:5000"
+    expose: 
+      - 5000
+    networks:
+      - bvplayer_network
+
 volumes:
   backend_data:
     driver: local

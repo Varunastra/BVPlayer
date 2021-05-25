@@ -7,6 +7,7 @@ export const auhtorizeUser = (login, password) => async (dispatch) => {
     localStorage.setItem("token", token);
     dispatch({ type: "USER_LOGIN_SUCCESS" });
   } catch (e) {
+    console.log(e);
     dispatch({
       type: "USER_LOGIN_FAIL",
       payload: "Wrong username or password",

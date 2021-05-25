@@ -3,15 +3,13 @@ import { searchTrack } from "../../api/playlist";
 import SearchItem from "./SearchItem";
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
+import { useHistory } from "react-router";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 
 function Searchbar({ isMenuOpen, setIsMenuOpen }) {
   const [tracks, setTracks] = useState([]);
   const [searchText, setSearchText] = useState("");
-
-  const clearSearch = () => {
-    setSearchText("");
-  };
+  const history = useHistory();
 
   // eslint-disable-next-line
   const debouncedSearch = useCallback(
@@ -34,14 +32,24 @@ function Searchbar({ isMenuOpen, setIsMenuOpen }) {
     }
   };
 
+  const clearSearch = useCallback(() => {
+    setSearchText('');
+    setTracks([]);
+    setIsMenuOpen(false);
+  }, [setIsMenuOpen]);
+
+  const handleItemClick = (id) => () => {
+    history.push(`/tracks/${id}`);
+    clearSearch();
+  };
+
   useEffect(() => {
     if (searchText.length) {
       debouncedSearch();
     } else {
-      setTracks([]);
-      setIsMenuOpen(false);
+      clearSearch();
     }
-  }, [searchText, setIsMenuOpen, debouncedSearch]);
+  }, [searchText, debouncedSearch, clearSearch]);
 
   return (
     <div className="search-bar">
@@ -57,7 +65,7 @@ function Searchbar({ isMenuOpen, setIsMenuOpen }) {
       {isMenuOpen && (
         <div className="search-menu">
           {tracks.map((track) => (
-            <SearchItem {...track} key={track.id} />
+            <SearchItem handleClick={handleItemClick(track.id)} {...track} key={track.id} />
           ))}
         </div>
       )}

@@ -5,7 +5,7 @@ const initialState = {
   isPlaying: false,
   duration: 0,
   isSeeking: false,
-  volume: 20,
+  volume: localStorage.getItem('volume') || 20,
   toasts: [],
   buffer: null,
 };
@@ -24,6 +24,7 @@ export function status(state = initialState, action) {
     case "SET_SEEKING":
       return { ...state, isSeeking: action.payload };
     case "SET_VOLUME":
+      localStorage.setItem('volume', action.payload);
       return { ...state, volume: action.payload };
     case "SET_BUFFER":
       return { ...state, buffer: action.payload };

@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import { setTrack } from "../actions/playlist";
 import { calculateTime } from "../helpers/calculateTime";
 import PlaylistHeader from "../components/Playlists/PlaylistHeader";
@@ -30,7 +31,9 @@ const Track = ({ onLike, onDislike, onPlay, track, index }) => (<div className="
   </div>
   <img src={track.poster} alt={track.name} className="poster" />
   <section className="info">
-    <span className="name">{track.title}</span>
+    <Link to={`/tracks/${track.id}`}>
+      <span className="name">{track.title}</span>
+    </Link>
     <span className="author">{track.artist}</span>
   </section>
   <section className="controls">
@@ -38,8 +41,8 @@ const Track = ({ onLike, onDislike, onPlay, track, index }) => (<div className="
       {calculateTime(track.duration)}
       <ClockCircleOutlined style={{ padding: '0 8px', fontSize: '12px' }} />
     </span>
-    <StopOutlined className="dislike-button" onClick={() => onDislike(track)} />
-    <button className={`like-button ${track.liked ? 'liked' : ''}`} onClick={() => onLike(track)} />
+    <StopOutlined className={`dislike-button ${track.rating === 0 ? 'disliked' : ''}`} onClick={() => onDislike(track)} />
+    <button className={`like-button ${(track.rating > 0 || !('rating' in track)) ? 'liked' : ''}`} onClick={() => onLike(track)} />
   </section>
 </div>);
 
@@ -93,7 +96,7 @@ export function Playlists() {
   };
 
   const onLike = async (track) => {
-    await rateTrack({ trackId: track.id, rating: track.liked ? -1 : 1 });
+    await rateTrack({ trackId: track.id, rating: track.rating > 0 ? -1 : 1 });
     fetchPlaylist();
   };
 

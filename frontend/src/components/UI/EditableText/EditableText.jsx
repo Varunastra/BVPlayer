@@ -16,13 +16,9 @@ function EditableText({
     const spanEl = spanRef.current;
     const inputEl = inputRef.current;
     inputEl.style.height = spanEl.offsetHeight + "px";
+    spanEl.style.display = "none";
+    inputEl.style.display = "block";
   };
-
-  useEffect(() => {
-    if (inputRef.current && value.length) {
-      setTextAreaHeight();
-    }
-  }, [value]);
 
   useEffect(() => {
     if (isEditable) {
@@ -36,7 +32,7 @@ function EditableText({
         <>
           <span ref={spanRef}>{value}</span>
           <textarea
-            style={areaStyle}
+            style={{ ...areaStyle, display: "none" }}
             value={value}
             ref={inputRef}
             onKeyPress={(e) => e.key === "Enter" && e.preventDefault()}

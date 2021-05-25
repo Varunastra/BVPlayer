@@ -2,7 +2,6 @@ const { checkToken } = require("../middlewares/auth");
 const multer = require("multer");
 const mm = require("music-metadata");
 const mime = require("mime-types");
-const path = require("path");
 const fs = require("fs");
 const { Op } = require("sequelize");
 const {
@@ -12,6 +11,7 @@ const {
   PlaylistTracks,
   Like,
 } = require("../models/index");
+const { getRecommendations, getGenres } = require("../utils/predictions");
 
 const memoryCache = {};
 
@@ -44,8 +44,7 @@ const uploadPoster = multer({ storage: postersStorage });
 function tracksRoute(app) {
   app.post("/api/playlists/:id/tracks", checkToken, async (req, res) => {
     const { id } = req.params;
-    const { title, author, id: trackId } = req.body;
-    const { id: UserId } = req.decoded;
+    const { id: trackId } = req.body;
 
     if (trackId) {
       const track = await Track.findByPk(trackId);
@@ -65,24 +64,9 @@ function tracksRoute(app) {
         });
       }
     } else {
-      const [track, playlist] = await Promise.all([
-        Track.create({
-          src: `/tracks/${filename}`,
-          UserId,
-          title,
-          author,
-        }),
-        Playlist.findOne({
-          where: {
-            id,
-          },
-        }),
-      ]);
-      if (!playlist.poster) {
-        playlist.poster = track.poster;
-      }
-      await Promise.all([playlist.addTrack(track), playlist.save()]);
-      res.json({ message: "Track uploaded successufuly", id: track.id });
+      res.status(400).json({
+        message: "No 'trackId' provided",
+      });
     }
   });
 
@@ -158,6 +142,22 @@ function tracksRoute(app) {
           playlist.poster = newTrack.poster;
         }
         await Promise.all([playlist.addTrack(newTrack), playlist.save()]);
+        getGenres(fs.createReadStream(`${process.cwd()}${trackPath}`)).then(
+          async ({ data: { genres } }) => {
+            const track = await Track.findByPk(newTrack.id);
+            const [genre, _] = await Genre.findOrCreate({
+              where: {
+                name: genres[0],
+              },
+              defaults: {
+                name: genres[0],
+              },
+            });
+            if (track) {
+              track.addGenres(genre);
+            }
+          }
+        );
         removeFromCache(cacheTrackIndex);
         res.json({ message: "Track uploaded successufuly", id: newTrack.id });
       }
@@ -175,7 +175,7 @@ function tracksRoute(app) {
 
       if (req.file) {
         const { buffer, mimetype } = req.file;
-        posterPath = `/tracks/track-${UserId}-${Date.now()}.${mime.extension(
+        posterPath = `/posters/track-${UserId}-${Date.now()}.${mime.extension(
           mimetype
         )}`;
         fs.createWriteStream(`${process.cwd()}${posterPath}`).write(buffer);
@@ -187,22 +187,6 @@ function tracksRoute(app) {
         const updateFields = posterPath
           ? { ...req.body, poster: posterPath }
           : req.body;
-
-        if ("liked" in updateFields) {
-          if (updateFields.liked === "true") {
-            Like.upsert({
-              rating: 1,
-              UserId: req.decoded.id,
-              TrackId: id,
-            });
-          } else {
-            Like.upsert({
-              rating: 0,
-              UserId: req.decoded.id,
-              TrackId: id,
-            });
-          }
-        }
 
         await track.update({
           ...updateFields,
@@ -238,12 +222,6 @@ function tracksRoute(app) {
     const { id: UserId } = req.decoded;
     const { rating } = req.body;
 
-    const track = await Track.findByPk(TrackId);
-    if (track) {
-      track.liked = rating > 0;
-      await track.save();
-    }
-
     const like = await Like.findOne({
       where: { UserId, TrackId },
     });
@@ -251,18 +229,19 @@ function tracksRoute(app) {
     if (like) {
       if (rating >= 0) {
         like.rating = rating;
-        like.save();
+        await like.save();
       } else {
-        like.destroy();
+        await like.destroy();
       }
     } else {
-      Like.create({ UserId, TrackId, rating });
+      await Like.create({ UserId, TrackId, rating });
     }
     res.json({ message: "Rated your track" });
   });
 
   app.get("/api/tracks/:id", checkToken, async (req, res) => {
     const { id } = req.params;
+    const { id: UserId } = req.decoded;
 
     if (id) {
       const track = await Track.findByPk(id, {
@@ -277,6 +256,13 @@ function tracksRoute(app) {
         ],
       });
       if (track) {
+        const like = await Like.findOne({
+          where: { UserId, TrackId: id },
+          raw: true,
+        });
+        if (like) {
+          track.setDataValue("rating", like.rating);
+        }
         track.poster &&
           (track.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${track.poster}`);
         res.json(track);
@@ -345,6 +331,12 @@ function tracksRoute(app) {
         error: "Wrong fields provided",
       });
     }
+  });
+
+  app.get("/api/tracks-recommendations", checkToken, async (req, res) => {
+    const { id: UserId } = req.decoded;
+    const recommendations = await getRecommendations(UserId);
+    res.json(recommendations);
   });
 }
 

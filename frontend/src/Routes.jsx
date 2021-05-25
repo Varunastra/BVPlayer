@@ -11,6 +11,7 @@ import MiddleWares from "./MiddleWares";
 import ContentWrapper from "./components/containers/ContentWrapper";
 import Home from "./pages/Home";
 import { fetchPlaylist } from "./actions/playlist";
+import { PlayerBar } from "./components/Player/PlayerBar";
 
 const SignUp = React.lazy(() => import("./pages/SignUp"));
 const SignIn = React.lazy(() => import("./pages/SignIn"));
@@ -27,7 +28,7 @@ export function Routes() {
     if (isAuthenticated) {
       const playlistId = localStorage.getItem('playlistId');
       dispatch(fetchUser());
-      if (playlistId) {
+      if (playlistId !== "undefined") {
         dispatch(fetchPlaylist(playlistId));
       }
     }
@@ -62,6 +63,7 @@ export function Routes() {
             </Route>
             <Redirect to="/404" />
           </Switch>
+          {isAuthenticated && <PlayerBar />}
         </Router>
       </React.Suspense>
       <MiddleWares />

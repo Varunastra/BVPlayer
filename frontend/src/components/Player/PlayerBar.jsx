@@ -2,6 +2,7 @@ import React from "react";
 import defaultPoster from "../../images/poster.svg";
 import PlayerProgressBar from "./PlayerProgressBar";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { nextTrack, prevTrack } from "../../actions/playlist";
 import { setIsPlaying } from "../../actions/status";
 import { VolumeControl } from "./VolumeControl";
@@ -59,7 +60,9 @@ export function PlayerBar() {
           alt="Poster"
         />
         <div className="description">
-          <div className="title">{track.title}</div>
+          <Link to={`/tracks/${track.id}`}>
+            <div className="title">{track.title}</div>
+          </Link>
           <div className="author">{track.artist}</div>
         </div>
         <div

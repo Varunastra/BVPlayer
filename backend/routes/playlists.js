@@ -1,6 +1,11 @@
 const { checkToken } = require("../middlewares/auth");
-const { Playlist, Track, Genre, User } = require("../models/index");
-const { like } = require("sequelize").Op;
+const { Playlist, Track } = require("../models/index");
+const {
+  Op: { like },
+  QueryTypes,
+} = require("sequelize");
+const { sequelize } = require("../sequelize");
+const { recommendations } = require("../utils/recommendations");
 
 function getSearchQuery(queryParams) {
   const searchQuery = {};
@@ -15,77 +20,75 @@ function getSearchQuery(queryParams) {
 function playlistsRoute(app) {
   app.get("/api/playlists/:id", checkToken, async (req, res) => {
     const { id } = req.params;
+    const { id: UserId } = req.decoded;
 
     let playlist;
 
-    if (id) {
-      if (id === "liked") {
-        const { id: UserId } = req.decoded;
-        const tracks = await User.findOne({
-          include: [
-            {
-              model: Track,
-              as: "trackLikes",
-              through: {
-                where: {
-                  rating: 1,
-                },
-              },
-            },
-          ],
-          attributes: [],
-          where: {
-            id: UserId,
-          },
-          plain: false,
-          raw: true,
-          nest: true,
-        });
-        playlist = { tracks: tracks.map((track) => track["trackLikes"]) };
-      } else {
-        playlist = await Playlist.findOne({
-          include: [
-            {
-              model: Track,
-              as: "tracks",
-              through: {
-                attributes: [],
-              },
-              attributes: {
-                exclude: ["createdAt", "updatedAt"],
-              },
-              order: ["id", "DESC"],
-              include: [
-                {
-                  model: Genre,
-                  as: "genres",
-                  through: {
-                    attributes: [],
-                  },
-                },
-              ],
-            },
-          ],
-          attributes: {
-            exclude: ["createdAt", "updatedAt"],
-          },
-          where: {
-            id,
-          },
-        });
-      }
-      playlist.tracks.forEach(
-        (track) =>
-          track.poster &&
-          (track.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${track.poster}`)
+    if (!id) {
+      res.json({ error: "'id' field is not provided" });
+    }
+
+    if (id === "liked") {
+      const tracks = await sequelize.query(
+        `
+          select
+            t.*
+          from
+            "Track" t
+          inner join "Like" l on
+            t.id = l."TrackId"
+          where
+            l."UserId" = ? and
+            l.rating > 0
+      `,
+        {
+          replacements: [UserId],
+          type: QueryTypes.SELECT,
+        }
       );
+      playlist = { ...recommendations.likes, tracks };
+    } else {
+      let [tracks, singlePlaylist] = await Promise.all([
+        sequelize.query(
+          `
+          select
+            distinct t.*,
+            l.rating
+          from
+            "Playlist" p
+          inner join "Playlist_Tracks" pt on
+            p.id = pt."PlaylistId"
+          inner join "Track" t on
+            pt."TrackId" = t.id
+            and p.id = ?
+          left outer join "Like" l on
+            t.id = l."TrackId"
+            and l."UserId" = ?
+        `,
+          {
+            replacements: [id, UserId],
+            type: QueryTypes.SELECT,
+          }
+        ),
+        Playlist.findByPk(id, {
+          raw: true,
+        }),
+      ]);
+      playlist = { ...singlePlaylist, tracks };
       if (playlist.poster) {
         playlist.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${playlist.poster}`;
       }
-      res.json(playlist);
-    } else {
-      res.json({ error: "'id' field is not provided" });
     }
+    playlist.tracks.forEach(
+      (track) =>
+        track.poster &&
+        (track.poster = `${process.env["BACKEND_URL"]}:${process.env["BACKEND_PORT"]}${track.poster}`)
+    );
+    res.json(playlist);
+  });
+
+  app.get("/playlist-recommendations", async (req, res) => {
+    const { UserId } = req.decoded;
   });
 
   app.get("/api/playlists", async (req, res) => {

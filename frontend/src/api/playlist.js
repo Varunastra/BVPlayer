@@ -112,3 +112,10 @@ export const rateTrack = async ({ trackId, rating }) => {
     body: JSON.stringify({ rating }),
   });
 };
+
+export const getRecommendations = async (query) => {
+  const params = new URLSearchParams(query);
+  return fetchApi(`playlists/recommendations?${params.toString()}`, {
+    method: "GET",
+  });
+};
