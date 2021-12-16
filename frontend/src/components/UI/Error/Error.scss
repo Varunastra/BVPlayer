@@ -1,0 +1,16 @@
+.error-message {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+
+  .fa-times-circle {
+    color: red;
+  }
+
+  .error-text {
+    color: crimson;
+    padding: 0 5px;
+    font-weight: 500;
+  }
+}
